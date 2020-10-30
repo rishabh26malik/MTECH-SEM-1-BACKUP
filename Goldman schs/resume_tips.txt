@@ -1,0 +1,27 @@
+IMPORTANT: Writing your Resume
+Take your resume seriously.
+1. Please do not write irrelevant things like long personal details, family information, motivational quotes/self-appraisal, vague interests, etc. Anything that is not backed by a fact is useless and shouldn't be there.
+Typically the sections are (among) Header, Education, Achievements, Work experience, Projects, Relevant courses, Skills, and Extracurricular Activities. Avoid any other unnecessary sections.
+2. Please use a decent template, and I strongly urge you to use Latex. MS Word typed resume is unacceptable. Even if you don't write Latex, tools like Overleaf and ShareLatex are fairly easy and have decent templates. Do NOT use unprofessional fonts and colors. Keep proper margins.
+3. Quality of content matters, not quantity. Having a one-page resume with only the awesome things is much better than a mediocre two-pages. Use the space efficiently but NEVER go beyond two pages. Also, it's not okay to have a one-and-half page resume.
+4. Proper English is essential. You cannot have spelling or grammatical mistakes on your resume. Make sure tense and the person is consistent throughout. Have at least two other people proofread your resume and make sure its correct down to every full stop.
+Your resume is like your face for the company and reflects you to the HR, interviewers, and hiring committee. Please present your best self.
+
+Check out the following links for reference
+https://shivamkhandelwal.in/shivam_khandelwal_resume.pdf?fbclid=IwAR3BCmzoE1iW3vN1HJ55CfJo-HkmsSzFfuntoIQjfGEJ4QjXqCW9H3IyH3U
+
+https://aadityanair.ml/CV.pdf?fbclid=IwAR0FQ9PnwpPTR9fLqyOWaAZCsf44X2ZmwtYA-lLC6cgVGjmLmwrCiADuEHY
+
+https://mrinaldhar.com/mrinaldhar.pdf
+
+The most common job profiles will be
+- SWE
+- Data Scientist
+- Quantitative Research
+
+We would advise you to make a different resume for each job profile showcasing different projects. For example in SWE you'll be showcasing more of your SWE projects like Shell or web app dev while for data sciencie, recruiters would look for more ML based projects.
+
+Moreover, the tests for these profiles are different so we would also advise you to do some preparation for different job profiles as well. Make sure you read the Job Descriptions properly for each company and tweak your resume if required.
+All the best for the upcoming drive.
+Cheers
+SPC

@@ -1,0 +1,13 @@
+
+
+phase  -  2
+
+client taking cmd as input in while(1)
+
+server running thread
+
+mtorrent creation
+
+cmd ONLY paassed TO SERVER
+
+

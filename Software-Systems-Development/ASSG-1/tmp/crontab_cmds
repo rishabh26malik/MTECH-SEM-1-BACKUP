@@ -1,0 +1,10 @@
+00 10 * * * /bin/ls >/ls.txt
+15 6 2 1 * /home/melissa/backup.sh
+01 00 * Jan Monday /home/melissa/backup.sh
+00 09-18 * * * /home/carl/hourly-archive.sh
+*/20 09-18 * * * /home/carl/hourly-archive.sh
+0 9,18 * * Mon /home/wendy/script.sh
+30 22 * * Mon,Tue,Wed,Thu,Fri /usr/local/bin/backup
+01 1 1 * * df -H | head -n 2 >> /var/log/df.log 2>&1
+01 3 1 * * uptime >> /var/log/uptime.log 2>&1
+

@@ -1,0 +1,324 @@
+/*static bool cmp(const vector<vector<int>> &a, const vector<vector<int>> &b ){
+    return a[0] < b[0];
+}
+*/
+double equalDisconnectedSegments(std::vector<std::vector<int>> arr1) {
+    float diff;
+    map <int,pair<int,int>> hash;
+    int i,n=arr1.size(),j;
+    int t,id,len1,len2;
+    std::vector<std::vector<float>> arr(n);
+    for(i=0;i<n;i++){
+        arr[i].push_back(arr1[i][0]);
+        arr[i].push_back(arr1[i][1]);
+    }
+    
+    for (i = 0; i < n-1; i++)  
+    {  
+        id=i;  
+        for (j = i+1; j < n; j++)  
+        if (arr[j][0] < arr[id][0])  
+            id = j;  
+        t=arr[id][0];
+        arr[id][0]=arr[i][0];
+        arr[i][0]=t;
+        
+        t=arr[id][1];
+        arr[id][1]=arr[i][1];
+        arr[i][1]=t;  
+    }  
+    
+    //sort(arr.begin(), arr.end(),cmp);
+    //for(i=0;i<n;i++)
+    //    cout<<arr[i][0]<<" "<<arr[i][1]<<endl;
+    
+    for(i=1;i<n;i++){
+        if(arr[i][0] < arr[i-1][1] ){
+            diff=abs(arr[i][0]-arr[i-1][1]);
+            if(diff==0)
+                continue;
+            else{
+                diff/=2;
+                arr[i-1][1]-=diff;
+                arr[i][0]+=diff;
+            }
+            
+        }
+    }
+    int ans=INT_MAX;
+    for(i=0;i<n;i++){
+        diff=arr[i][1]-arr[i][0];
+        if(ans>diff)
+            ans=diff;
+    }
+    //return ans;
+    
+    hash[arr[0][1]]={arr[0][0],1};
+    for(i=1;i<n;i++){
+        if(hash.find(arr[i][0])!=hash.end()){
+            pair<int,int>t1=(hash.find(arr[i][0])->second);
+            hash.erase(hash.find(arr[i][0]));
+            hash[arr[i][1]]={t1.first,t1.second+1};
+        }
+    }
+    float res=0;
+    for(auto it=hash.begin(); it!=hash.end(); it++){
+        //cout<<it->first<<" "<<it->second.first<<" "<<it->second.second<<endl;
+        float tmp=abs(it->first-(it->second.first))/it->second.second;
+        if(res < tmp)
+            res=tmp;
+        cout<<res<<endl;
+    }
+    return res;
+    for(i=0;i<n;i++)
+        cout<<arr[i][0]<<" "<<arr[i][1]<<endl;
+    
+    return 1;
+}
+
+
+
+
+
+
+You are given a list of interval segments. Your task is to modify these segments such that:
+
+All segments are disconnected
+All segments are equal in length. Length of segment is defined as difference of its start and end.
+Any modified segment created is subsegment of original segment
+Return the maximal length after modifications.
+
+Example
+Input segments
+[
+ [2, 6], 
+ [1, 4], 
+ [8, 12]
+]
+Output
+2.5
+Explanation
+First [2, 6] segment intersects with second [1, 4], after making them disconnected, they become [1, 3.5] (and [3.5, 6] each of size 2.5.
+Now all of segments are disconnected, but length of third is not equal to first two. After making third equal , it becomes [8, 10.5].
+
+So the maximal length is 2.5
+
+[execution time limit] 1 seconds (cpp)
+
+[input] array.array.integer segments
+
+An array of segments. Size of array <= 10000. Each segment is again an array of size 2 and contains start and end of segment in order.
+
+[output] float
+
+The maximal possible length of an interval with precision of 10^-6.
+[C++] Syntax Tips
+
+// Prints help message to the console
+// Returns a string
+std::string helloWorld(std::string name) {
+    std::cout << "This prints to the console when you Run Tests" << std::endl;
+    return "Hello, " + name;
+}
+
+C++
+123456789101112131415161718
+    for(i=0;i<n;i++){
+        arr[i].push_back(arr1[i][0]);
+        arr[i].push_back(arr1[i][1]);
+    }
+    
+    for (i = 0; i < n-1; i++)  
+    {  
+        id=i;  
+        for (j = i+1; j < n; j++)  
+        if (arr[j][0] < arr[id][0])  
+
+-----------------
+
+
+
+std::string wordSubtraction(std::string a, std::string b) {
+    long long int val[]={1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,                          65536,131072,262144,524288,1048576,2097152,4194304,8388608,
+                            16777216,33554432};
+    long long int diff,i,n=a.length(), m=b.length(), s1=0,s2=0;
+    std::string out="";
+    for(i=0;i<n;i++)
+        s1+=val[a[i]-'a'];
+    for(i=0;i<m;i++)
+        s2+=val[b[i]-'a'];
+    diff=s1-s2;
+    //cout<<s1<<" "<<s2<<" "<<diff<<endl;
+    for(i=25;i>=0;i--){
+        if(diff>0 && diff >= val[i])
+        {
+            diff-=val[i];
+            out+=char('a'+i);
+        }
+        //cout<<diff<<" "<<out<<endl;
+    }
+    std::sort(out.begin(), out.end());
+    return out;
+}
+
+
+
+
+
+
+Let's map the letters of the English alphabet to powers of 2 as follows
+
+a = 20 = 1, b = 21 = 2, c = 22 = 4, d = 23 = 8, etc.
+
+Then define a sum of a word as the sum of the corresponding powers of two of the word's letters. For example,
+
+sum("abac") = 1 + 2 + 1 + 4 = 8
+
+For a word w that contains only English letters we can define its abbreviated form aw as follows:
+
+aw also contains only English letters;
+w and aw have the same sum as defined above;
+the letters of aw are placed in a strictly increasing alphabetical order.
+Note: the abbreviated form is guaranteed to be unique, if exists.
+
+Find the difference between two given words a and b, i.e. a word c, such that sum(a) - sum(b) = sum(c) and c is in the abbreviated form.
+
+It is guaranteed that sum(a) > sum(b).
+
+Example
+
+For a = "acdg" and b = "ac", the output should be
+wordSubtraction(a, b) = "dg";
+For a = "acdg" and b = "ab", the output should be
+wordSubtraction(a, b) = "bdg";
+For a = "acdg" and b = "abc", the output should be
+wordSubtraction(a, b) = "bcg".
+Input/Output
+
+[execution time limit] 0.5 seconds (cpp)
+
+[input] string a
+
+A word in the abbreviated form.
+
+Guaranteed constraints:
+1 ≤ a.length ≤ 30.
+
+[input] string b
+
+A word in the abbreviated form.
+
+Guaranteed constraints:
+1 ≤ b.length ≤ 10.
+
+[output] string
+
+The result of the subtraction a - b in the abbreviated form.
+[C++] Syntax Tips
+
+// Prints help message to the console
+// Returns a string
+std::string helloWorld(std::string name) {
+    std::cout << "This prints to the console when you Run Tests" << std::endl;
+    return "Hello, " + name;
+}
+
+C++
+1234567891011121314151617
+std::string wordSubtraction(std::string a, std::string b) {
+    long long int val[]={1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,                          65536,131072,262144,524288,1048576,2097152,4194304,8388608,
+                            16777216,33554432};
+    long long int diff,i,n=a.length(), m=b.length(), s1=0,s2=0;
+    std::string out="";
+    for(i=0;i<n;i++)
+        s1+=val[a[i]-'a'];
+    for(i=0;i<m;i++)
+        s2+=val[b[i]-'a'];
+
+    ----------------------
+
+
+long long greatestValueDays(std::vector<int> arr) {
+     long long int i,j,n=arr.size(),ans=INT_MIN,mn=INT_MAX,avg,sum,prod;
+     for(i=0;i<n;i++){
+         sum=0;
+         mn=INT_MAX;
+         for(j=i;j<n;j++){
+             if(mn > arr[j])
+                mn=arr[j];
+             //mn=min(min,arr[j])
+             sum+=arr[j];
+             prod=sum*mn;
+             if(ans < prod)
+                ans=prod;
+             //ans=std::max(ans,prod);
+         }
+         
+     }
+     return ans;
+}
+
+
+
+
+We want to give incentives to driver. So we need to devise a mechanism to calculate these incentives.
+
+On the end of every trip, an Uber driver gets rating for the ride which is averaged per day. For a given period of days, the value of driver is computed as the sum of the rating of the days in the given period, multiplied by the least rating in that period.
+
+For example
+The average ratings for some 4 days are:
+
+2, 1, 3, 4
+The the value of driver over these days is (2 + 1 + 3 + 4) * 1 = 10
+
+Let's create a hypothesis that the incentive calculated is proportional to the greatest value over any contiguous period in drivers days on Uber. Given driver's average ratings per day, return this greatest value.
+
+Example
+Input
+Given driver's ratings over 6 days:
+
+[3, 1, 6, 4, 5, 2]
+Output
+60
+Explanation
+Then the period from day 3 to day 5, i.e. 6, 4, 5 has the greatest value, which is (6 + 4 + 5) * 4 = 60
+
+Array of integers. a[i] represents average integer rating on i'th day. Size of array <= 10^5. 0 <= a[i] <= 10^6.
+
+The greatest value of any contiguous period throughout whole period in given array.
+
+C++
+123456789101112131415161718
+long long greatestValueDays(std::vector<int> arr) {
+     long long int i,j,n=arr.size(),ans=INT_MIN,mn=INT_MAX,avg,sum,prod;
+     for(i=0;i<n;i++){
+         sum=0;
+         mn=INT_MAX;
+         for(j=i;j<n;j++){
+             if(mn > arr[j])
+                mn=arr[j];
+             //mn=min(min,arr[j])
+             sum+=arr[j];
+             prod=sum*mn;
+             if(ans < prod)
+                ans=prod;
+             //ans=std::max(ans,prod);
+         }
+         
+     }
+     return ans;
+}
+
+TESTS
+CUSTOM TESTS
+Test 1
+Input:
+ratings: [3, 1, 6, 4, 5, 2]
+Expected Output:
+60
+
+
+
+
+
+

@@ -1,0 +1,7 @@
+
+
+phase  -  1
+
+only 1 time msg passing 
+
+server running thread

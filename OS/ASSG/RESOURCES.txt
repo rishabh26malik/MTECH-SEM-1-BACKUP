@@ -1,0 +1,44 @@
+***SYSTEM CALL REQUIRED***
+opendir
+readir
+chdir
+getcwd
+stat
+
+***POINTERS REQUIRED***
+DIR
+
+***INBUILT STRUCTURES***
+dirent
+
+
+*****LINKS*****
+
+EXTRACT FILE PERMISSIONS USING STAT
+https://linuxhint.com/stat-system-call-linux/
+
+TO SKIP HIDDEN FILES WHILE EXTRACTING FILES/DIR IN A DIR 
+https://stackoverflow.com/questions/845556/how-to-ignore-hidden-files-with-opendir-and-readdir-in-c-library
+
+TO GET TERMINAL DIMENSION   -  https://stackoverflow.com/questions/23369503/get-size-of-terminal-window-rows-columns
+
+CURSOR MOVEMENTS  -   https://web.archive.org/web/20151004211730/http://www.termsys.demon.co.uk/vtansi.htm
+
+cursor -   https://tldp.org/HOWTO/Bash-Prompt-HOWTO/x361.html
+
+---------------------------------------------------------
+https://github.com/rushitjasani/Terminal-File-Explorer
+
+https://github.com/darshank15/Linux-Terminal-based-File-Explorer
+
+https://github.com/shashijangra22/terminal-fx
+
+https://github.com/VatsalSoni301/LinuxFileExplorer
+
+https://github.com/priyendumori/Terminal-based-file-explorer
+
+https://github.com/ravihooda155/Terminal-File-Explorer
+---------------------------------------------------
+
+TO DISABLE ECHO WHEN INPUT NAVIGATION KEYS
+"termios" interface to disable echo.

@@ -1,0 +1,47 @@
+body{
+      background-image: url('img5.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+      
+}
+
+
+div: not(.exclude){
+  background-color:Lightblue;
+  padding:2%;
+  margin:1%;
+}
+
+.exclude{
+  text-align: center;
+
+}
+
+h1,h2,h3{
+  font-family: "Arial";
+}
+div,ul,li,b{
+  font-family: "Arial";
+  font-size: 18px;
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width:100%;
+  height:auto;
+}
+
+#panelSkill, #flipSkill, #panelProj, #flipProj, #flipPub, #panelPub, #flipIntern, #panelIntern, #flipAchv, #panelAchv, #flipEdu, #panelEdu,
+#panelGoal, #panelEval, #panelSub, #panelContent, #panelExp, #flipGoal, #flipEval, #flipSub, #flipContent, #flipExp   {
+  padding: 5px;
+  text-align: left;
+  background-color: #086ec4;
+  border: solid 1px #c3c3c3;
+}
+
+#panelSkill, #panelProj, #panelPub, #panelIntern, #panelAchv, #panelEdu, #panelGoal, #panelEval, #panelSub, #panelContent, #panelExp  {
+  display: none;
+  background-color: #82bbeb;
+}

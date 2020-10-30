@@ -1,0 +1,2587 @@
+Project Topics
+LA Monsoon 2020 team
+October 19, 2020
+1. Complex Inner product spaces and formulation of quantum theory
+2. Application of Linear Algebra in ML and deep neural networks.
+3. Infinite Dimensional Vector spaces.
+4. Vector space model in information retrieval.
+5. Linear Algebra in control theory.
+6. Pauli Matrices, operator algebra and approximating quantum gates.
+7. Eigenvalue problem of multiple finite automata.
+8. Applications of polynomial interpolations.
+9. Sparse Matrix Operations in Social Networks
+10. Linear Independence and Coding: Hamming Codes.
+11. Markov Processes and Learning
+12. Spectral graph theory and page ranking.
+13. Solving Differential equations for oscillations.
+14. Estimation of Eigenvalues (exact and approximate techniques).
+15. Applications of LA in Game theory and Nash Equilibriums.
+16. Linear algebra in genetics.
+17. Optical processor design and linear algebra.
+18. Image compression and wavelet transformation.
+1
+
+
+#include<bits/stdc++.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <iostream>
+#include <fstream>
+#include <strings.h>
+#include <stdlib.h>
+#include <string>
+#include <pthread.h>
+#include <openssl/sha.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+using namespace std;
+
+struct SOCKET{
+	string ip;
+	int portNo;
+};
+typedef struct SOCKET SOCKET;
+
+struct CLIENT{
+	string ip;
+	char IP[15];
+	int portNo;
+	int server_port;
+	int sock;
+	struct sockaddr_in clientAddr; 
+	set <string> grpID;
+	int isUser=0;
+	string userName, psw;
+	int isLoggedIn=0;
+};
+typedef struct CLIENT CLIENT;
+
+struct FILES_HASH{
+	string combinedHash;
+	vector <string> pieces;
+	int no_of_pieces;
+};
+typedef struct FILES_HASH FILES_HASH;
+
+struct FILES{
+	set <string> grpID;
+	int index;
+};
+typedef struct FILES FILES;
+
+struct down_file{
+	string filename;
+	int chunk_no;
+	int port;
+};
+typedef struct down_file down_file;
+
+struct CHUNKS{
+	string filename;
+	int chunkNo;
+	int port, idx;
+};
+typedef struct CHUNKS CHUNKS;
+
+International Institute of Information Technology, Hyderabad
+Course offerings in 2020-21 Semester I (Monsoon)
+M.Tech Programmes
+Course Code
+Course Name
+M.Tech I year I Semester – CSE & CSIS
+Data Structures & Algorithms for
+M20Temp3
+Problem Solving
+Maths for Computer Science 1-
+M20Temp4
+Probability and Statistics (H1)
+Credits Faculty Name(s)
+3-0-2-6 Vineet Gandhi + Avinash Sharma
+3-1-0-2 Girish Varma
+M20Temp5 Maths for Computer Science 2 - Linear
+Algebra (H2) 3-1-0-2 Indranil Chakrabarthy
+M20Temp6 Software Systems Development 3-0-2-4 Raghu Reddy
+M20Temp7 Advanced Operating Systems 3-0-1-4 Manish Shrivastava
+Total
+M.Tech I year I Semester – CASE
+12-1-5-18
+M20Temp20 Structural Dynamics 3-1-0-4 Sunitha P
+M20Temp21 Computer Problem Solving 3-1-0-4 Anoop Namboodiri
+M20Temp22 Finite Element Method 3-1-0-4 Venkateswarlu M
+M20Temp23 Structural Engineering Design Studio 3-1-0-4 Pradeep R
+Total
+12-4-0-16
+Timetable for M.Tech Courses- Monsoon 2020
+Course Name
+Programme
+Time Slot
+Data Structures & Algorithms for Problem Solving Mon/Wed/Fri - 9:30-10:30AM
+Maths for Computer Science 1- Probability & Statistics(H1) Tue/Thu/Sat - 9:30-10:30 AM
+Maths for Computer Science 2 - Linear Algebra (H2)
+M.Tech CSE
+& CSIS
+Tue/Thu/Sat - 9:30-10:30 AM
+Software Systems Development Mon/Thu - 4:00 - 5:30 PM
+Advanced Operating Systems Tue/Thu/Sat - 11:30-12:30 PM
+Structural Dynamics Tue/Fri - 1:00-2:30 PM
+Computer Problem Solving Tue/Fri - 4:00-5:30 PM
+Finite Element Method
+Structural Engineering Design Studio
+M.Tech CASE
+Mon/Thu - 1:00-2:30 PM
+Mon/Thu -10:00-11:30 AM
+
+Data Structures & Algorithms for Problem Solving
+Assignment 3
+Deadline: 2 nd November 2020 , 11.55 pm
+IMPORTANT POINTS
+1. Languages Allowed : C/C++
+2. Submission Format: Copy all the codes in a folder with name as your
+roll no. and submit the zip file in moodle. Ex: 2019201001_A3.zip
+Note: All those submissions which are not in the specified format
+or submitted after the deadline will be awarded 0 in assignment.
+Any case of plagiarism will lead to 0 in assignment or “F” in the
+course.
+PROBLEM 1: Implementation of suffix array
+AIM: Implement a Suffix Array that is capable of performing following operations
+on Strings in a most efficient way.
+1. Given a string S print its minimum lexicographic rotation. O(nlogn)
+2. Given an integer K, print the length of the longest substring that appears in the
+text at least K times.If no such substring exist, print -1. O(nlogn)
+3. Given a strings S determine its longest substring that is also a palindrome. In
+the case of multiple solutions, print the lexicographically smallest palindrome.
+O(nlogn)
+EXAMPLE:
+Input String: S = “dcabca”
+1. All possible rotation are “dcabca” , “cabcad” , “abcadc” , “bcadca” , “cadcab” ,
+“adcabc”.
+Among all lexicographically minimum is “abcadc” .2. If K=2 than since “ca” is a substring that appears twice and its length is 2, so
+the answer is 2
+3. Since only length 1 substring are palindromic, and among them “a” is
+lexicographically smallest, hence answer is “a”.
+INPUT FORMAT: You will be given a large string S (length <= 10 ^5 ). Print
+the corresponding output for each case Q1a, Q1b and Q1c.
+Constraints:
+• 1 <= String length <= 10^5
+• String consist of either Lower/Upper Case Alphabet and Numeric digits.
+Submission Format: For each subpart implement a different code. Submit it as
+rollnumber_Q1a.cpp, rollnumber_Q1b.cpp, rollnumber_Q1c.cpp.
+We will run each file separately.
+PROBLEM 2: Trie Implementation
+AIM: Given an array A of N numbers, you will be given q queries. Each query will
+contain a single integer x. You have to find then maximum xor of x from any number
+in A.
+Constraints:
+• 1 <= N, q <= 10 ^ 5
+• 1 <= A[i] <= 10 ^ 12
+INPUT:
+First Line contains N and q
+Second line contains N space separated intergers.
+Next q lines contain q queries of single integer
+Example:
+3 2
+1 2 3
+4
+5
+A = {1, 2, 3}
+Case 1: x = 4 Maximum xor of x is with 3, therefore answer is 4 xor 3 = 7
+Case 2: x = 5 Maximum xor of x is with 2, therefore answer is 5 xor 2 = 7
+Submission Format: Submit it as rollnumber_Q2.cppPROBLEM 3: External Sorting
+AIM: External Sorting is a class of algorithms used to deal with massive amounts of
+data that do not fit in memory.
+The question aims at implementing one such type: K-Way merge sort algorithm to
+sort a very large array. This algorithm is a perfect example of the use of divide and
+conquer where with limited resources large problems are tackled by breaking the
+problem space into small computable subspaces and then operations are done on
+them.
+Input Constraints:
+1. A file containing a large unsorted list of integers (Will not fit in your usual Laptop
+RAM).
+2.Do not use any in-built data structures.
+Output: A file containing non-Descending sorted list of the given integers
+Evaluation parameters :
+1. Time and Space Complexity of the algorithm
+2. Efficient use of Data-Structures
+Input Format: Your code should take two arguments.
+• First is the name of input file.
+• Second is name of output file.
+• Example Format: If your input file is at ./data/input.txt And if you need your
+output file at ./data/ named output.txt
+For c++, code should be of format rollnumber_Q3.cpp compiled file should
+accept two arguments ./a.out “./data/input.txt” “./data/output.txt”
+Generation of unsorted file:
+To generate the unsorted file, python script is uploaded along with this pdf. It
+contains all the instructions required to run it.
+Submission format: Submit it as rollnumber_Q3.cpp
+#include "header.h"
+#define PORT 8080 
+using namespace std;
+
+map <int, int> sock2idx;
+vector<int> sock_n( 10, 0); 
+CLIENT client[10];
+int n=0;
+
+map <string, string> login_cred;
+map <string, set<int>> groupMembers;
+map <string, set<int>> pendingJoinReq;
+map <string, int> grpOwner;
+map <string, int> usrName2Idx;
+map <string, vector<FILES>> shared_files;   // key = filename
+map <string, vector<pair< int , vector<int> > > > leeches;    // key = filename, value = vector< pair< idx , chunk vector >>
+map <string, set<string>> grpID2file;
+map <string, vector<FILES_HASH>> file2hash;
+
+
+void tokenize(string command, vector <string> &cmds){
+    command+=" ";
+    string str="";
+    int i,n=command.length();
+    for(i=0;i<n;i++){
+        if(command[i]!=' '){
+            str+=command[i];
+        }
+        else{
+            cmds.push_back(str);
+            str="";
+        }
+    }
+}
+
+void showLoginDetails(){
+    for(auto it : login_cred){
+        cout<<it.first<<" - "<<it.second<<endl;
+    }
+}
+
+
+string create_user(int idx, vector<string> cmd){
+    string status;
+    /*if(client[idx].isUser==1){
+        status="ALREADY LOGGED IN";
+    }
+    else */if(login_cred.find(cmd[1])!=login_cred.end()){
+        status="USER NAME ALREADY IN USE";
+    }
+    else{
+        client[idx].userName=cmd[1];
+        client[idx].psw=cmd[2];
+        status="USER MADE";
+        login_cred[cmd[1]]=cmd[2];
+        usrName2Idx[cmd[1]]=idx;
+    }
+    return status;
+}
+
+string login(int idx, vector<string> cmd){
+    string status;
+    if(client[idx].isLoggedIn==1){
+        status="ALREADY LOGGED IN";
+    }
+    else if(login_cred.find(cmd[1])==login_cred.end() || login_cred[cmd[1]]!=cmd[2]){
+        status="USERNAME OR PSW IS WRONG";
+    }
+    else{
+        client[idx].isLoggedIn=1;
+        status="LOGGED IN";
+    }
+    return status;
+}
+
+string create_group(int idx, vector<string> cmd){
+    string status;
+    if(groupMembers.find(cmd[1])!=groupMembers.end()){
+        status="GROUP ID NOT UNIQUE";
+    }
+    else{
+        groupMembers[cmd[1]].insert(idx);
+        grpOwner[cmd[1]]=idx;
+        status="NEW GROUP MADE";
+        client[idx].grpID.insert(cmd[1]);
+    }
+    return status;
+}
+
+string join_group(int idx, vector<string> cmd){
+    string status;
+    if(groupMembers.find(cmd[1])==groupMembers.end()){
+        status="NO SUCH GROUP";
+    }
+    else{
+        int GrpOwn=grpOwner[cmd[1]];
+        pendingJoinReq[cmd[1]].insert(idx);
+        status="JOIN REQ SENT";
+    }
+    return status;
+}
+
+string list_requests(int idx, vector<string> cmd){
+    //cout<<"in list_requests server...\n";
+    string status="";
+    if(pendingJoinReq.find(cmd[1])==pendingJoinReq.end()){
+        status="NO PENDING REQUESTS";
+    }
+    else{
+        status="REQUESTS - \n";
+        //cout<<status;
+        for(auto it : pendingJoinReq[cmd[1]]){
+            //status+=to_string(it)+"  -  "+usrName2Idx[it]+"\n";
+            status+=client[it].userName+" - "+to_string(it)+"\n";
+        }
+    }
+    return status;
+}
+
+string leave_group(int idx, vector<string> cmd){
+    string status;
+    if(groupMembers.find(cmd[1])==groupMembers.end()){
+        status="NO SUCH GROUP";
+    }
+    else if(client[idx].grpID.find(cmd[1])==client[idx].grpID.end()){
+        status="ALREADY NOT A MEMBER";  
+    }
+    else{
+        status="GROUP LEFT";
+        if(grpOwner[cmd[1]]!=idx){                      // IF NON-OWNER LEAVES
+            client[idx].grpID.erase(cmd[1]);
+            groupMembers[cmd[1]].erase(idx);
+            if(groupMembers[cmd[1]].size()==0){
+                groupMembers.erase(cmd[1]);
+                status="GROUP NO MORE EXISTS";
+            }
+        }
+        else{                                           // IF GROUP OWNER LEAVES
+            for(auto member : groupMembers[cmd[1]]){
+                client[member].grpID.erase(cmd[1]);
+            }
+            groupMembers.erase(cmd[1]);
+            grpOwner.erase(cmd[1]);
+            status="GROUP NO MORE EXISTS";
+        }
+        
+    }
+    // update delete uploaded files in the grp left by respective peer
+    return status;
+}
+
+string accept_request(int idx, vector<string> cmd){
+    cout<<"in acc req if() server...\n";
+    string status;
+    int id=stoi(cmd[2]);
+    if(groupMembers.find(cmd[1])==groupMembers.end()){
+        status="NO SUCH GROUP";
+    }
+    else if(grpOwner[cmd[1]]==idx){     // CAN ACCEPT ONLY IF U ARE GRP OWNER
+        if(pendingJoinReq[cmd[1]].find(id)==pendingJoinReq[cmd[1]].end()){
+            status="NO SUCH PENDING REQUEST FOUND";
+        }
+        else{
+            client[id].grpID.insert(cmd[1]);
+            groupMembers[cmd[1]].insert(id);
+            pendingJoinReq[cmd[1]].erase(id);
+            status="REQUEST ACCEPTED";
+        }
+    }
+    else{
+        status="CANNOT ACCEPT. U R NOT GRP OWNER";
+    }
+    return status;
+}
+
+string list_groups(){
+    string status="";
+    for(auto grp : groupMembers){
+        //cout<<grp.first<<" -  ";
+        status+=grp.first+" -  ";
+        for(auto member : grp.second){
+            status+=to_string(member)+" ";
+            //cout<<member<<" ";
+        }
+        status+="\n";
+        //cout<<endl;
+    }
+    if(status=="")
+        status="NO GROUPS AVAILABLE";
+    return status;
+}
+
+string upload_file(int idx, vector<string> cmd, string command){
+    //cout<<command<<endl;
+    //return command;
+    string status;
+    int total_pieces=stoi(cmd[3]);
+    if(groupMembers.find(cmd[2])==groupMembers.end()){
+        status="NO SUCH GROUP";
+    }
+    else{
+        if(file2hash.find(cmd[1])==file2hash.end()){    // update only when file is shared for first time
+            FILES_HASH fh;
+            
+            total_pieces/=20;
+            fh.no_of_pieces=total_pieces/20;
+            int pos=15+cmd[1].length()+cmd[2].length()+cmd[3].length();
+            string remStr=command.substr(pos);
+            fh.combinedHash=remStr;
+            int i=0;
+            for( int j=1;j<=total_pieces;j++){      // STORE HASH OF ALL CHUNKS
+                string tmp=remStr.substr(i,20);
+                i+=20;
+                fh.pieces.push_back(tmp);
+            }
+            file2hash[cmd[1]].push_back(fh);
+        }
+        
+        FILES f;
+                
+        f.grpID.insert(cmd[2]);
+        f.index=idx;
+        shared_files[cmd[1]].push_back(f);
+        grpID2file[cmd[2]].insert(cmd[1]);
+        status="FILE SHARED. U R A SEED OF IT.";
+    }
+    return status;
+}
+
+string list_files(int idx, vector<string> cmd){
+    string status="";
+    if(groupMembers.find(cmd[1])==groupMembers.end()){
+        status="NO SUCH GROUP";
+    }
+    else{
+        if(grpID2file.find(cmd[1])==grpID2file.end()){
+            status="NO FILES SHARED IN THIS GROUP";
+        }
+        else{
+            status="FILES -  ";
+            for(auto file : grpID2file[cmd[1]]){
+                status+=file+" ";
+            }
+        }
+    }
+    return status;
+}
+
+string download_file(int idx, vector<string> cmd){
+    string status="";
+    string leeches_info="";
+    int file_avail=0;
+    if(shared_files.find(cmd[2])==shared_files.end()){
+        status="FILE_NOT_AVAILABLE";
+    }
+    else{
+        int chunks=file2hash[cmd[2]][0].pieces.size();//no_of_pieces;
+        file_avail=1;
+        int i;
+        string srcIP, srcPort;
+        for(auto f : shared_files[cmd[2]]){
+            if(f.grpID.find(cmd[1])!=f.grpID.end()){
+                i=f.index;
+                srcIP=client[i].ip;
+                srcPort=to_string(client[i].server_port);
+                status+=srcIP+","+srcPort+"|";
+            }
+        }
+        //DETAILS OF LEECHES
+        /*
+        if(leeches.find(cmd[2])==leeches.end()){
+            leeches_info="X";    //NO_LEECH_AVAILABLE
+        }
+        else{
+            pair <int, vector<int>> p;
+            for(auto f : leeches[cmd[2]]){
+                if(f.first==stoi(cmd[1])){
+                    string srcIP, srcPort;
+                    i=f.first;
+                    srcIP=client[i].ip;
+                    srcPort=to_string(client[i].server_port);
+                    leeches_info+=srcIP+","+srcPort+":";
+                    for(int j=0; j<f.second.size(); j++){
+                        if(f.second[j]==1){
+                            leeches_info+=to_string(f.second[j])+",";
+                        }
+                    }
+                    leeches_info+="|";
+                }
+            }
+        }
+        leeches_info+=to_string(chunks);*/
+    }
+    /*int len=status.length();
+    status=status.substr(0,len-1);
+    //len=leeches_info.length();
+    //leeches_info=leeches_info.substr(0,len-1);
+    status+="-"+leeches_info;*/
+    return status;
+}
+
+void *serverservice(void *socket_desc)	//socket_desc
+{
+	int new_socket = *(int *)socket_desc;
+	int idx=sock2idx[new_socket];
+	cout<<client[idx].ip<<"\n"<<client[idx].IP<<"\n"<<client[idx].portNo<<"\n"<<client[idx].sock<<endl;
+	/*
+    char serverreply[1000]={0};
+    strcpy(serverreply, clientreplymsg.c_str());
+    //cout<<"serverreply : "<<serverreply<<endl;
+    send(new_socket, serverreply, strlen(serverreply), 0);	
+    */
+    string status;
+    while (1)
+    {
+
+        int closeflag = 0;
+        char buffer[1024] = {0};
+        int rc = read(new_socket, buffer, 1024);
+        //cout<<buffer<<endl;
+        string clientreplymsg="bye";
+        //string data = string(buffer);
+        
+        vector<string> cmd;
+        string command(buffer);
+        tokenize(command, cmd);
+        cout<<command<<endl;
+        for(auto i : cmd){
+            cout<<i<<endl;
+        }
+        //cout<<"after tokenize...\n";
+        if(cmd[0]=="create_user"){
+            //cout<<"in create_user...\n";
+            //status="share reply";
+            status=create_user(idx, cmd);
+            clientreplymsg=status;
+            //showLoginDetails();
+            //cout<<"serverreply : "<<string(serverreply)<<endl;
+        }
+        else if(cmd[0]=="login"){
+            status=login(idx, cmd);
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="create_group"){
+            status=create_group(idx, cmd);
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="join_group"){
+            status=join_group(idx, cmd);
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="list_requests"){
+            status=list_requests(idx, cmd);
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="leave_group"){
+            status=leave_group(idx, cmd);
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="accept_request"){
+            //cout<<"in acc req if() server...\n";
+            status=accept_request(idx, cmd);
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="list_groups"){
+            status=list_groups();
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="upload_file"){
+            status=upload_file(idx, cmd, command);
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="list_files"){
+            status=list_files(idx, cmd);
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="download_file"){
+            status=download_file(idx, cmd);
+            clientreplymsg=status;
+        }
+        
+
+            char *serverreply = new char[clientreplymsg.length() + 1];
+            strcpy(serverreply, clientreplymsg.c_str());
+            //cout<<"serverreply : "<<serverreply<<endl;
+            send(new_socket, serverreply, strlen(serverreply), 0);  
+    }
+/*    while(1){
+    	char buffer[1024]={0};
+		int valread = read( new_socket , buffer, 1024); 
+		char send_cmd[1024]="bye" ;
+		send(new_socket , send_cmd , strlen(send_cmd) , 0 );
+		printf("%s\n",buffer );
+	}*/
+}
+
+int main(int argc, char *argv[])
+{
+	int args[2];
+    pthread_t thread_id;
+    if (argc != 3)
+    {
+        cout << "Invalid Argument !!!" << endl;
+    }
+    else
+    {
+    	int tracker_port=atoi(argv[2]);
+        int server_fd, new_socket;
+        struct sockaddr_in address;
+        int opt = 1;
+        int addrlen = sizeof(address);
+
+        // Creating socket file descriptor
+        if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+        {
+            perror("socket failed");
+            exit(EXIT_FAILURE);
+        }
+
+        // Forcefully attaching socket to the port 8080
+        if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+                       &opt, sizeof(opt)))
+        {
+            perror("setsockopt");
+            exit(EXIT_FAILURE);
+        }
+        address.sin_family = AF_INET;
+        address.sin_addr.s_addr = inet_addr(argv[1]);	//trackersocket1.ip
+        address.sin_port = htons(tracker_port);			//trackersocket1.port
+
+        // Forcefully attaching socket to the port 8080
+        if (bind(server_fd, (struct sockaddr *)&address,
+                 sizeof(address)) < 0)
+        {
+            perror("bind failed");
+            exit(EXIT_FAILURE);
+        }
+        if (listen(server_fd, 10) < 0)
+        {
+            perror("listen");
+            exit(EXIT_FAILURE);
+        }
+        n=0;
+        while (1)
+        {
+        	cout<<"listening...\n";								/*client[n].clientAddr*/
+            if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
+            {
+                perror("Error in accept connection");
+                exit(EXIT_FAILURE);
+            }
+            cout<<"connected  "<<new_socket<<endl;
+            client[n].ip=inet_ntoa(address.sin_addr);
+            //cout<<"1\n";
+            strcpy( client[n].IP , (client[n].ip).c_str());
+		    //cout<<"2\n";
+		    client[n].portNo=(int) ntohs(address.sin_port);
+		    //client[n].portNo=;//(int) ntohs(address.sin_port);
+		    
+		    //cout<<"3\n";
+		    client[n].sock=new_socket;
+		    //cout<<"4\n";
+		    //cout<<client[n].ip<<"\n"<<client[n].IP<<"\n"<<client[n].portNo<<"\n"<<client[n].sock<<endl;
+		    sock2idx[new_socket]=n;
+
+            //READ CLIENT'S SERVER PORT
+            char buffer[1024];
+            int valread = read( new_socket , buffer, 1024); 
+            string tmp(buffer);
+            client[n].server_port=stoi(tmp);
+            cout<<client[n].ip<<"\n"<<client[n].IP<<"\n"<<client[n].portNo<<"\n"<<client[n].sock<<endl<<"\n"<<client[n].server_port<<endl;
+
+
+		    if (pthread_create(&thread_id, NULL, serverservice, (void *)&new_socket) < 0)
+            {
+                perror("\ncould not create thread\n");
+            }
+            n++;
+        }
+    }
+}
+
+#include "header.h" 
+#define PORT 8080 
+using namespace std;
+CLIENT client[10];
+int k=0;
+map <int, int> sock2idx;
+
+vector <vector<string>> downloaded_files(100);
+vector <string, int> file_2_idx;
+
+string server_ip;
+int server_port;
+string shareHASH;
+int client_port;
+string client_ip;
+//CLIENT client[10];
+//int k=0;
+//map <int, int> sock2idx;
+int myPort;
+
+
+int m=0;
+
+void tokenize(string command, vector <string> &cmds){
+    command+=" ";
+    string str="";
+    int i,n=command.length();
+    for(i=0;i<n;i++){
+        if(command[i]!=' '){
+            str+=command[i];
+        }
+        else{
+            cmds.push_back(str);
+            str="";
+        }
+    }
+}
+
+void create_mtorrent_file(vector <string> cmd){
+    string tracker_info = server_ip + " " + to_string(server_port);
+    char filepath[100], saveName[100];
+    //string save_name=cmd[1]+".mtorrent";
+    strcpy(filepath, cmd[1].c_str());
+    strcpy(saveName, cmd[2].c_str());
+    struct stat sb;
+    //char curr_path[200];//="foo.txt";
+    //strcpy(curr_path, cmd[2].c_str());
+    int piece_size=512*1024, total_pieces, size, last_piece;
+    string hash="";
+    
+    if (stat(filepath, &sb) == -1) {
+        perror("stat");
+        exit(EXIT_FAILURE);
+    }
+    size=sb.st_size;
+    
+    total_pieces = size/piece_size;
+    if(size % piece_size == 0)
+        last_piece = 512*1024;
+    else{
+        total_pieces++;
+        last_piece = size % piece_size;
+    }
+    
+    ifstream input_file;
+    //input_file.open("foo.txt");
+    input_file.open(filepath);
+    unsigned char input[piece_size], SHA_hash[40];
+    //cout<<total_pieces<<" "<<last_piece<<" "<<size<<endl;
+    ofstream stream;
+    //stream.open("filename.mtorrent");
+    stream.open(saveName);
+    if( !stream ){
+        cout << "Opening file failed" << endl;
+        exit(0);
+    }
+    //stream << "filename.pdf" << endl;
+    stream << tracker_info << endl;
+    stream << filepath << endl;
+    stream << size << endl;
+
+    while(total_pieces--){
+        input_file.read((char*)input, piece_size);
+        if(total_pieces > 1){
+            SHA1(input, piece_size , SHA_hash);
+        }
+        else{
+            //cout<<"last\n";
+            SHA1(input, last_piece , SHA_hash);
+        }
+        //cout<<SHA_hash;
+        string piece((char*)SHA_hash);
+        //stream << SHA_hash << endl;
+        hash += piece;      
+    }
+    stream << hash << endl;
+    //string path="/home/rishabh/F/torrent/foo.txt";
+    //stream << curr_path << endl;
+    shareHASH=hash;
+}
+
+
+void create_user(string command, vector <string> cmd, int sock){
+    int len;
+    char buffer[1024] = {0};
+    while(1){
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="USER NAME ALREADY IN USE"){
+            string usrname;
+            cout<<"enter username again : ";
+            cin>>usrname;
+            cmd[1]=usrname;
+            command="create_user "+usrname+" "+cmd[2];
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+    }
+    //printf("%s\n",buffer );
+}
+
+void login(string command, vector <string> cmd, int sock){
+    int len,attempts=4;
+    //char buffer[1024] = {0};
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="USERNAME OR PSW IS WRONG"){
+            string usr_psw;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter usrname password again : ";
+            getline(cin,usr_psw);
+            command="login "+usr_psw;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+    //printf("%s\n",buffer );
+}
+
+void create_group(string command, vector <string> cmd, int sock){
+    int len,attempts=4;
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="GROUP ID NOT UNIQUE"){
+            string grpId;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter group id again : ";
+            getline(cin,grpId);
+            command="create_group "+grpId;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+}
+
+
+
+void join_group(string command, vector <string> cmd, int sock){
+    int len,attempts=4;
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="NO SUCH GROUP"){
+            string grpId;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter group id again : ";
+            getline(cin,grpId);
+            command="join_group "+grpId;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+}
+
+void list_requests(string command, vector <string> cmd, int sock){
+    cout<<"in list_requests client...\n";
+    int len,attempts=4;
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="NO SUCH GROUP"){
+            string grpId;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter group id again : ";
+            getline(cin,grpId);
+            command="list_requests "+grpId;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+}
+
+void leave_group(string command, vector <string> cmd, int sock){
+    int len,attempts=4;
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="NO SUCH GROUP"){
+            string grpId;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter group id again : ";
+            getline(cin,grpId);
+            command="leave_group "+grpId;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+}
+
+void accept_request(string command, vector <string> cmd, int sock){
+    cout<<"in accept_request() client...\n";
+    int len,attempts=4;
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="INVALID GROUP OR USER ID"){
+            string grp_usr_Id;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter group_id and user_id again : ";
+            getline(cin,grp_usr_Id);
+            command="accept_request "+grp_usr_Id;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+}
+
+void list_groups(string command, vector <string> cmd, int sock){
+    int len=command.length();
+    char send_cmd[len];
+    strcpy(send_cmd, command.c_str());
+    fflush(stdout);
+    send(sock , send_cmd , strlen(send_cmd) , 0 );
+    char buffer[1024] = {0};
+    int valread = read( sock , buffer, 1024);
+    string replyStr(buffer);
+    printf("%s\n",buffer );
+}
+
+string getSHA_Hash(vector <string> cmd/*, vector <string> &pieces*/){
+    char filepath[100];
+    strcpy(filepath, cmd[1].c_str());
+    string hash="", piece_wise="";
+    struct stat sb;
+    int piece_size=512*1024, total_pieces, size, last_piece;
+    int no_of_pieces;
+    if (stat(filepath, &sb) == -1) {
+        perror("stat : no such file or wrong path\n");
+        exit(EXIT_FAILURE);
+    }
+    size=sb.st_size;
+    total_pieces = size/piece_size;
+    if(size % piece_size == 0)
+        last_piece = 512*1024;
+    else{
+        total_pieces++;
+        last_piece = size % piece_size;
+    }
+    no_of_pieces=total_pieces;
+    cout<<size<<" "<<total_pieces<<" "<<last_piece<<endl;
+    ifstream input_file;
+    input_file.open(filepath);
+    unsigned char input[piece_size], SHA_hash[20*total_pieces];
+    while(total_pieces--){
+        input_file.read((char*)input, piece_size);
+        if(total_pieces > 1){
+            SHA1(input, piece_size , SHA_hash);
+        }
+        else{
+            //cout<<"last\n";
+            SHA1(input, last_piece , SHA_hash);
+        }
+        //cout<<SHA_hash;
+        string piece((char*)SHA_hash);
+        //stream << SHA_hash << endl;
+        hash += piece;  
+        //pieces.push_back(piece);
+        piece_wise += piece+" ";        
+    }
+    return hash;
+    //cout<<hash<<endl<<endl<<piece_wise<<endl;
+    //return to_string(no_of_pieces)+" "+hash+" "+piece_wise;
+}
+
+void upload_file(string command, vector <string> cmd, int sock){
+    //vector <string> pieces;
+    string SHA_hash=getSHA_Hash(cmd);
+    //cout<<SHA_hash<<endl;
+    //cout<<endl<<endl;
+    //cout<<"----------------\n";
+    /*for(auto i : pieces){
+        cout<<i.length()<<"   "<<i<<endl<<endl;;
+    }*/
+    string filename="";
+    int i=cmd[1].length()-1;
+    while(cmd[1][i]!='/'){
+        filename=cmd[1][i]+filename;
+        i--;
+    }
+
+    command="upload_file "+filename+" "+cmd[2]+" "+to_string(SHA_hash.length())+" "+SHA_hash;
+    int len=command.length();
+    char send_cmd[len];
+    strcpy(send_cmd, command.c_str());
+    fflush(stdout);
+    send(sock , send_cmd , strlen(send_cmd) , 0 );
+    char buffer[1024] = {0};
+    int valread = read( sock , buffer, 1024);
+    string replyStr(buffer);
+    printf("%s\n",buffer );
+
+}
+
+void list_files(string command, vector <string> cmd, int sock){
+    int len=command.length();
+    char send_cmd[len];
+    strcpy(send_cmd, command.c_str());
+    fflush(stdout);
+    send(sock , send_cmd , strlen(send_cmd) , 0 );
+    char buffer[1024] = {0};
+    int valread = read( sock , buffer, 1024);
+    string replyStr(buffer);
+    printf("%s\n",buffer ); 
+}
+
+
+void * client1(void *temp){
+    //down_file *df=(down_file*)temp;
+
+    //char *msg=(char*)temp;
+    //cout<<"msg in thread - "<<msg<<endl;
+    //int port=1000*(msg[0]-'0')+100*(msg[1]-'0')+10*(msg[2]-'0')+(msg[3]-'0');
+    //cout<<"port in thread - "<<port<<endl;
+
+    //int port=*(int*)temp;
+    //free(temp);
+    
+    CHUNKS chk=*(CHUNKS*)temp;
+    int port = chk.port;
+    string flname=""
+    int i=0;
+    while(chk.filename[i]!='-')
+        flname+=chk.filename[i];
+
+
+    int client_socket;
+    client_socket=socket(AF_INET,SOCK_STREAM,0);
+    if(client_socket==-1){
+        printf("Socket creation error %d\n",errno);
+        return 0;
+    }
+    struct sockaddr_in server_address;
+    //int addrlen=sizeof(address);
+    char buffer[512*1024]={0};
+    
+    //setsockopt(client_socket,)
+    if(inet_pton(AF_INET,"127.0.0.1",&server_address.sin_addr)==-1){
+        printf("Invalid Address:%d\n",errno);
+    }
+    server_address.sin_family=AF_INET;
+    server_address.sin_port=htons(port);        //df->port
+    int addrlen=sizeof(server_address);
+
+    int socket=connect(client_socket,(struct sockaddr*)&server_address,addrlen);
+    if(socket==-1){
+        printf("Connect error:%d\n",errno);
+        return 0;
+    }
+    printf("Connected\n");
+    //string to_send="text.txt";
+    string to_send=chk.filename+"-"+to_string(chk.port)+"-"+to_string(chk.chunkNo);
+
+    //string to_send=to_string(df->chunk_no);
+    write(client_socket,to_send.c_str(),to_send.length());
+    //write(client_socket,msg,strlen(msg));
+    //while(1){
+        int valread=read(client_socket,buffer,512*1024);
+        printf("%d %d %s\n",getpid(),valread,buffer);
+        memset(buffer,'\0',512*1024);
+
+    string rcvdChunk(buffer);
+    downloaded_files[chk.idx][file_2_idx[flname]]=rcvdChunk;
+        cout<<"-------------------------------------------\n";
+        cout<<"-------------------------------------------\n";
+        //if(valread<1024) break;
+    //}
+    close(client_socket);
+    cout<<"coming out of client thread...\n";
+    return NULL;
+}
+
+
+void download_file(string command, vector <string> cmd, int sock){
+    //pthread_t thread_id;
+
+    int len=command.length();
+    char send_cmd[len];
+    strcpy(send_cmd, command.c_str());
+    fflush(stdout);
+    send(sock , send_cmd , strlen(send_cmd) , 0 );
+    char buffer[1024] = {0};
+    int valread = read( sock , buffer, 1024);
+    string replyStr(buffer);
+    printf("%s\n",buffer ); 
+    // TILL HERE, GOT INFO OF SEEDS
+    ////////////////
+    int i;
+    len=replyStr.length();
+    vector <string> seeds_ip;
+    vector <int> seeds_port;
+    string tmp="";
+    for(i=0;i<len;i++){
+        if(replyStr[i]==','){
+            seeds_ip.push_back(tmp);
+            tmp="";
+        } 
+        else if(replyStr[i]=='|'){
+            //cout<<"----\n";
+            seeds_port.push_back(stoi(tmp));
+            tmp="";
+        }
+        else if(replyStr[i]=='-')
+            break;
+        else            
+            tmp+=replyStr[i];
+    }
+    /////////
+    //LEECHES INFO PROCESSING
+    //i++;
+    //for(;i<len;i++){
+
+    //}
+    int chunks=6;
+    len=seeds_port.size();
+    //pthread_t thread_id[len];
+    pthread_t thread_id[chunks];
+/*    down_file df;
+    df.filename=cmd[2];
+    for(i=0;i<n;){
+        int x=chunks/len;
+        if(chunks % len==0){
+            for(int j=i; j<x+i;j++){
+                df.chunk_no=j;
+                df.port=seeds_port[j];
+                pthread_create(&thread_id[j],NULL,client1,&df);
+            }
+            i+=x;
+        }
+        else{
+            for(int j=i; j<n && j<=x+i;j++){
+                df.chunk_no=j;
+                df.port=seeds_port[j];
+                pthread_create(&thread_id[j],NULL,client1,&df);
+            }
+            i+=x+1;
+        }
+    }
+*/
+
+/*    int x=chunks/len;
+    for(i=0;i<len;i++){
+        cout<<seeds_port[i]<<"   "<<seeds_ip[i]<<endl;
+        string msg="";
+        msg+=to_string(seeds_port[i])+" "+to_string(i)+" "+to_string(x)+" "+to_string(m);
+        cout<<"msg - "<<msg<<endl;
+        char MSG[1024];
+        strcpy(MSG, msg.c_str());
+        pthread_create(&thread_id[i],NULL,client1,(void*)MSG);
+     
+*/
+
+        //pthread_create(&thread_id[i],NULL,client1,&seeds_port[i]);
+        //pthread_join(t2,NULL);
+        /*string str=seeds_ip[i]+" "+to_string(seeds_port[i]);
+        char passIP_port[20];
+        strcpy(passIP_port, str.c_str());
+        if (pthread_create(&thread_id[i], NULL, downloader_thread , (void *)passIP_port) < 0)
+        {
+            perror("\ncould not create t
+            hread in download_file\n");
+        }*/
+//    }
+
+
+    int x,j;
+    int t=0;
+    CHUNKS chk;
+    file_2_idx[cmd[2]]=m;
+    for(i=0;i<chunks;){
+        x=chunks/len;
+        if(chunks % len==0){
+            for(j=i; j<x+i;j++){
+                //cout<<j<<" ";
+                cout<<seeds_port[t]<<"   "<<seeds_ip[t]<<endl;
+                string msg="";
+                msg+=to_string(seeds_port[t])+" chunk no. - "+to_string(j);
+                cout<<"msg - "<<msg<<endl;
+                chk.filename=cmd[2];
+                chk.chunkNo=j;
+                chk.port=seeds_port[t];
+                chk.idx=j;
+                pthread_create(&thread_id[j],NULL,client1,(void*)&chk);
+                //char MSG[1024]={0};
+                //strcpy(MSG, msg.c_str());
+                //pthread_create(&thread_id[j],NULL,client1,(void*)MSG);
+                
+             }
+            i+=x;
+            //cout<<endl;
+        }
+        else{
+            for(j=i; j<chunks && j<=x+i;j++){
+                //cout<<j<<" ";    
+                cout<<seeds_port[t]<<"   "<<seeds_ip[t]<<endl;
+                string msg="";
+                msg+=to_string(seeds_port[t])+" chunk no. - "+to_string(j);
+                cout<<"msg - "<<msg<<endl;
+                chk.filename=cmd[2];
+                chk.chunkNo=j;
+                chk.port=seeds_port[t];
+                pthread_create(&thread_id[j],NULL,client1,(void*)&chk);
+                //char MSG[1024]={0};
+                //strcpy(MSG, msg.c_str());
+                //pthread_create(&thread_id[j],NULL,client1,(void*)MSG);
+                
+            }
+            i+=x+1;n
+            //cout<<endl;
+        }
+        t++;
+    }
+
+
+
+    m++;
+    for(i=0;i<len;i++)
+        pthread_join(thread_id[i],NULL);
+
+    cout<<"*****************\n\n";
+    i=file_2_idx[cmd[2]];
+    for(auto f : downloaded_files[i]){
+        cout<<f<<endl<<endl;
+        cout<<"\\\\\\\\\\\\\\\\\\\\\\\\\\\n\n";
+    }
+
+}
+
+
+
+
+
+void execute_cmd(string command, vector <string> cmd, int sock){
+    string reply;
+    if(cmd[0]=="create_user"){
+        create_user(command, cmd, sock);
+    }
+    else if(cmd[0]=="login"){
+        login(command, cmd, sock);  
+    }
+    else if(cmd[0]=="create_group"){
+        create_group(command, cmd, sock);   
+    }
+    else if(cmd[0]=="join_group"){
+        join_group(command, cmd, sock); 
+    }
+    else if(cmd[0]=="list_requests"){
+        list_requests(command, cmd, sock);  
+    }
+    else if(cmd[0]=="leave_group"){
+        leave_group(command, cmd, sock);    
+    }
+    else if(cmd[0]=="list_groups"){
+        list_groups(command, cmd, sock);    
+    }
+    else if(cmd[0]=="accept_request"){
+        accept_request(command, cmd, sock);
+    }
+    else if(cmd[0]=="upload_file"){
+        upload_file(command, cmd, sock);
+    }
+    else if(cmd[0]=="list_files"){
+        list_files(command, cmd, sock);
+    }
+    else if(cmd[0]=="download_file"){
+        download_file(command, cmd, sock);
+    }
+    else{
+        cout<<cmd[0]<<","<<cmd[1]<<","<<cmd[2]<<endl;
+        cout<<"invalid command\n";
+    }
+}
+
+
+
+
+
+
+
+
+void * acceptCon(void * client_socket1){
+    int client_socket=*(int*)client_socket1;
+    //struct sockaddr_in client=*client1;
+    free(client_socket1);
+    //free(client1);
+    char buffer[1024]={0};
+    //printf("Accepted from %lld:%d\n",client.sin_addr,client.sin_port);
+    int valread=read(client_socket,buffer,1024);
+    //printf("%s\n",buffer);
+    cout<<buffer<<endl;
+    string to_send="Hi from server";
+
+    ////////
+/*    string str(buffer);
+    str=str+" chunk received";
+    char send_buffer[1024]={0};
+    strcpy(send_buffer, str.c_str());
+*/
+    ///////
+
+    int i=0;
+    string filename="", str(buffer);
+    while(str[i]!='-'){
+        filename+=str[i];
+        i++;
+    }
+    i++;
+    while(str[i]!='-')
+        i++;
+    i++;
+    int n=0;
+    while(i<str.length()){
+        n=n*10+str[i]-'0';
+        i++;
+    }
+
+    char path[100];
+    strcpy(path, filename.c_str());
+    ifstream input_file;
+    input_file.open(path);
+    int a=512*1024;
+    unsigned char input[a];
+    while(n--){
+        input_file.read((char*)input, 512*1024);
+    }
+
+    //char send_buffer[1024]="Hi from server";
+    //send(client_socket , send_buffer , strlen(send_buffer) , 0 );
+    send(client_socket , input , strlen((char*)input) , 0 );
+
+    close(client_socket);
+    return NULL;
+}
+
+
+void * server(void *temp){
+    int server_socket;
+    int port=*(int*)temp;
+    //free(temp);
+    struct sockaddr_in address;
+    //int addrlen=sizeof(address);
+    char buffer[1024]={0};
+    int opt=1;
+    
+    server_socket=socket(AF_INET,SOCK_STREAM,0);
+    if(server_socket==-1){
+        cout<<"Socket creation error "<<errno<<endl;
+        //printf("Socket creation error %d\n",errno);
+        return 0;
+    }
+
+    if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) 
+    { 
+        perror("setsockopt"); 
+        exit(EXIT_FAILURE); 
+    } 
+    //setsockopt(server_socket,)
+    address.sin_addr.s_addr=INADDR_ANY;
+    address.sin_family=AF_INET;
+    address.sin_port=htons(port);
+    int addrlen=sizeof(address);
+    if(bind(server_socket,(const struct sockaddr *)&address,addrlen)==-1){
+        printf("bind error:%d\n",errno);
+        return 0;
+    }
+    if(listen(server_socket,4)==-1){
+        printf("Listen error:%d\n",errno);
+        return 0;
+    }
+
+    printf("Listening\n");
+    while(1){
+        struct sockaddr_in client;
+        socklen_t client_len=sizeof(client);
+        int client_socket=accept(server_socket,(struct sockaddr*)&client,&client_len);
+        if(client_socket==-1){
+            printf("Accept error:%d\n",errno);
+            return 0;
+        }
+        cout<<ntohs(client.sin_port)<<"  "<<inet_ntoa(client.sin_addr)<<endl;
+        pthread_t t;
+        struct sockaddr_in *temp=(struct sockaddr_in *)malloc(sizeof(client));
+        *temp=client;
+        int *client_soc=(int*)malloc(sizeof(int));
+        *client_soc=client_socket;
+        pthread_create(&t,NULL,acceptCon,client_soc);
+        //acceptCon(client_socket,client);
+    }
+    close(server_socket);
+    return 0;
+}
+
+
+int main(int argc, char const *argv[])
+{
+    pthread_t t1,t2;
+    if (argc != 5)
+    {
+        cout << "Invalid Argument in client!!!" << endl;
+    }
+    else
+    {  
+        pthread_t thread_id;
+        string ip1(argv[1]);
+        string port1(argv[2]);
+        int myPort=stoi(port1);
+        ip1=ip1+" "+port1;
+        char passIP_port[ip1.length()];
+        strcpy(passIP_port, ip1.c_str());
+        pthread_create(&t1,NULL,server,&myPort);
+        /*if (pthread_create(&thread_id, NULL, PeerASServer , (void *)passIP_port) < 0)
+        {
+            perror("\ncould not create thread\n");
+        }*/
+        //socket programming on client side
+        int sock = 0;
+        struct sockaddr_in serv_addr, my_addr;
+        if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+        {
+            printf("\n Socket creation error in client side\n");
+            return -1;
+        }
+
+        /*my_addr.sin_family = AF_INET; 
+        my_addr.sin_addr.s_addr = INADDR_ANY; 
+        my_addr.sin_port = htons(atoi(argv[2]));
+
+        if (bind(sock, (struct sockaddr*) &my_addr, sizeof(struct sockaddr_in)) == 0) 
+            printf("Binded Correctly\n"); 
+        else
+            printf("Unable to bind\n");*/
+
+        memset(&serv_addr, '0', sizeof(serv_addr));
+        serv_addr.sin_family = AF_INET;
+        serv_addr.sin_port = htons(atoi(argv[4]));      //trackersocket1.port
+
+        //Convert IPv4 and IPv6 addresses from text to binary form
+        if (inet_pton(AF_INET, argv[3] , &serv_addr.sin_addr) <= 0)         //trackersocket1.ip
+        {
+            printf("\nClient File  : Invalid address/ Address not supported \n");
+            return -1;
+        }
+        cout<<"b4 connected\n";
+        if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+        {
+            printf("\nConnection Failed in client side\n");
+            return -1;
+        }
+        cout<<"connected\n";
+        send(sock , argv[2] , strlen(argv[2]) , 0 );    //send client's server is running sock port no
+        //continuously listening to client for his entring command
+        
+        while(1){
+            string command;
+            getline(cin, command);
+            vector <string> cmd;
+            tokenize(command, cmd);
+            for(auto i : cmd)
+                cout<<i<<" ";
+            cout<<endl;
+            execute_cmd(command, cmd, sock);
+            /*char send_cmd[1024], buffer[1024];
+            strcpy(send_cmd, command.c_str());
+            send(sock , send_cmd , strlen(send_cmd) , 0 );
+            int valread = read( sock , buffer, 1024); 
+            printf("%s\n",buffer );*/
+        }
+        /*
+        while(1){
+            string command="";
+            cout<<"enter : ";
+            getline(cin, command);
+            //char ch;
+            //while(ch=getchar()!='\n'){
+            //  command+=ch;
+            //}
+            if(command=="abc"){
+                int input_port;
+                cout<<"enter port : ";
+                string line;
+                getline(cin, line);
+                stringstream linestream(line);
+                linestream>>input_port;
+                //cin>>input_port;
+                pthread_create(&t2,NULL,client1,&input_port);
+                pthread_join(t2,NULL);
+                cout<<"below join()...\n";
+            }
+            else{
+                cout<<"in else...\n";
+                char send_cmd[1024], buffer[1024];
+                strcpy(send_cmd, command.c_str());
+                cout<<"below strcpy()...\n";
+                send(sock , send_cmd , strlen(send_cmd) , 0 );
+                cout<<"below send()...\n";
+                int valread = read( sock , buffer, 1024);
+                cout<<"below read()...\n"; 
+                //printf("%s\n",buffer );
+                cout<<buffer<<endl;
+                //fflush(STDOUT);   
+            }
+            cout<<"below else...\n";
+        }*/
+
+    }
+
+    return 0;
+}
+#include "header.h" 
+#define PORT 8080 
+using namespace std;
+CLIENT client[10];
+int k=0;
+map <int, int> sock2idx;
+
+//vector <vector<string>> downloaded_files(100);
+vector <string, int> file_2_idx;
+
+string server_ip;
+int server_port;
+string shareHASH;
+int client_port;
+string client_ip;
+//CLIENT client[10];
+//int k=0;
+//map <int, int> sock2idx;
+int myPort;
+
+///////////
+//GLOBALS FOR FILE DOWNLOADING
+int m=0;
+vector <vector<CHUNKS>> chunks_details(100);
+ 
+//////////
+
+
+void tokenize(string command, vector <string> &cmds){
+    command+=" ";
+    string str="";
+    int i,n=command.length();
+    for(i=0;i<n;i++){
+        if(command[i]!=' '){
+            str+=command[i];
+        }
+        else{
+            cmds.push_back(str);
+            str="";
+        }
+    }
+}
+
+void create_mtorrent_file(vector <string> cmd){
+    string tracker_info = server_ip + " " + to_string(server_port);
+    char filepath[100], saveName[100];
+    //string save_name=cmd[1]+".mtorrent";
+    strcpy(filepath, cmd[1].c_str());
+    strcpy(saveName, cmd[2].c_str());
+    struct stat sb;
+    //char curr_path[200];//="foo.txt";
+    //strcpy(curr_path, cmd[2].c_str());
+    int piece_size=512*1024, total_pieces, size, last_piece;
+    string hash="";
+    
+    if (stat(filepath, &sb) == -1) {
+        perror("stat");
+        exit(EXIT_FAILURE);
+    }
+    size=sb.st_size;
+    
+    total_pieces = size/piece_size;
+    if(size % piece_size == 0)
+        last_piece = 512*1024;
+    else{
+        total_pieces++;
+        last_piece = size % piece_size;
+    }
+    
+    ifstream input_file;
+    //input_file.open("foo.txt");
+    input_file.open(filepath);
+    unsigned char input[piece_size], SHA_hash[40];
+    //cout<<total_pieces<<" "<<last_piece<<" "<<size<<endl;
+    ofstream stream;
+    //stream.open("filename.mtorrent");
+    stream.open(saveName);
+    if( !stream ){
+        cout << "Opening file failed" << endl;
+        exit(0);
+    }
+    //stream << "filename.pdf" << endl;
+    stream << tracker_info << endl;
+    stream << filepath << endl;
+    stream << size << endl;
+
+    while(total_pieces--){
+        input_file.read((char*)input, piece_size);
+        if(total_pieces > 1){
+            SHA1(input, piece_size , SHA_hash);
+        }
+        else{
+            //cout<<"last\n";
+            SHA1(input, last_piece , SHA_hash);
+        }
+        //cout<<SHA_hash;
+        string piece((char*)SHA_hash);
+        //stream << SHA_hash << endl;
+        hash += piece;      
+    }
+    stream << hash << endl;
+    //string path="/home/rishabh/F/torrent/foo.txt";
+    //stream << curr_path << endl;
+    shareHASH=hash;
+}
+
+
+void create_user(string command, vector <string> cmd, int sock){
+    int len;
+    char buffer[1024] = {0};
+    while(1){
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="USER NAME ALREADY IN USE"){
+            string usrname;
+            cout<<"enter username again : ";
+            cin>>usrname;
+            cmd[1]=usrname;
+            command="create_user "+usrname+" "+cmd[2];
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+    }
+    //printf("%s\n",buffer );
+}
+
+void login(string command, vector <string> cmd, int sock){
+    int len,attempts=4;
+    //char buffer[1024] = {0};
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="USERNAME OR PSW IS WRONG"){
+            string usr_psw;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter usrname password again : ";
+            getline(cin,usr_psw);
+            command="login "+usr_psw;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+    //printf("%s\n",buffer );
+}
+
+void create_group(string command, vector <string> cmd, int sock){
+    int len,attempts=4;
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="GROUP ID NOT UNIQUE"){
+            string grpId;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter group id again : ";
+            getline(cin,grpId);
+            command="create_group "+grpId;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+}
+
+
+
+void join_group(string command, vector <string> cmd, int sock){
+    int len,attempts=4;
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="NO SUCH GROUP"){
+            string grpId;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter group id again : ";
+            getline(cin,grpId);
+            command="join_group "+grpId;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+}
+
+void list_requests(string command, vector <string> cmd, int sock){
+    cout<<"in list_requests client...\n";
+    int len,attempts=4;
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="NO SUCH GROUP"){
+            string grpId;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter group id again : ";
+            getline(cin,grpId);
+            command="list_requests "+grpId;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+}
+
+void leave_group(string command, vector <string> cmd, int sock){
+    int len,attempts=4;
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="NO SUCH GROUP"){
+            string grpId;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter group id again : ";
+            getline(cin,grpId);
+            command="leave_group "+grpId;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+}
+
+void accept_request(string command, vector <string> cmd, int sock){
+    cout<<"in accept_request() client...\n";
+    int len,attempts=4;
+    while(1){
+        if(attempts==0){
+            cout<<"all attempts exhausted...!!! so awk....!!!\n";
+            break;
+        }
+        len=command.length();
+        char send_cmd[len];
+        strcpy(send_cmd, command.c_str());
+        fflush(stdout);
+        send(sock , send_cmd , strlen(send_cmd) , 0 );
+        char buffer[1024] = {0};
+        int valread = read( sock , buffer, 1024);
+        string replyStr(buffer);
+        printf("%s\n",buffer );
+        if(replyStr=="INVALID GROUP OR USER ID"){
+            string grp_usr_Id;
+            //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
+            cout<<"enter group_id and user_id again : ";
+            getline(cin,grp_usr_Id);
+            command="accept_request "+grp_usr_Id;
+            cout<<"updated cmd --  "<<command<<endl;
+            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
+        }
+        else
+            break; 
+        attempts--;
+    }
+}
+
+void list_groups(string command, vector <string> cmd, int sock){
+    int len=command.length();
+    char send_cmd[len];
+    strcpy(send_cmd, command.c_str());
+    fflush(stdout);
+    send(sock , send_cmd , strlen(send_cmd) , 0 );
+    char buffer[1024] = {0};
+    int valread = read( sock , buffer, 1024);
+    string replyStr(buffer);
+    printf("%s\n",buffer );
+}
+
+string getSHA_Hash(vector <string> cmd/*, vector <string> &pieces*/){
+    char filepath[100];
+    strcpy(filepath, cmd[1].c_str());
+    string hash="", piece_wise="";
+    struct stat sb;
+    int piece_size=512*1024, total_pieces, size, last_piece;
+    int no_of_pieces;
+    if (stat(filepath, &sb) == -1) {
+        perror("stat : no such file or wrong path\n");
+        exit(EXIT_FAILURE);
+    }
+    size=sb.st_size;
+    total_pieces = size/piece_size;
+    if(size % piece_size == 0)
+        last_piece = 512*1024;
+    else{
+        total_pieces++;
+        last_piece = size % piece_size;
+    }
+    no_of_pieces=total_pieces;
+    cout<<size<<" "<<total_pieces<<" "<<last_piece<<endl;
+    ifstream input_file;
+    input_file.open(filepath);
+    unsigned char input[piece_size], SHA_hash[20*total_pieces];
+    while(total_pieces--){
+        input_file.read((char*)input, piece_size);
+        if(total_pieces > 1){
+            SHA1(input, piece_size , SHA_hash);
+        }
+        else{
+            //cout<<"last\n";
+            SHA1(input, last_piece , SHA_hash);
+        }
+        //cout<<SHA_hash;
+        string piece((char*)SHA_hash);
+        //stream << SHA_hash << endl;
+        hash += piece;  
+        //pieces.push_back(piece);
+        piece_wise += piece+" ";        
+    }
+    return hash;
+    //cout<<hash<<endl<<endl<<piece_wise<<endl;
+    //return to_string(no_of_pieces)+" "+hash+" "+piece_wise;
+}
+
+void upload_file(string command, vector <string> cmd, int sock){
+    //vector <string> pieces;
+    string SHA_hash=getSHA_Hash(cmd);
+    //cout<<SHA_hash<<endl;
+    //cout<<endl<<endl;
+    //cout<<"----------------\n";
+    /*for(auto i : pieces){
+        cout<<i.length()<<"   "<<i<<endl<<endl;;
+    }*/
+    string filename="";
+    int i=cmd[1].length()-1;
+    while(cmd[1][i]!='/'){
+        filename=cmd[1][i]+filename;
+        i--;
+    }
+
+    command="upload_file "+filename+" "+cmd[2]+" "+to_string(SHA_hash.length())+" "+SHA_hash;
+    int len=command.length();
+    char send_cmd[len];
+    strcpy(send_cmd, command.c_str());
+    fflush(stdout);
+    send(sock , send_cmd , strlen(send_cmd) , 0 );
+    char buffer[1024] = {0};
+    int valread = read( sock , buffer, 1024);
+    string replyStr(buffer);
+    printf("%s\n",buffer );
+
+}
+
+void list_files(string command, vector <string> cmd, int sock){
+    int len=command.length();
+    char send_cmd[len];
+    strcpy(send_cmd, command.c_str());
+    fflush(stdout);
+    send(sock , send_cmd , strlen(send_cmd) , 0 );
+    char buffer[1024] = {0};
+    int valread = read( sock , buffer, 1024);
+    string replyStr(buffer);
+    printf("%s\n",buffer ); 
+}
+
+/*
+void * client1(void *temp){
+    CHUNKS chk=*(CHUNKS*)temp;
+    //int port=*(int*)temp;
+    //free(temp);
+    
+    cout<<chk.first_chunk<<"\n"<<chk.no_of_chunks<<"\n"<<chk.idx<<"\n"<<chk.port<<"\n";
+
+    int client_socket;
+    client_socket=socket(AF_INET,SOCK_STREAM,0);
+    if(client_socket==-1){
+        printf("Socket creation error %d\n",errno);
+        return 0;
+    }
+    struct sockaddr_in server_address;
+    //int addrlen=sizeof(address);
+    char buffer[1024]={0};
+    
+    //setsockopt(client_socket,)
+    if(inet_pton(AF_INET,"127.0.0.1",&server_address.sin_addr)==-1){
+        printf("Invalid Address:%d\n",errno);
+    }
+    server_address.sin_family=AF_INET;
+    server_address.sin_port=htons(chk.port);        //df->port
+    int addrlen=sizeof(server_address);
+
+    int socket=connect(client_socket,(struct sockaddr*)&server_address,addrlen);
+    if(socket==-1){
+        printf("Connect error:%d\n",errno);
+        return 0;
+    }
+    printf("Connected\n");
+    //string to_send="text.txt";
+    string to_send=chk.filename+" "+to_string(chk.first_chunk)+" "+to_string(chk.no_of_chunks);
+    write(client_socket,to_send.c_str(),to_send.length());
+    //while(1){
+        int valread=read(client_socket,buffer,1024);
+        printf("%d %d %s\n",getpid(),valread,buffer);
+        memset(buffer,'\0',1024);
+        //if(valread<1024) break;
+    //}
+    close(client_socket);
+    cout<<"coming out of client thread...\n";
+    return NULL;
+}
+*/
+
+void * client1(void *temp){
+    //down_file *df=(down_file*)temp;
+    int port=*(int*)temp;
+    //free(temp);
+    int client_socket;
+    client_socket=socket(AF_INET,SOCK_STREAM,0);
+    if(client_socket==-1){
+        printf("Socket creation error %d\n",errno);
+        return 0;
+    }
+    struct sockaddr_in server_address;
+    //int addrlen=sizeof(address);
+    char buffer[1024]={0};
+    
+    //setsockopt(client_socket,)
+    if(inet_pton(AF_INET,"127.0.0.1",&server_address.sin_addr)==-1){
+        printf("Invalid Address:%d\n",errno);
+    }
+    server_address.sin_family=AF_INET;
+    server_address.sin_port=htons(port);        //df->port
+    int addrlen=sizeof(server_address);
+
+    int socket=connect(client_socket,(struct sockaddr*)&server_address,addrlen);
+    if(socket==-1){
+        printf("Connect error:%d\n",errno);
+        return 0;
+    }
+    printf("Connected\n");
+    string to_send="text.txt";
+    //string to_send=to_string(df->chunk_no);
+    write(client_socket,to_send.c_str(),to_send.length());
+    //while(1){
+        int valread=read(client_socket,buffer,1024);
+        printf("%d %d %s\n",getpid(),valread,buffer);
+        memset(buffer,'\0',1024);
+        //if(valread<1024) break;
+    //}
+    close(client_socket);
+    cout<<"coming out of client thread...\n";
+    return NULL;
+}
+
+/*
+void * client1(void *temp){
+    char *msg=(char*)temp;
+    cout<<"msg in thread - "<<msg<<endl;
+    //int port=*(int*)temp;
+    //free(temp);
+
+    int port=1000*(msg[0]-'0')+100*(msg[1]-'0')+10*(msg[2]-'0')+(msg[3]-'0');
+    cout<<"port in thread - "<<port<<endl;
+    int client_socket;
+    client_socket=socket(AF_INET,SOCK_STREAM,0);
+    if(client_socket==-1){
+        printf("Socket creation error %d\n",errno);
+        return 0;
+    }
+    struct sockaddr_in server_address;
+    //int addrlen=sizeof(address);
+    char buffer[1024]={0};
+    
+    //setsockopt(client_socket,)
+    if(inet_pton(AF_INET,"127.0.0.1",&server_address.sin_addr)==-1){
+        printf("Invalid Address:%d\n",errno);
+    }
+    server_address.sin_family=AF_INET;
+    server_address.sin_port=htons(port);        //df->port
+    int addrlen=sizeof(server_address);
+
+    int socket=connect(client_socket,(struct sockaddr*)&server_address,addrlen);
+    if(socket==-1){
+        printf("Connect error:%d\n",errno);
+        return 0;
+    }
+    printf("Connected\n");
+    string to_send="text.txt";
+    //string to_send=to_string(df->chunk_no);
+    //write(client_socket,to_send.c_str(),to_send.length());
+    write(client_socket,msg,strlen(msg));
+    //while(1){
+        int valread=read(client_socket,buffer,1024);
+        printf("%d %d %s\n",getpid(),valread,buffer);
+        memset(buffer,'\0',1024);
+        //if(valread<1024) break;
+    //}
+    close(client_socket);
+    cout<<"coming out of client thread...\n";
+    return NULL;
+}
+*/
+
+void download_file(string command, vector <string> cmd, int sock){
+    //pthread_t thread_id;
+
+    int len=command.length();
+    char send_cmd[len];
+    strcpy(send_cmd, command.c_str());
+    fflush(stdout);
+    send(sock , send_cmd , strlen(send_cmd) , 0 );
+    char buffer[1024] = {0};
+    int valread = read( sock , buffer, 1024);
+    string replyStr(buffer);
+    printf("%s\n",buffer ); 
+    // TILL HERE, GOT INFO OF SEEDS
+    ////////////////
+    int i;
+    len=replyStr.length();
+    vector <string> seeds_ip;
+    vector <int> seeds_port;
+    string tmp="";
+    for(i=0;i<len;i++){
+        if(replyStr[i]==','){
+            seeds_ip.push_back(tmp);
+            tmp="";
+        } 
+        else if(replyStr[i]=='|'){
+            //cout<<"----\n";
+            seeds_port.push_back(stoi(tmp));
+            tmp="";
+        }
+        else if(replyStr[i]=='-')
+            break;
+        else            
+            tmp+=replyStr[i];
+    }
+    /////////
+    //LEECHES INFO PROCESSING
+    //i++;
+    //for(;i<len;i++){
+
+    //}
+    int chunks=6;
+    len=seeds_port.size();
+    pthread_t thread_id[len];
+    /*down_file df;
+    df.filename=cmd[2];
+    for(i=0;i<chunks;){
+        int x=chunks/len;
+        if(chunks % len==0){
+            for(int j=i; j<x+i;j++){
+                df.chunk_no=j;
+                df.port=seeds_port[j];
+                pthread_create(&thread_id[j],NULL,client1,&df);
+            }
+            i+=x;
+        }
+        else{
+            for(int j=i; j<chunks && j<=x+i;j++){
+                df.chunk_no=j;
+                df.port=seeds_port[j];
+                pthread_create(&thread_id[j],NULL,client1,&df);
+            }
+            i+=x+1;
+        }
+    }
+*/
+    int j=0;
+    //vector <CHUNKS> Tmp;
+    int x=ceil(float(chunks)/float(len));
+    cout<<"x = "<<x<<endl;
+    file_2_idx[cmd[2]]=m;
+    for(i=0;i<len;i++){
+        string msg="";
+        
+        cout<<seeds_port[i]<<"   "<<seeds_ip[i]<<endl;
+        /*CHUNKS chk;
+        //chk.filename=cmd[2];
+        chk.port=seeds_port[i];
+        chk.first_chunk=i;
+        chk.idx=m;
+        chk.no_of_chunks=x;//(j+x<len) ? x : len-j;
+        Tmp.push_back(chk);*/
+        msg+=to_string(seeds_port[i])+" "+to_string(i)+" "+to_string(x)+" "+to_string(m);
+        cout<<"msg - "<<msg<<endl;
+        //pthread_create(&thread_id[i],NULL,client1,&chk);
+
+
+        pthread_create(&thread_id[i],NULL,client1,&seeds_port[i]);
+        
+        /*char MSG[1024];
+        strcpy(MSG, msg.c_str());
+        pthread_create(&thread_id[i],NULL,client1,MSG);*/
+
+        //pthread_join(t2,NULL);
+        /*string str=seeds_ip[i]+" "+to_string(seeds_port[i]);
+        char passIP_port[20];
+        strcpy(passIP_port, str.c_str());
+        if (pthread_create(&thread_id[i], NULL, downloader_thread , (void *)passIP_port) < 0)
+        {
+            perror("\ncould not create thread in download_file\n");
+        }*/
+        j+=x;
+    }
+    /*schunks_details.push_back(Tmp);
+    
+    m++;
+    j=0;
+    for(i=0;i<len;i+=x){
+        //pthread_create(&thread_id[i],NULL,client1,&chk);
+
+
+        pthread_create(&thread_id[i],NULL,client1,&seeds_port[j]);
+        j++;
+
+        //pthread_join(t2,NULL);
+        
+    }
+    */
+    for(i=0;i<len;i++)
+        pthread_join(thread_id[i],NULL);
+}
+
+
+
+
+
+void execute_cmd(string command, vector <string> cmd, int sock){
+    string reply;
+    if(cmd[0]=="create_user"){
+        create_user(command, cmd, sock);
+    }
+    else if(cmd[0]=="login"){
+        login(command, cmd, sock);  
+    }
+    else if(cmd[0]=="create_group"){
+        create_group(command, cmd, sock);   
+    }
+    else if(cmd[0]=="join_group"){
+        join_group(command, cmd, sock); 
+    }
+    else if(cmd[0]=="list_requests"){
+        list_requests(command, cmd, sock);  
+    }
+    else if(cmd[0]=="leave_group"){
+        leave_group(command, cmd, sock);    
+    }
+    else if(cmd[0]=="list_groups"){
+        list_groups(command, cmd, sock);    
+    }
+    else if(cmd[0]=="accept_request"){
+        accept_request(command, cmd, sock);
+    }
+    else if(cmd[0]=="upload_file"){
+        upload_file(command, cmd, sock);
+    }
+    else if(cmd[0]=="list_files"){
+        list_files(command, cmd, sock);
+    }
+    else if(cmd[0]=="download_file"){
+        download_file(command, cmd, sock);
+    }
+    else{
+        cout<<cmd[0]<<","<<cmd[1]<<","<<cmd[2]<<endl;
+        cout<<"invalid command\n";
+    }
+}
+
+
+
+
+
+
+
+
+void * acceptCon(void * client_socket1){
+    int client_socket=*(int*)client_socket1;
+    //struct sockaddr_in client=*client1;
+    free(client_socket1);
+    //free(client1);
+    char buffer[1024]={0};
+    //printf("Accepted from %lld:%d\n",client.sin_addr,client.sin_port);
+    int valread=read(client_socket,buffer,1024);
+    //printf("%s\n",buffer);
+    cout<<buffer<<endl;
+    //string to_send="Hi from server";
+
+    ////////
+    //string str(buffer);
+    //str=str+" chunk received";
+    //char send_buffer[1024]={0};
+    //strcpy(send_buffer, str.c_str());
+
+    ///////
+
+
+    char send_buffer[1024]="Hi from server";
+    send(client_socket , send_buffer , strlen(send_buffer) , 0 );
+
+    close(client_socket);
+    return NULL;
+}
+/*
+void * acceptCon(void * client_socket1){
+    int client_socket=*(int*)client_socket1;
+    //struct sockaddr_in client=*client1;
+    free(client_socket1);
+    //free(client1);
+    char buffer[1024]={0};
+    //printf("Accepted from %lld:%d\n",client.sin_addr,client.sin_port);
+    int valread=read(client_socket,buffer,1024);
+    //printf("%s\n",buffer);
+    cout<<buffer<<endl;
+    string to_send="Hi from server";
+
+    ////////
+    //string str(buffer);
+    //str=str+" chunk received";
+    //char send_buffer[1024]={0};
+    //strcpy(send_buffer, str.c_str());
+
+    ///////
+
+
+    char send_buffer[1024]="Hi from server";
+    send(client_socket , send_buffer , strlen(send_buffer) , 0 );
+
+    close(client_socket);
+    return NULL;
+}*/
+
+
+void * server(void *temp){
+    int server_socket;
+    int port=*(int*)temp;
+    //free(temp);
+    struct sockaddr_in address;
+    //int addrlen=sizeof(address);
+    char buffer[1024]={0};
+    int opt=1;
+    
+    server_socket=socket(AF_INET,SOCK_STREAM,0);
+    if(server_socket==-1){
+    	cout<<"Socket creation error "<<errno<<endl;
+        //printf("Socket creation error %d\n",errno);
+        return 0;
+    }
+
+    if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) 
+    { 
+        perror("setsockopt"); 
+        exit(EXIT_FAILURE); 
+    } 
+    //setsockopt(server_socket,)
+    address.sin_addr.s_addr=INADDR_ANY;
+    address.sin_family=AF_INET;
+    address.sin_port=htons(port);
+    int addrlen=sizeof(address);
+    if(bind(server_socket,(const struct sockaddr *)&address,addrlen)==-1){
+        printf("bind error:%d\n",errno);
+        return 0;
+    }
+    if(listen(server_socket,4)==-1){
+        printf("Listen error:%d\n",errno);
+        return 0;
+    }
+
+    printf("Listening\n");
+    while(1){
+        struct sockaddr_in client;
+        socklen_t client_len=sizeof(client);
+        int client_socket=accept(server_socket,(struct sockaddr*)&client,&client_len);
+        if(client_socket==-1){
+            printf("Accept error:%d\n",errno);
+            return 0;
+        }
+        cout<<ntohs(client.sin_port)<<"  "<<inet_ntoa(client.sin_addr)<<endl;
+        pthread_t t;
+        struct sockaddr_in *temp=(struct sockaddr_in *)malloc(sizeof(client));
+        *temp=client;
+        int *client_soc=(int*)malloc(sizeof(int));
+        *client_soc=client_socket;
+        pthread_create(&t,NULL,acceptCon,client_soc);
+        //acceptCon(client_socket,client);
+    }
+    close(server_socket);
+    return 0;
+}
+
+
+int main(int argc, char const *argv[])
+{
+	pthread_t t1,t2;
+    if (argc != 5)
+    {
+        cout << "Invalid Argument in client!!!" << endl;
+    }
+    else
+    {  
+    	pthread_t thread_id;
+    	string ip1(argv[1]);
+    	string port1(argv[2]);
+    	int myPort=stoi(port1);
+    	ip1=ip1+" "+port1;
+    	char passIP_port[ip1.length()];
+    	strcpy(passIP_port, ip1.c_str());
+    	pthread_create(&t1,NULL,server,&myPort);
+        /*if (pthread_create(&thread_id, NULL, PeerASServer , (void *)passIP_port) < 0)
+        {
+            perror("\ncould not create thread\n");
+        }*/
+        //socket programming on client side
+        int sock = 0;
+        struct sockaddr_in serv_addr, my_addr;
+        if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+        {
+            printf("\n Socket creation error in client side\n");
+            return -1;
+        }
+
+        /*my_addr.sin_family = AF_INET; 
+	    my_addr.sin_addr.s_addr = INADDR_ANY; 
+	    my_addr.sin_port = htons(atoi(argv[2]));
+
+	    if (bind(sock, (struct sockaddr*) &my_addr, sizeof(struct sockaddr_in)) == 0) 
+	        printf("Binded Correctly\n"); 
+	    else
+	        printf("Unable to bind\n");*/
+
+        memset(&serv_addr, '0', sizeof(serv_addr));
+        serv_addr.sin_family = AF_INET;
+        serv_addr.sin_port = htons(atoi(argv[4]));		//trackersocket1.port
+
+        //Convert IPv4 and IPv6 addresses from text to binary form
+        if (inet_pton(AF_INET, argv[3] , &serv_addr.sin_addr) <= 0)			//trackersocket1.ip
+        {
+            printf("\nClient File  : Invalid address/ Address not supported \n");
+            return -1;
+        }
+        cout<<"b4 connected\n";
+        if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+        {
+            printf("\nConnection Failed in client side\n");
+            return -1;
+        }
+        cout<<"connected\n";
+        send(sock , argv[2] , strlen(argv[2]) , 0 );    //send client's server is running sock port no
+        //continuously listening to client for his entring command
+        
+        while(1){
+            string command;
+            getline(cin, command);
+            vector <string> cmd;
+            tokenize(command, cmd);
+            /*for(auto i : cmd)
+                cout<<i<<" ";
+            cout<<endl;*/
+            execute_cmd(command, cmd, sock);
+            /*char send_cmd[1024], buffer[1024];
+            strcpy(send_cmd, command.c_str());
+            send(sock , send_cmd , strlen(send_cmd) , 0 );
+            int valread = read( sock , buffer, 1024); 
+            printf("%s\n",buffer );*/
+        }
+        /*
+        while(1){
+        	string command="";
+        	cout<<"enter : ";
+			getline(cin, command);
+			//char ch;
+			//while(ch=getchar()!='\n'){
+			//	command+=ch;
+			//}
+			if(command=="abc"){
+				int input_port;
+			    cout<<"enter port : ";
+			    string line;
+			    getline(cin, line);
+			    stringstream linestream(line);
+			    linestream>>input_port;
+			    //cin>>input_port;
+				pthread_create(&t2,NULL,client1,&input_port);
+				pthread_join(t2,NULL);
+				cout<<"below join()...\n";
+			}
+			else{
+				cout<<"in else...\n";
+				char send_cmd[1024], buffer[1024];
+				strcpy(send_cmd, command.c_str());
+				cout<<"below strcpy()...\n";
+				send(sock , send_cmd , strlen(send_cmd) , 0 );
+				cout<<"below send()...\n";
+				int valread = read( sock , buffer, 1024);
+				cout<<"below read()...\n"; 
+				//printf("%s\n",buffer );
+				cout<<buffer<<endl;
+				//fflush(STDOUT);	
+			}
+			cout<<"below else...\n";
+		}*/
+
+    }
+
+    return 0;
+}

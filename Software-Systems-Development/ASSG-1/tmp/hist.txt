@@ -1,0 +1,10 @@
+ g++ arr_DQ.cpp 
+ ./a.out
+ clear
+ ./a.out
+ clear
+ g++ arr_DQ.cpp 
+ clear
+ g++ arr_DQ.cpp 
+ ./a.out
+ history | tail -n 10 | cut -c 7- > hist.txt

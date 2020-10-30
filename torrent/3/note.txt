@@ -1,0 +1,16 @@
+
+
+phase  -  3
+
+client taking cmd as input in while(1)
+
+server running thread
+
+mtorrent creation
+
+cmd ONLY paassed TO SERVER
+
+---
+share cmd implemented
+server storing shared files data in hash table
+date = ip , port of client, file name, its sha hash

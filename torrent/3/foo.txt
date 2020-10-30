@@ -1,0 +1,89 @@
+#include "header.h"
+
+int clientSkt;
+struct sockaddr_in server_address;
+struct sockaddr_in client_address;
+
+void processArgs(SOCKET &server, char *args ){
+	int i, port=0, len=strlen(args);
+	string IP="";
+	
+        if(command[i]!=' '){
+            str+=command[i];
+        }
+        else{
+            cmds.push_back(str);
+            str="";
+        }
+    }
+}
+
+void setupClient(SOCKET client){
+	int s_addrlen = sizeof(server_address);
+    int opt = 1;
+	if((client.portNo > 65535) || (client.portNo < 1024))
+    {
+        cerr << "Please enter a port number between 1024 - 65535" << endl;
+        exit(EXIT_FAILURE);
+    }
+    //create socket
+    clientSkt = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    
+    if(clientSkt < 0)
+    {
+        cerr << "Cannot open client socket" << endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // Forcefully attaching socket to the port 8080
+    if (setsockopt(serverSkt, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,&opt, sizeof(opt)))
+    {
+        perror("setsockopt");
+        exit(EXIT_FAILURE);
+    }
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(5000);
+    int connection = connect(clientSkt,(struct sockaddr *) &server_address, sizeof(server_address));
+    
+    if (connection < 0)
+    {
+        cerr << "Cannot Connect!" << endl;
+        exit(EXIT_FAILURE);
+    }
+    printf("connection made\n");
+}
+
+
+int main(int argc, char *argv[])
+{
+	SOCKET client;
+	string command;
+	if(argc != 2){
+		cout<<"Invalid no. of args\n";
+		exit(0);
+	}
+	processArgs(client, argv[1]);
+	cout<<client.ip<<" "<<client.portNo<<endl;
+	setupClient(client);
+	while(1){
+		getline(cin, command);
+		vector <string> cmd;
+		tokenize(command, cmd);
+		for(auto i : cmd)
+			cout<<i<<"  ";
+		cout<<endl;
+		/*char message[300];
+        cout << "\rMe:";
+        bzero(message, 301);
+        cin.getline(message, 300);
+     
+        send(clientSkt, message, strlen(message),0);*/	
+	}
+	return 1;
+}
+
+#!/bin/bash
+for i in $(seq 1 2 20)
+do
+   echo "$i"
+done

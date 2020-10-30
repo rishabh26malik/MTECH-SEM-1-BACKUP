@@ -1,0 +1,25 @@
+inp=input()
+numbers=inp.split(',')
+five=0
+ten=0
+fifteen=0
+zero=0
+out=[]
+for i in numbers:
+	if(i=="0101"):
+		if(five==0):
+			out.append(i)
+			five=1
+	if(i=="1010"):
+		if(ten==0):
+			out.append(i)
+			ten=1
+	if(i=="1111"):
+		if(fifteen==0):
+			out.append(i)
+			fifteen=1
+	if(i=="0000"):
+		if(zero==0):
+			out.append(i)
+			zero=1
+print(out)

@@ -1,0 +1,16 @@
+\documentclass[14pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+\begin{enumerate}
+  \item Given word : ILLUMINATI
+  \item Separate out the vowels and consonents
+  \item Vowels = "IIIUA", Consonents = "LLMNT"
+  \item Consider the set of vowels as a single alphabet
+  \item Now we have 6 alphabets in our new word which has 5 consonents and 1 representing set of vowels in "ILLUMINATI"
+  \item These 6 alphabets(5 consonents + 1 for all vowels) cab be arranged in \textbf{6!} ways
+  \item but we have some repetitions as well. \textbf{L} occurs 2 times and \textbf{I} occurs 3 times so we need to \textbf{divide total purmutations with 2! and 3!}
+  \item So, the word "ILLUMINATI" can be arranged such all the vowels are always together in \boldmath{$\frac{6!}{2! 3!}$}
+\end{enumerate}
+
+\end{document}

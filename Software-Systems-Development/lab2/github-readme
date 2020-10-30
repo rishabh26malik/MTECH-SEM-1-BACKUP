@@ -1,0 +1,334 @@
+git clone https://github.com/rishabh26malik/SSD-Lab-Activity-2
+
+git remote -v
+
+
+cd SSD-Lab-Activity-2
+
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+
+
+
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+
+git add README.md
+
+
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   README.md
+
+
+
+git log
+commit febe449a64c4ab3a9ff428ad937133286ef211f6 (HEAD -> master, origin/master, origin/HEAD)
+Author: rishabh26malik <32366430+rishabh26malik@users.noreply.github.com>
+Date:   Tue Sep 1 17:55:54 2020 +0530
+
+    Initial commit
+
+
+git pull origin master
+From https://github.com/rishabh26malik/SSD-Lab-Activity-2
+ * branch            master     -> FETCH_HEAD
+Already up to date.
+
+
+
+git push origin master
+Username for 'https://github.com': rishabh26malik
+Password for 'https://rishabh26malik@github.com': 
+Counting objects: 3, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 320 bytes | 320.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/rishabh26malik/SSD-Lab-Activity-2
+   febe449..5fe36a2  master -> master
+
+
+
+------------------------------------------
+
+
+touch hello.txt
+
+
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	hello.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+
+
+git diff
+diff --git a/README.md b/README.md
+index dc84285..274a888 100644
+--- a/README.md
++++ b/README.md
+@@ -1,4 +1,4 @@
+ # SSD-Lab-Activity-2
+ SSD Lab 2 Activity Exercises
+ 
+-This is a sample test 
++This is my first git project!
+
+
+
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	hello.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+
+git add README.md
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	hello.txt
+
+
+
+
+git add .
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   README.md
+	new file:   hello.txt
+
+
+
+git commit -m "Add hello.txt and edit README.md"
+[master 904e87d] Add hello.txt and edit README.md
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ create mode 100644 hello.txt
+
+
+git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+
+
+git log
+commit 904e87d7770de43297e448ca2c2a71bf57c44626 (HEAD -> master)
+Author: rishabh26malik <rishabhmalik26@gmail.com>
+Date:   Tue Sep 1 18:16:53 2020 +0530
+
+    Add hello.txt and edit README.md
+
+commit 5fe36a287eeea431bb87ec47166dd64ffceecda3 (origin/master, origin/HEAD)
+Author: rishabh26malik <rishabhmalik26@gmail.com>
+Date:   Tue Sep 1 18:06:03 2020 +0530
+
+    first commit - this is a practice
+
+commit febe449a64c4ab3a9ff428ad937133286ef211f6
+Author: rishabh26malik <32366430+rishabh26malik@users.noreply.github.com>
+Date:   Tue Sep 1 17:55:54 2020 +0530
+
+    Initial commit
+
+
+----------------------------------------
+
+git push origin master
+Username for 'https://github.com': rishabh26malik
+Password for 'https://rishabh26malik@github.com': 
+Counting objects: 4, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 378 bytes | 378.00 KiB/s, done.
+Total 4 (delta 0), reused 0 (delta 0)
+To https://github.com/rishabh26malik/SSD-Lab-Activity-2
+   5fe36a2..904e87d  master -> master
+
+
+
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+
+----------------------------
+
+
+git checkout -b NewBranch
+Switched to a new branch 'NewBranch'
+
+
+git branch
+* NewBranch
+  master
+
+
+touch test.txt
+
+git status
+On branch NewBranch
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	test.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+
+git add .
+
+git status
+On branch NewBranch
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	new file:   test.txt
+
+
+git commit -m "branch commit testing"
+[NewBranch 47eb94b] branch commit testing
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 test.txt
+
+
+git push -u origin NewBranch
+Username for 'https://github.com': rishabh26malik
+Password for 'https://rishabh26malik@github.com': 
+Counting objects: 2, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (2/2), 281 bytes | 281.00 KiB/s, done.
+Total 2 (delta 0), reused 0 (delta 0)
+remote: 
+remote: Create a pull request for 'NewBranch' on GitHub by visiting:
+remote:      https://github.com/rishabh26malik/SSD-Lab-Activity-2/pull/new/NewBranch
+remote: 
+To https://github.com/rishabh26malik/SSD-Lab-Activity-2
+ * [new branch]      NewBranch -> NewBranch
+Branch 'NewBranch' set up to track remote branch 'NewBranch' from 'origin'.
+
+
+
+merging
+
+
+
+git checkout master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+
+
+
+ git pull origin master
+From https://github.com/rishabh26malik/SSD-Lab-Activity-2
+ * branch            master     -> FETCH_HEAD
+Already up to date.
+
+
+
+git branch --merged
+* master
+
+
+
+git merge NewBranch
+Updating 904e87d..47eb94b
+Fast-forward
+ test.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 test.txt
+
+
+
+ git branch --merged
+  NewBranch
+* master
+
+git push origin master
+Username for 'https://github.com': rishabh26malik
+Password for 'https://rishabh26malik@github.com': 
+Total 0 (delta 0), reused 0 (delta 0)
+To https://github.com/rishabh26malik/SSD-Lab-Activity-2
+   904e87d..47eb94b  master -> master
+
+
+
+----delete branch
+
+git branch -d NewBranch
+Deleted branch NewBranch (was 47eb94b).
+
+
+git branch -a
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/NewBranch
+  remotes/origin/master
+
+
+  
+
+
+
+
+
+

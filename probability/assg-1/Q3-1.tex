@@ -1,0 +1,56 @@
+\documentclass[14pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+ 
+Let N be the set of natural numbers and P(N) be the power set of natural numbers.
+
+\textbf{ASSUME : } a function f : N $\to$ $P(N)$. Let f be a one-one onto function for all n $\in$ N.
+So f is a mapping from N to P(N).
+\[ P(N) = \{ \{P_1,P_2,P_3,...\}; P_i = \{ \{x_{i1},x_{i2},x_{i3},...\}; x_{in} \in \{0,1\} \& n \in N \} \}  \]
+%\[ x_{in}=1 \tab if n \in P_i \]
+\begin{center}
+$x_{in}=1$ if n $\in$ $P_i$ \\
+$x_{in}=0$ if n $\notin$ $P_i$ \\
+\end{center}
+So each element(.i.e, a set of 0's and 1's denoting a subset of natural numbers) in power set is a string of zeros and ones.
+\begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+        \hline
+        P(i) & 1 & 2 & 3 & ... & n & ...\\
+        \hline
+        \hline
+        P(1) & 1 & 1 & 0 & ... & 1 & ... \\
+        \hline
+        P(2) & 1 & 0 & 0 & ... & 0 & ... \\ 
+        \hline
+        P(3) & 0 & 1 & 0 & ... & 1 & ... \\ 
+        \hline
+        ... & ... & ... & ... & .... & ... & ... \\ 
+        \hline
+        P(n) & 1 & 1 & 1 & ... & 1 & ... \\ 
+        \hline
+        ... & ... & ... & ... & .... & ... & ... \\
+        \hline
+    \end{tabular} 
+\end{center}
+\textbf{NOTE : Values in table are filled randomly}\\
+Now we will try to construct a new sample binary string with an intent that it should not be same as any of the above strings in power set. For this, let A be the new string denoted as \\
+\[ A = \{ \{a_1,a_2,a_3,...\}; a_{i} \in \{0,1\} \& i \in N \}  \]
+\begin{center}
+$a_{i}=1$ if $ i \in$ A \\
+$a_{i}=0$ if $ i \notin$ A \\
+\end{center}
+By doing so we make sure that the $0^{th}$ entry in A differs from the $\{0,0\}^{th}$ entry in the above table. Similarly, we do it for all other entries as denoted below : \\
+\begin{center}
+$a_{i}=1$ if $x_{i,i}=0$ \\
+$a_{i}=0$ if $x_{i,i}=1$ \\
+\end{center}
+\begin{itemize}
+
+\item Now, A differs from all the strings in the power set displayed in above table. So, A is one such set(binary string) that is not listed in the above power set. 
+\item Since, we assumed function f to be a bijection, but now with the addition of A in the power set, f is no more a bijection.  
+\item Therefore, there does not exist a one to one mapping between natural numbers and its power set. Hence, power set of natural numbers is uncountable.
+\end{itemize}
+
+\end{document}
