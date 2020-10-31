@@ -5,7 +5,7 @@ CLIENT client[10];
 int k=0;
 map <int, int> sock2idx;
 
-vector <vector<string>> downloaded_files(100, vector<string> (100,""));
+vector <vector<string>> downloaded_files(100, vector<string> (50,""));
 map <string, int> file_2_idx;
 
 string server_ip;
@@ -101,6 +101,10 @@ void create_mtorrent_file(vector <string> cmd){
 
 
 void create_user(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 3){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
     int len;
     char buffer[1024] = {0};
     while(1){
@@ -117,7 +121,7 @@ void create_user(string command, vector <string> cmd, int sock){
             cin>>usrname;
             cmd[1]=usrname;
             command="create_user "+usrname+" "+cmd[2];
-            cout<<"updated cmd --  "<<command<<endl;
+            //cout<<"updated cmd --  "<<command<<endl;
             //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
@@ -127,6 +131,10 @@ void create_user(string command, vector <string> cmd, int sock){
 }
 
 void login(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 3){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
     int len,attempts=4;
     //char buffer[1024] = {0};
     while(1){
@@ -146,10 +154,10 @@ void login(string command, vector <string> cmd, int sock){
         if(replyStr=="USERNAME OR PSW IS WRONG"){
             string usr_psw;
             //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
-            cout<<"enter usrname password again : ";
+            cout<<"ENTER USERNAME PASSWORD AGAIN : ";
             getline(cin,usr_psw);
             command="login "+usr_psw;
-            cout<<"updated cmd --  "<<command<<endl;
+            //cout<<"updated cmd --  "<<command<<endl;
             //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
@@ -160,6 +168,10 @@ void login(string command, vector <string> cmd, int sock){
 }
 
 void create_group(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 2){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
     int len,attempts=4;
     while(1){
         if(attempts==0){
@@ -178,10 +190,10 @@ void create_group(string command, vector <string> cmd, int sock){
         if(replyStr=="GROUP ID NOT UNIQUE"){
             string grpId;
             //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
-            cout<<"enter group id again : ";
+            cout<<"ENTER GROUP ID AGAIN : ";
             getline(cin,grpId);
             command="create_group "+grpId;
-            cout<<"updated cmd --  "<<command<<endl;
+            //cout<<"updated cmd --  "<<command<<endl;
             //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
@@ -193,6 +205,10 @@ void create_group(string command, vector <string> cmd, int sock){
 
 
 void join_group(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 2){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
     int len,attempts=4;
     while(1){
         if(attempts==0){
@@ -211,10 +227,10 @@ void join_group(string command, vector <string> cmd, int sock){
         if(replyStr=="NO SUCH GROUP"){
             string grpId;
             //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
-            cout<<"enter group id again : ";
+            cout<<"ENTER GROUP ID AGAIN : ";
             getline(cin,grpId);
             command="join_group "+grpId;
-            cout<<"updated cmd --  "<<command<<endl;
+            //cout<<"updated cmd --  "<<command<<endl;
             //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
@@ -224,7 +240,11 @@ void join_group(string command, vector <string> cmd, int sock){
 }
 
 void list_requests(string command, vector <string> cmd, int sock){
-    cout<<"in list_requests client...\n";
+    if(cmd.size() != 2){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
+    //cout<<"in list_requests client...\n";
     int len,attempts=4;
     while(1){
         if(attempts==0){
@@ -243,10 +263,10 @@ void list_requests(string command, vector <string> cmd, int sock){
         if(replyStr=="NO SUCH GROUP"){
             string grpId;
             //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
-            cout<<"enter group id again : ";
+            cout<<"ENTER GROUP ID AGAIN : ";
             getline(cin,grpId);
             command="list_requests "+grpId;
-            cout<<"updated cmd --  "<<command<<endl;
+            //cout<<"updated cmd --  "<<command<<endl;
             //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
@@ -256,6 +276,10 @@ void list_requests(string command, vector <string> cmd, int sock){
 }
 
 void leave_group(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 2){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
     int len,attempts=4;
     while(1){
         if(attempts==0){
@@ -274,10 +298,10 @@ void leave_group(string command, vector <string> cmd, int sock){
         if(replyStr=="NO SUCH GROUP"){
             string grpId;
             //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
-            cout<<"enter group id again : ";
+            cout<<"ENTER GROUP ID AGAIN : ";
             getline(cin,grpId);
             command="leave_group "+grpId;
-            cout<<"updated cmd --  "<<command<<endl;
+            //cout<<"updated cmd --  "<<command<<endl;
             //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
@@ -287,7 +311,11 @@ void leave_group(string command, vector <string> cmd, int sock){
 }
 
 void accept_request(string command, vector <string> cmd, int sock){
-    cout<<"in accept_request() client...\n";
+    if(cmd.size() != 3){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
+    //cout<<"in accept_request() client...\n";
     int len,attempts=4;
     while(1){
         if(attempts==0){
@@ -306,10 +334,10 @@ void accept_request(string command, vector <string> cmd, int sock){
         if(replyStr=="INVALID GROUP OR USER ID"){
             string grp_usr_Id;
             //cout<<"U HAVE "+to_string(attempts)+" ATTEMPTS REMAINING\n";
-            cout<<"enter group_id and user_id again : ";
+            cout<<"ENTER GROUP ID AND USER ID AGAIN : ";
             getline(cin,grp_usr_Id);
             command="accept_request "+grp_usr_Id;
-            cout<<"updated cmd --  "<<command<<endl;
+            //cout<<"updated cmd --  "<<command<<endl;
             //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
@@ -319,6 +347,10 @@ void accept_request(string command, vector <string> cmd, int sock){
 }
 
 void list_groups(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 1){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
     int len=command.length();
     char send_cmd[len];
     strcpy(send_cmd, command.c_str());
@@ -377,6 +409,10 @@ string getSHA_Hash(vector <string> cmd, int &total_chunks/*, vector <string> &pi
 }
 
 void upload_file(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 3){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
     //vector <string> pieces;
     int total_chunks=0;
     string SHA_hash=getSHA_Hash(cmd, total_chunks);
@@ -407,6 +443,10 @@ void upload_file(string command, vector <string> cmd, int sock){
 }
 
 void list_files(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 2){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
     int len=command.length();
     char send_cmd[len];
     strcpy(send_cmd, command.c_str());
@@ -470,8 +510,8 @@ void * client1(void *temp){
         printf("Connect error:%d\n",errno);
         return 0;
     }
-    cout<<"in client1 thread...connected()\n";
-    //printf("Connected\n");
+    //cout<<"in client1 thread...connected()\n";
+    printf("Thread Connected\n");
     //string to_send="text.txt";
     string to_send=chk.filename+"-"+to_string(chk.port)+"-"+to_string(chk.chunkNo);
     //cout<<"in client thread ...  "<<to_send<<endl;
@@ -481,27 +521,31 @@ void * client1(void *temp){
     //while(1){
         int valread=read(client_socket,buffer,512*1024);
         //printf("%d %d %s\n",getpid(),valread,buffer);
-        
+        cout<<buffer<<endl;
         string rcvdChunk(buffer);
-        cout<<"b4 assignment...\n";
-        downloaded_files[chk.idx][chk.chunkNo]=rcvdChunk;
+        //cout<<"b4 assignment...\n";
+        //downloaded_files[chk.idx][chk.chunkNo]=rcvdChunk;
 
         memset(buffer,'\0',512*1024);
 
     //string rcvdChunk(buffer);
     //downloaded_files[chk.idx][chk.chunkNo]=rcvdChunk;
     //downloaded_files[file_2_idx[flname]][chk.idx]=rcvdChunk;
-        cout<<"-------------------------------------------\n";
+        //cout<<"-------------------------------------------\n";
     //    cout<<"-------------------------------------------\n";
         //if(valread<1024) break;
     //}
     close(client_socket);
-    cout<<"coming out of client thread...\n";
+    //cout<<"coming out of client thread...\n";
     return NULL;
 }
 
 
 void download_file(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 4){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
     //pthread_t thread_id;
 
     int len=command.length();
@@ -612,7 +656,7 @@ void download_file(string command, vector <string> cmd, int sock){
                 cout<<seeds_port[t]<<"   "<<seeds_ip[t]<<endl;
                 string msg="";
                 msg+=to_string(seeds_port[t])+" chunk no. - "+to_string(j);
-                //cout<<"msg - "<<msg<<endl;
+                cout<<"msg - "<<msg<<endl;
                 chk.filename=cmd[2];
                 chk.chunkNo=j;
                 chk.port=seeds_port[t];
@@ -658,10 +702,10 @@ void download_file(string command, vector <string> cmd, int sock){
     }
     
     cout<<"AFTER JOIN\n";
-    i=file_2_idx[cmd[2]];
+    /*i=file_2_idx[cmd[2]];
     for(auto ch : downloaded_files[i]){
-        cout<<ch<<"\n\n\nXXXXXXXXXXXXXX\n\n\n";
-    }
+        cout<<ch.size()<<"\nXXXXXXXXXXXXXX\n";
+    }*/
 /*
     cout<<"*****************\n\n";
     i=file_2_idx[cmd[2]];
@@ -718,9 +762,9 @@ void execute_cmd(string command, vector <string> cmd, int sock){
         download_file(command, cmd, sock);
     }
     else{
-        cout<<cmd[0]<<","<<cmd[1]<<","<<cmd[2]<<endl;
-        cout<<"invalid command\n";
-    }
+        //cout<<cmd[0]<<","<<cmd[1]<<","<<cmd[2]<<endl;
+        cout<<"INVALID COMMAND\n";
+    }   
 }
 
 
@@ -740,8 +784,8 @@ void * acceptCon(void * client_socket1){
     int valread=read(client_socket,buffer,1024);
     //printf("%s\n",buffer);
     cout<<buffer<<endl;
-    string to_send="Hi from server";
-
+    //string to_send="Hi from server";
+    send(client_socket , buffer , strlen(buffer) , 0 );
     ////////
 /*    string str(buffer);
     str=str+" chunk received";
@@ -750,7 +794,7 @@ void * acceptCon(void * client_socket1){
 */
     ///////
 
-    int i=0;
+/*    int i=0;
     string filename="", str(buffer);
     while(str[i]!='-'){
         filename+=str[i];
@@ -779,10 +823,10 @@ void * acceptCon(void * client_socket1){
         input_file.read((char*)input, 512*1024);
         //cout<<input<<endl<<endl<<endl;
     }
-
+*/
     //char send_buffer[1024]="Hi from server";
     //send(client_socket , send_buffer , strlen(send_buffer) , 0 );
-    send(client_socket , input , strlen((char*)input) , 0 );
+    //send(client_socket , input , strlen((char*)input) , 0 );
 
     close(client_socket);
     return NULL;
@@ -896,7 +940,7 @@ int main(int argc, char const *argv[])
             printf("\nClient File  : Invalid address/ Address not supported \n");
             return -1;
         }
-        cout<<"b4 connected\n";
+        //cout<<"b4 connected\n";
         if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
         {
             printf("\nConnection Failed in client side\n");

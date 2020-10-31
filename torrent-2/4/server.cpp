@@ -42,15 +42,16 @@ void showLoginDetails(){
 
 string create_user(int idx, vector<string> cmd){
     string status;
-    /*if(client[idx].isUser==1){
-        status="ALREADY LOGGED IN";
+    if(client[idx].isUser==1){
+        status="ALREADY CREATED USER";
     }
-    else */if(login_cred.find(cmd[1])!=login_cred.end()){
+    else if(login_cred.find(cmd[1])!=login_cred.end()){
         status="USER NAME ALREADY IN USE";
     }
     else{
         client[idx].userName=cmd[1];
         client[idx].psw=cmd[2];
+        client[idx].isUser=1;
         status="USER MADE";
         login_cred[cmd[1]]=cmd[2];
         usrName2Idx[cmd[1]]=idx;
@@ -60,7 +61,10 @@ string create_user(int idx, vector<string> cmd){
 
 string login(int idx, vector<string> cmd){
     string status;
-    if(client[idx].isLoggedIn==1){
+    if(client[idx].isUser==0){
+        status="PLEASE CREATE A USER FIRST";
+    }
+    else if(client[idx].isLoggedIn==1){
         status="ALREADY LOGGED IN";
     }
     else if(login_cred.find(cmd[1])==login_cred.end() || login_cred[cmd[1]]!=cmd[2]){
@@ -78,6 +82,12 @@ string create_group(int idx, vector<string> cmd){
     if(groupMembers.find(cmd[1])!=groupMembers.end()){
         status="GROUP ID NOT UNIQUE";
     }
+    else if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="PLEASE LOG IN";
+    }
     else{
         groupMembers[cmd[1]].insert(idx);
         grpOwner[cmd[1]]=idx;
@@ -89,7 +99,13 @@ string create_group(int idx, vector<string> cmd){
 
 string join_group(int idx, vector<string> cmd){
     string status;
-    if(groupMembers.find(cmd[1])==groupMembers.end()){
+    if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="U R NOT LOG IN";
+    }
+    else if(groupMembers.find(cmd[1])==groupMembers.end()){
         status="NO SUCH GROUP";
     }
     else{
@@ -103,7 +119,13 @@ string join_group(int idx, vector<string> cmd){
 string list_requests(int idx, vector<string> cmd){
     //cout<<"in list_requests server...\n";
     string status="";
-    if(pendingJoinReq.find(cmd[1])==pendingJoinReq.end()){
+    if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="U R NOT LOG IN";
+    }
+    else if(pendingJoinReq.find(cmd[1])==pendingJoinReq.end()){
         status="NO PENDING REQUESTS";
     }
     else{
@@ -119,7 +141,13 @@ string list_requests(int idx, vector<string> cmd){
 
 string leave_group(int idx, vector<string> cmd){
     string status;
-    if(groupMembers.find(cmd[1])==groupMembers.end()){
+    if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="U R NOT LOG IN";
+    }
+    else if(groupMembers.find(cmd[1])==groupMembers.end()){
         status="NO SUCH GROUP";
     }
     else if(client[idx].grpID.find(cmd[1])==client[idx].grpID.end()){
@@ -153,7 +181,13 @@ string accept_request(int idx, vector<string> cmd){
     cout<<"in acc req if() server...\n";
     string status;
     int id=stoi(cmd[2]);
-    if(groupMembers.find(cmd[1])==groupMembers.end()){
+    if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="U R NOT LOG IN";
+    }
+    else if(groupMembers.find(cmd[1])==groupMembers.end()){
         status="NO SUCH GROUP";
     }
     else if(grpOwner[cmd[1]]==idx){     // CAN ACCEPT ONLY IF U ARE GRP OWNER
@@ -173,17 +207,25 @@ string accept_request(int idx, vector<string> cmd){
     return status;
 }
 
-string list_groups(){
+string list_groups(int idx){
     string status="";
-    for(auto grp : groupMembers){
-        //cout<<grp.first<<" -  ";
-        status+=grp.first+" -  ";
-        for(auto member : grp.second){
-            status+=to_string(member)+" ";
-            //cout<<member<<" ";
+    if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="U R NOT LOG IN";
+    }
+    else{
+        for(auto grp : groupMembers){
+            //cout<<grp.first<<" -  ";
+            status+=grp.first+" -  ";
+            for(auto member : grp.second){
+                status+=to_string(member)+" ";
+                //cout<<member<<" ";
+            }
+            status+="\n";
+            //cout<<endl;
         }
-        status+="\n";
-        //cout<<endl;
     }
     if(status=="")
         status="NO GROUPS AVAILABLE";
@@ -195,8 +237,17 @@ string upload_file(int idx, vector<string> cmd, string command){
     //return command;
     string status;
     int total_pieces=stoi(cmd[3]);
-    if(groupMembers.find(cmd[2])==groupMembers.end()){
+    if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="U R NOT LOG IN";
+    }
+    else if(groupMembers.find(cmd[2])==groupMembers.end()){
         status="NO SUCH GROUP";
+    }
+    else if(client[idx].grpID.find(cmd[2])==client[idx].grpID.end()){
+        status="U R NOT A PART OF THIS GROUP";
     }
     else{
         if(file2hash.find(cmd[1])==file2hash.end()){    // update only when file is shared for first time
@@ -230,8 +281,17 @@ string upload_file(int idx, vector<string> cmd, string command){
 
 string list_files(int idx, vector<string> cmd){
     string status="";
-    if(groupMembers.find(cmd[1])==groupMembers.end()){
+    if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="U R NOT LOG IN";
+    }
+    else if(groupMembers.find(cmd[1])==groupMembers.end()){
         status="NO SUCH GROUP";
+    }
+    else if(client[idx].grpID.find(cmd[1])==client[idx].grpID.end()){
+        status="U R NOT A PART OF THIS GROUP";
     }
     else{
         if(grpID2file.find(cmd[1])==grpID2file.end()){
@@ -252,7 +312,19 @@ string download_file(int idx, vector<string> cmd){
     string leeches_info="";
     int file_avail=0;
     int chunks;
-    if(shared_files.find(cmd[2])==shared_files.end()){
+    if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="U R NOT LOG IN";
+    }
+    else if(groupMembers.find(cmd[1])==groupMembers.end()){
+        status="NO SUCH GROUP";
+    }
+    else if(client[idx].grpID.find(cmd[1])==client[idx].grpID.end()){
+        status="U R NOT A PART OF THIS GROUP";
+    }
+    else if(shared_files.find(cmd[2])==shared_files.end()){
         status="FILE_NOT_AVAILABLE";
     }
     else{
@@ -368,7 +440,7 @@ void *serverservice(void *socket_desc)	//socket_desc
             clientreplymsg=status;
         }
         else if(cmd[0]=="list_groups"){
-            status=list_groups();
+            status=list_groups(idx);
             clientreplymsg=status;
         }
         else if(cmd[0]=="upload_file"){

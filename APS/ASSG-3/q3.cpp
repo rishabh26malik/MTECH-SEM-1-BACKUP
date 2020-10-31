@@ -192,7 +192,7 @@ void createInitialRuns(
 	int i; 
 	while (more_input) { 
 		for (i = 0; i < run_size; i++) { 
-			if (fscanf(in, "%d ", &arr[i]) != 1) { 
+			if (fscanf(in, "%d,", &arr[i]) != 1) { 
 				more_input = false; 
 				break; 
 			} 
@@ -236,14 +236,14 @@ int main()
 	char input_file[] = "input.txt"; 
 	char output_file[] = "output.txt"; 
 
-	FILE* in = openFile(input_file, "w"); 
+	/*FILE* in = openFile(input_file, "w"); 
 
 	srand(time(NULL)); 
 
 	for (int i = 0; i < num_ways * run_size; i++) 
 		fprintf(in, "%d ", rand()); 
 
-	fclose(in); 
+	fclose(in);*/ 
 	time(&start);
 	ios_base::sync_with_stdio(false);
 	externalSort(input_file, output_file, num_ways, 
