@@ -42,6 +42,7 @@ struct FILES_HASH{
 	string combinedHash;
 	vector <string> pieces;
 	int no_of_pieces;
+	string file_size;
 };
 typedef struct FILES_HASH FILES_HASH;
 
@@ -52,9 +53,7 @@ struct FILES{
 typedef struct FILES FILES;
 
 struct down_file{
-	string filename;
-	int chunk_no;
-	int port;
+	char *chunk;
 };
 typedef struct down_file down_file;
 

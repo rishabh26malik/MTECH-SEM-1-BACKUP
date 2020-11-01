@@ -256,9 +256,10 @@ string upload_file(int idx, vector<string> cmd, string command){
             total_pieces/=20;
             //fh.no_of_pieces=total_pieces/20;
             fh.no_of_pieces=stoi(cmd[3]);
-            int pos=15+cmd[1].length()+cmd[2].length()+cmd[3].length()+cmd[4].length();
+            int pos=16+cmd[1].length()+cmd[2].length()+cmd[3].length()+cmd[4].length()+cmd[5].length();
             string remStr=command.substr(pos);
             fh.combinedHash=remStr;
+            fh.file_size=cmd[4];
             int i=0;
             for( int j=1;j<=total_pieces;j++){      // STORE HASH OF ALL CHUNKS
                 string tmp=remStr.substr(i,20);
@@ -312,6 +313,7 @@ string download_file(int idx, vector<string> cmd){
     string leeches_info="";
     int file_avail=0;
     int chunks;
+    string fileSize;
     if(client[idx].isUser==0){
         status="NO USER CREATED";
     }
@@ -329,6 +331,7 @@ string download_file(int idx, vector<string> cmd){
     }
     else{
         chunks=file2hash[cmd[2]][0].no_of_pieces;//pieces.size();
+        fileSize=file2hash[cmd[2]][0].file_size;
         cout<<chunks<<endl;
         cout<<file2hash[cmd[2]][0].combinedHash.length()<<endl;
         file_avail=1;
@@ -372,9 +375,56 @@ string download_file(int idx, vector<string> cmd){
     //len=leeches_info.length();
     //leeches_info=leeches_info.substr(0,len-1);
     status+="-"+leeches_info;*/
-    status+=to_string(chunks);
+    status+=to_string(chunks)+"-"+fileSize;
     return status;
 }
+
+string stop_share(int idx, vector<string> cmd){
+    string status;
+    if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="U R NOT LOG IN";
+    }
+    else if(groupMembers.find(cmd[1])==groupMembers.end()){
+        status="NO SUCH GROUP";
+    }
+    else if(client[idx].grpID.find(cmd[1])==client[idx].grpID.end()){
+        status="U R NOT A PART OF THIS GROUP";
+    }
+    else if(shared_files.find(cmd[2])==shared_files.end()){
+        status="FILE_NOT_AVAILABLE";
+    }
+    else{
+        for(auto it=shared_files[cmd[2]].begin(); it!=shared_files[cmd[2]].end(); it++ ){
+            if( it->index == idx  ){
+                shared_files[cmd[2]].erase(it);
+                status="SHARING STOPPED BY U";
+                break;
+            }
+        }
+        if(shared_files[cmd[2]].size()==0){     // delete entry from map if only 1 peer was sharing
+            shared_files.erase(cmd[2]);
+        }
+    }
+}
+
+string logout(int idx, vector<string> cmd){
+    string status;
+    if(client[idx].isUser==0){
+        status="NO USER CREATED";
+    }
+    else if(client[idx].isLoggedIn==0){
+        status="U R ALREADY LOGGED OUT";
+    }
+    else{
+        client[idx].isLoggedIn=0;
+        status="LOGGED OUT!!";
+    }
+    return status;
+}
+
 
 void *serverservice(void *socket_desc)	//socket_desc
 {
@@ -454,6 +504,14 @@ void *serverservice(void *socket_desc)	//socket_desc
         else if(cmd[0]=="download_file"){
             
             status=download_file(idx, cmd);
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="stop_share"){
+            status=stop_share(idx, cmd);
+            clientreplymsg=status;
+        }
+        else if(cmd[0]=="logout"){
+            status=logout(idx, cmd);
             clientreplymsg=status;
         }
         

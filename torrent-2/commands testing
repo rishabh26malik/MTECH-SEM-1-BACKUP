@@ -1,0 +1,96 @@
+share /home/rishabh/F/torrent/foo.txt foo.txt.mtorrent
+
+share /home/rishabh/F/torrent/utilities.cpp utilities.cpp.mtorrent
+
+remove foo.txt.mtorrent
+
+share /home/rishabh/F/torrent/server.cpp server.cpp.mtorrent
+
+share /home/rishabh/F/torrent/header.h header.h.mtorrent 
+
+g++ server.cpp -o server -lpthread
+
+g++ client.cpp -o client -lssl -lcrypto -lpthread
+
+g++ client1.cpp -o client1 -lssl -lcrypto -lpthread
+
+g++ client1_1.cpp -o client1_1 -lssl -lcrypto -lpthread
+
+upload_file /home/rishabh/F/torrent-2/4/bb.pdf id1
+
+
+get foo.txt.mtorrent
+
+
+
+https://github.com/gaurav-kc/Peer-to-Peer-file-sharing-system
+
+
+upload_file /home/rishabh/F/torrent-2/4/client.cpp id1
+
+upload_file /home/rishabh/F/torrent-2/4/bb.pdf id1
+upload_file /home/rishabh/F/torrent-2/4/aa.pdf id1
+upload_file /home/rishabh/F/torrent-2/4/0.txt id1
+upload_file /home/rishabh/F/torrent-2/4/test.txt id1
+
+
+
+upload_file /home/rishabh/F/torrent-2/6/bb.pdf id1
+upload_file /home/rishabh/F/torrent-2/6/aa.pdf id1
+upload_file /home/rishabh/F/torrent-2/6/0.txt id1
+upload_file /home/rishabh/F/torrent-2/6/test.txt id1
+
+
+upload_file /home/rishabh/F/MTECH/torrent-2/6/Script.js id1
+upload_file /home/rishabh/F/MTECH/torrent-2/6/video2.mp4 id1
+upload_file /home/rishabh/F/MTECH/torrent-2/6/video3.mp4 id1
+upload_file /home/rishabh/F/MTECH/torrent-2/6/bb.pdf id1
+
+download_file id1 aa.pdf /home/rishabh/F/
+download_file id1 bb.pdf /home/rishabh/F/
+download_file id1 0.txt /home/rishabh/F/
+
+download_file id1 client.cpp /home/rishabh/F/
+download_file id1 test.txt /home/rishabh/F/
+
+download_file id1 video2.mp4 /home/rishabh/F/
+download_file id1 video3.mp4 /home/rishabh/F/
+download_file id1 Script.js /home/rishabh/F/
+
+
+upload_file bb.pdf id1 6 
+
+
+�0�k̦�:<G!��)D��Ih^_7
+ϼ籠D]Ym��Tc����|�5�a��B���զ��%�?K%$���1.�Da!���-[��kUB��-d�ㅞ�Ί֩<1ʜAr�t�\h�.
+
+
+create_user ricky aa
+create_user anu bb
+create_user dimple cc
+
+login ricky aa
+login anu bb
+login dimple cc
+
+create_group id1
+join_group id1
+
+list_requests id1
+accept_request id1
+
+list_groups
+
+SOME CHECK WHILE IMPLEMENTING FUNCTIONS IN AOS -
+1) check user is created or not
+2) check if he's logged in
+3) check if a given group exists or not
+4) check if user is part of that group or not
+5) check if user is admin of that group or not
+6) check if file is available or not
+7) check if file is available in that group in which user is also a member
+8) check if a username is unique or not
+ 
+127.0.0.1,5024|3-1463090
+
+

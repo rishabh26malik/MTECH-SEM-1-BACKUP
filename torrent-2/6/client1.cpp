@@ -5,8 +5,9 @@ CLIENT client[10];
 int k=0;
 map <int, int> sock2idx;
 
-vector <vector<string>> downloaded_files(100, vector<string> (50,""));
+vector <vector<down_file>> downloaded_files(100, vector<down_file> (100));
 map <string, int> file_2_idx;
+map <string, string> downloads;
 
 string server_ip;
 int server_port;
@@ -429,7 +430,11 @@ void upload_file(string command, vector <string> cmd, int sock){
         i--;
     }
 
-    command="upload_file "+filename+" "+cmd[2]+" "+to_string(total_chunks)+" "+to_string(SHA_hash.length())+" "+SHA_hash;
+    struct stat fstatus;
+    stat(filename.c_str(), &fstatus);
+    long int total_size = fstatus.st_size;
+
+    command="upload_file "+filename+" "+cmd[2]+" "+to_string(total_chunks)+" "+to_string(total_size)+" "+to_string(SHA_hash.length())+" "+SHA_hash;
     int len=command.length();
     char send_cmd[len];
     strcpy(send_cmd, command.c_str());
@@ -458,10 +463,45 @@ void list_files(string command, vector <string> cmd, int sock){
     printf("%s\n",buffer ); 
 }
 
-void *abc(void *x){
-	string a=*(string*)x;
-	cout<<a<<endl;
+void stop_share(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 3){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
+    int len=command.length();
+    char send_cmd[len];
+    strcpy(send_cmd, command.c_str());
+    fflush(stdout);
+    send(sock , send_cmd , strlen(send_cmd) , 0 );
+    char buffer[1024] = {0};
+    int valread = read( sock , buffer, 1024);
+    string replyStr(buffer);
+    printf("%s\n",buffer ); 
 }
+
+void logout(string command, vector <string> cmd, int sock){
+    if(cmd.size() != 1){
+        cout<<"INVALID NO. OF ARGS\n";
+        return;
+    }
+    int len=command.length();
+    char send_cmd[len];
+    strcpy(send_cmd, command.c_str());
+    fflush(stdout);
+    send(sock , send_cmd , strlen(send_cmd) , 0 );
+    char buffer[1024] = {0};
+    int valread = read( sock , buffer, 1024);
+    string replyStr(buffer);
+    printf("%s\n",buffer ); 
+}
+
+void show_downloads(){
+	cout<<"DOWNLOADS - \n";
+	for(auto d : downloads){
+		cout<<d.second<<endl;
+	}
+}
+
 
 void * client1(void *temp){
     string data=*(string*)temp;
@@ -470,61 +510,152 @@ void * client1(void *temp){
 	
 	vector <string> tokens;
 	tokenize(data, tokens);
-	
-	cout<<endl;
 	int port=stoi(tokens[0]);
-
-    int client_socket;
-    
+	int client_socket;
     client_socket=socket(AF_INET,SOCK_STREAM,0);
     if(client_socket==-1){
         printf("Socket creation error %d\n",errno);
         return 0;
     }
-    
     struct sockaddr_in server_address;
     //int addrlen=sizeof(address);
     char buffer[512*1024]={0};
-    
     if(inet_pton(AF_INET,"127.0.0.1",&server_address.sin_addr)==-1){
         printf("Invalid Address:%d\n",errno);
     }
     server_address.sin_family=AF_INET;
     server_address.sin_port=htons(port);        
     int addrlen=sizeof(server_address);
-
     int socket=connect(client_socket,(struct sockaddr*)&server_address,addrlen);
     if(socket==-1){
         printf("Connect error:%d\n",errno);
         return 0;
     }
-    
     printf("Thread Connected\n");
-    
+    /*string destpath="dest_"+tokens[3];
+    char *d_path = new char[destpath.length() + 1];
+    strcpy(d_path, destpath.c_str());
+    ofstream myfile(d_path, ofstream::binary);*/
     write(client_socket,data.c_str(),data.length());
     //write(client_socket,msg,strlen(msg));
-    int i=stoi(tokens[1]), n=stoi(tokens[2]), idx=file_2_idx[tokens[3]];
-    while( n-- ){
-        int valread=read(client_socket,buffer,512*1024);
-        //cout<<buffer<<endl;
-        //cout<<"reply   -  "<<buffer<<endl;
-        string rcvdChunk(buffer);
-        cout<<i<<"  "<<rcvdChunk.length()<<endl;
-        downloaded_files[idx][i]=rcvdChunk;
-        //downloaded_files[chk.idx][chk.chunkNo]=rcvdChunk;
-        i++;
-        memset(buffer,'\0',512*1024);
-        //cout<<"\n\n--------------------------------\n\n\n";
+    ifstream file1(tokens[3].c_str(), ifstream::binary);
+    if (!file1)
+    {
+        cout << "Can't Open file1  : "<< endl;
+        //return "-1";
     }
-    //string rcvdChunk(buffer);
-    //downloaded_files[chk.idx][chk.chunkNo]=rcvdChunk;
-    //downloaded_files[file_2_idx[flname]][chk.idx]=rcvdChunk;
-        //cout<<"-------------------------------------------\n";
-    //    cout<<"-------------------------------------------\n";
-        //if(valread<1024) break;
-    //}
-    close(client_socket);
+	
     
+    long int total_size = stol(tokens[4], nullptr, 10);;//fstatus.st_size;
+    cout<<total_size<<endl;
+    long int chunk_size = 64*1024;
+
+    int total_chunks = total_size / chunk_size;
+    int last_chunk_size = total_size % chunk_size;
+
+    if (last_chunk_size != 0) // if file1 is not exactly divisible by chunks size
+    {
+        ++total_chunks; // add last chunk to count
+    }
+    else //when file1 is completely divisible by chunk size
+    {
+        last_chunk_size = chunk_size;
+    }
+    cout<<total_chunks<<" "<<last_chunk_size<<endl;
+
+
+
+    int i, start=stoi(tokens[1]), end=stoi(tokens[2]), idx=file_2_idx[tokens[3]];
+    start*=512*1024;
+    end=start+end*512*1024;
+/*
+    for (int chunk = 0; chunk < total_chunks; ++chunk)
+    {
+    	cout<<"chunk - "<<chunk<<" - ";
+        int cur_cnk_size;
+        if (chunk == n - 1)
+            cur_cnk_size = last_chunk_size;
+        else
+            cur_cnk_size = chunk_size;
+        //cout<<cur_cnk_size<<endl;
+        char *chunk_data = new char[cur_cnk_size];
+        int valread=read(client_socket,chunk_data, cur_cnk_size);
+        cout<<valread<<endl;
+        myfile.write(chunk_data, cur_cnk_size);
+    }
+  */
+
+    ofstream outfile;
+    string destpath1="zzzz_"+tokens[3];
+    char *d_path1 = new char[destpath1.length() + 1];
+    strcpy(d_path1, destpath1.c_str());
+	outfile.open(d_path1);
+
+	downloads[tokens[3]]="[C] "+ tokens[5] +" "+tokens[3];
+
+    int read_last_chunk=total_size % (64*1024);
+    cout<<read_last_chunk<<endl;
+    int read_size=64*1024;
+    while(start < end && start < total_size){
+    	int slab=end-start;
+    	if(slab % read_size != 0 ){
+    		read_size=read_last_chunk;
+    	}
+    	downloaded_files[idx][i].chunk=(char*)malloc(sizeof(char)*read_size);
+        int valread=read(client_socket, downloaded_files[idx][i].chunk, read_size);
+        cout<<valread<<"-"<<tokens[0]<<endl;
+        //myfile.write(downloaded_files[idx][i].chunk, read_size);
+    	
+        outfile.seekp(start,ios::beg);
+        outfile.write (downloaded_files[idx][i].chunk, read_size);
+
+    	start += read_size;
+    }
+    outfile.close();
+    /*string destpath1="zzzz_"+tokens[3];
+    char *d_path1 = new char[destpath.length() + 1];
+    strcpy(d_path1, destpath1.c_str());
+    ofstream myfile1(d_path1, ofstream::binary);
+    read_size=64*1024;
+    
+    for(i=0;i<total_chunks;i++){
+    	if(i==total_chunks-1){
+    		read_size=read_last_chunk;
+    	}
+    	//cout<<i<<endl;
+    	//cout<<i<<" - "<<read_size<<" "<<strlen(downloaded_files[idx][i].chunk)<<endl;
+    	//cout<<"--\n";
+    	myfile1.write(downloaded_files[idx][i].chunk, read_size);
+    	//cout<<"..\n";
+    }
+    myfile1.close();*/
+
+
+
+
+/*
+    for(int i=start;i<end+start && i<total_chunks;i++){
+    	down_file rcvd;
+    	downloaded_files[idx][i].chunk=(char*)malloc(sizeof(char)*64*1024);
+    	//rcvd.chunk=(char*)malloc(sizeof(char)*64*1024);
+    	//char *chunk_data = new char[64*1024];
+        int valread=read(client_socket, downloaded_files[idx][i].chunk, 64*1024);
+        cout<<valread<<endl;
+        myfile.write(downloaded_files[idx][i].chunk, 64*1024);
+    }
+    down_file rcvd1;
+    downloaded_files[idx][i].chunk=(char*)malloc(sizeof(char)*21298);
+    //rcvd1.chunk=(char*)malloc(sizeof(char)*21298);
+    //char *chunk_data1 = new char[21298];
+    int valread=read(client_socket, downloaded_files[idx][i].chunk, 21298);
+    cout<<valread<<endl;
+    myfile.write(downloaded_files[idx][i].chunk, 21298);
+
+*/
+    
+    downloads[tokens[3]]="[D] "+ tokens[5] +" "+tokens[3];
+    close(client_socket);
+    //myfile.close();
     return NULL;
 
 }
@@ -547,6 +678,11 @@ void download_file(string command, vector <string> cmd, int sock){
     int valread = read( sock , buffer, 1024);
     string replyStr(buffer);
     printf("%s\n",buffer ); 
+
+    if(replyStr=="NO USER CREATED" || replyStr=="U R NOT LOG IN"   || replyStr=="NO SUCH GROUP"
+    		   || replyStr=="U R NOT A PART OF THIS GROUP"   || replyStr=="FILE_NOT_AVAILABLE" ){
+        return;
+    }
     // TILL HERE, GOT INFO OF SEEDS
     ////////////////
     int i, chunks;
@@ -570,17 +706,48 @@ void download_file(string command, vector <string> cmd, int sock){
             tmp+=replyStr[i];
     }
     chunks=stoi(tmp);
-    cout<<chunks<<endl;
-    
+    cout<<chunks<<" "<<replyStr.length()<<endl;
+    i++;
+    string aa=replyStr.substr(i,5);
+    tmp="";
+    cout<<len<<" "<<"i - "<<i<<endl;
+
+    //exit(0);
+    while(i<len){
+    	cout<<replyStr[i];
+    	tmp+=replyStr[i];
+    	i++;
+    }
+    cout<<"\nfile size - "<<tmp<<endl;
+    //exit(0);
+    long int size_of_file=stol(tmp, nullptr, 10);
+    cout<<size_of_file<<endl;
     len=seeds_port.size();
     pthread_t thread_id[len];
 	int x=chunks/len;
     int start_chk=0;
-
+    cout<<seeds_port[0]<<endl<<chunks<<endl;
     vector<string> passDetails(len);
-    for(i=0;i<len;i++){
+    string str=to_string(seeds_port[0])+" "+to_string(start_chk)+" "+to_string(chunks)+" "+cmd[2]+" "+to_string(size_of_file)+" "+cmd[1];
+	cout<<"str - "<<str<<endl;
+	passDetails[0]=str;
+	if (pthread_create(&thread_id[0], NULL, client1 , (void *)&str) < 0)  //passDetails[0]
+    {
+        perror("\ncould not create thread in download_file\n");
+    }
+    pthread_join(thread_id[0],NULL);
+
+
+
+
+    //cout<<"joined"<<endl;
+    /*for(i=0;i<len;i++){
     	string str="";
-    	str=to_string(seeds_port[i])+" "+to_string(start_chk)+" "+to_string(x)+" "+cmd[2];
+    	if(i==len-1){
+    		str=to_string(seeds_port[i])+" "+to_string(start_chk)+" "+to_string(chunks-i)+" "+cmd[2]+" "+to_string(size_of_file);	
+    	}
+    	else
+	    	str=to_string(seeds_port[i])+" "+to_string(start_chk)+" "+to_string(x)+" "+cmd[2]+" "+to_string(size_of_file);
     	passDetails[i]=str;
     	start_chk+=x;
     	//cout<<passDetails[i].c_str()<<endl;
@@ -593,27 +760,6 @@ void download_file(string command, vector <string> cmd, int sock){
             perror("\ncould not create thread in download_file\n");
         }
     }
-/*
-    ofstream stream;
-    stream.open("check_this.pdf");
-    if( !stream ){
-        cout << "Opening file failed" << endl;
-        exit(0);
-    }
-    int idx=file_2_idx[cmd[2]];
-    for(auto str : downloaded_files[idx]){
-    	stream<<str;
-
-    }*/
-
-/*    string sstr="";
-    vector <string> each_chunk;
-    for(i=0;i<chunks;i++){
-        each_chunk.push_back(sstr);
-    }
-    downloaded_files.push_back(each_chunk);
-*/
-    
 
     cout<<"AFTER LOOP\n";
 
@@ -621,26 +767,31 @@ void download_file(string command, vector <string> cmd, int sock){
     for(i=0;i<len;i++){
         pthread_join(thread_id[i],NULL);
         cout<<"join - "<<i<<endl;
-    }
+    }*/
     
     cout<<"AFTER JOIN\n";
-    /*i=file_2_idx[cmd[2]];
-    for(auto ch : downloaded_files[i]){
-        cout<<ch.size()<<"\nXXXXXXXXXXXXXX\n";
-    }*/
-/*
-    cout<<"*****************\n\n";
-    i=file_2_idx[cmd[2]];
-    ofstream stream;
-    stream.open("saveName.txt");
-    for(auto f : downloaded_files[i]){
-        stream<<f;
-        //char myChunk[512*1024];
-        //strcpy(myChunk, f.c_str());
-        //cout<<f<<endl<<endl;
-        //cout<<"\\\\\\\\\\\\\\\\\\\\\\\\\\\n\n";
+    /*int idx=file_2_idx[cmd[2]];
+    long int count=size_of_file/(64*1024);
+    if(size_of_file%(64*1024) != 0)
+    	count++;
+    cout<<"count - "<<count<<endl;
+    string destpath="check_"+cmd[2];
+    char *d_path = new char[destpath.length() + 1];
+    strcpy(d_path, destpath.c_str());
+    ofstream myfile1(d_path, ofstream::binary);
+    int read_size=64*1024;
+    int last_chunk_size=size_of_file % (64*1024);
+    for(i=0;i<count;i++){
+    	if(i==count-1){
+    		read_size=last_chunk_size;
+    	}
+    	cout<<i<<endl;
+    	//cout<<i<<" - "<<read_size<<" "<<strlen(downloaded_files[idx][i].chunk)<<endl;
+    	cout<<"--\n";
+    	myfile1.write(downloaded_files[idx][i].chunk, read_size);
+    	cout<<"..\n";
     }
-*/
+    myfile1.close();*/
 
 }
 
@@ -680,6 +831,15 @@ void execute_cmd(string command, vector <string> cmd, int sock){
     else if(cmd[0]=="download_file"){
         download_file(command, cmd, sock);
     }
+    else if(cmd[0]=="stop_share"){
+        stop_share(command, cmd, sock);
+    }
+    else if(cmd[0]=="logout"){
+        logout(command, cmd, sock);
+    }
+    else if(cmd[0]=="show_downloads"){
+        show_downloads();
+    }
     else{
         //cout<<cmd[0]<<","<<cmd[1]<<","<<cmd[2]<<endl;
         cout<<"INVALID COMMAND\n";
@@ -702,53 +862,100 @@ void * acceptCon(void * client_socket1){
     tokenize(command, tokens);
 
     
-    //send(client_socket , buffer , strlen(buffer) , 0 );
-    ////////
-    string str(buffer);
-    str=str+" chunk received";
-    char send_buffer[1024]={0};
-    strcpy(send_buffer, str.c_str());
-
-    ///////
+    
     int piece_size=512*1024, total_pieces=stoi(tokens[2]);
     ifstream input_file;
     input_file.open(tokens[3].c_str());
     
-    unsigned char input[piece_size];
-    
-    int n=stoi(tokens[1]);
-    while(n--)
-    	input_file.read((char*)input, piece_size);
+     
+    /*string destpath="dddd_"+tokens[3];
+    char *d_path = new char[destpath.length() + 1];
+    strcpy(d_path, destpath.c_str());
+    ofstream myfile(d_path, ofstream::binary);*/
 
-    while(total_pieces--){
-        input_file.read((char*)input, piece_size);
-        string yoyo((char*)input);
-        cout<<total_pieces<<"  "<<yoyo.length()<<endl;
-        //cout<<input<<endl;
-        //cout<<"\n\n--------------------------------\n\n\n";
-        send(client_socket , input , strlen((char*)input) , 0 );
-        string piece((char*)input);
-              
+   
+    ifstream file1(tokens[3].c_str(), ifstream::binary);
+
+    if (!file1)
+    {
+        cout << "Can't Open file1  : "<< endl;
+        //return "-1";
     }
+	
+    long int total_size = stol(tokens[4],nullptr, 10);//fstatus.st_size;
+    cout<<total_size<<endl;
+    long int chunk_size = 512*1024;
 
+    int total_chunks = total_size / chunk_size;
+    int last_chunk_size = total_size % chunk_size;
 
-    //////
-/*    char path[100];
-    strcpy(path, filename.c_str());
-    ifstream input_file;
-    input_file.open(path);
-    int a=512*1024;
-    unsigned char input[a];
-    while(n--){
+    if (last_chunk_size != 0) // if file1 is not exactly divisible by chunks size
+    {
+        ++total_chunks; // add last chunk to count
+    }
+    else //when file1 is completely divisible by chunk size
+    {
+        last_chunk_size = chunk_size;
+    }
+    cout<<total_chunks<<" "<<last_chunk_size<<endl;
+    /*for (int chunk = 0; chunk < total_chunks; ++chunk)
+    {
+        int cur_cnk_size;
+        if (chunk == total_chunks - 1)
+            cur_cnk_size = last_chunk_size;
+        else
+            cur_cnk_size = chunk_size;
+        cout<<cur_cnk_size<<endl;
+        char *chunk_data = new char[cur_cnk_size];
+        //cout<<strlen(chunk_data)<<endl;
+        file1.read(chunk_data,    
+                   cur_cnk_size); 
+        myfile.write(chunk_data, cur_cnk_size);
+        send(client_socket , chunk_data , cur_cnk_size , 0 );
+    }*/
+    int i, start=stoi(tokens[1]), end=stoi(tokens[2]);
+    start*=512*1024;
+    end=start+end*512*1024;
+    int read_last_chunk=total_size % (64*1024);
+    cout<<read_last_chunk<<endl;
+    int read_size=64*1024;
+    while(start < end && start < total_size){
+    	int slab=end-start;
+    	if(slab % read_size != 0 ){
+    		read_size=read_last_chunk;
+    	}
+ 		char *chunk_data = new char[read_size];
+        file1.seekg(start,ios::beg);
+        file1.read(chunk_data, read_size);
+        //myfile.write(chunk_data, read_size);
+        send(client_socket , chunk_data , read_size , 0 );
         
-        input_file.read((char*)input, 512*1024);
-        //cout<<input<<endl<<endl<<endl;
+    	start += read_size;
+    }
+    file1.close();
+    //myfile.close();
+
+    
+    /*for(int i=0;i<22;i++){
+    	char *chunk_data = new char[64*1024];
+        //cout<<strlen(chunk_data)<<endl;
+        file1.read(chunk_data, 64*1024); 
+        
+
+        //myfile.write(chunk_data, 64*1024);
+        send(client_socket , chunk_data , 64*1024 , 0 );
     }
 
-    //char send_buffer[1024]="Hi from server";
-    //send(client_socket , send_buffer , strlen(send_buffer) , 0 );
-    //send(client_socket , input , strlen((char*)input) , 0 );
-*/
+    char *chunk_data = new char[21298];
+    //cout<<strlen(chunk_data)<<endl;
+    file1.read(chunk_data, 21298); 
+       
+    //myfile.write(chunk_data, 21298);
+    send(client_socket , chunk_data , 21298 , 0 );
+    //myfile.close();
+    file1.close();
+    */
+
     close(client_socket);
     return NULL;
 }

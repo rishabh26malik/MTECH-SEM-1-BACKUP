@@ -32,7 +32,17 @@ upload_file /home/rishabh/F/torrent-2/4/0.txt id1
 upload_file /home/rishabh/F/torrent-2/4/test.txt id1
 
 
-upload_file /home/rishabh/F/MTECH/torrent-2/6/video.asf id1
+
+upload_file /home/rishabh/F/torrent-2/6/bb.pdf id1
+upload_file /home/rishabh/F/torrent-2/6/aa.pdf id1
+upload_file /home/rishabh/F/torrent-2/6/0.txt id1
+upload_file /home/rishabh/F/torrent-2/6/test.txt id1
+
+
+upload_file /home/rishabh/F/MTECH/torrent-2/6/Script.js id1
+upload_file /home/rishabh/F/MTECH/torrent-2/6/video2.mp4 id1
+upload_file /home/rishabh/F/MTECH/torrent-2/6/video3.mp4 id1
+upload_file /home/rishabh/F/MTECH/torrent-2/6/bb.pdf id1
 
 download_file id1 aa.pdf /home/rishabh/F/
 download_file id1 bb.pdf /home/rishabh/F/
@@ -41,7 +51,10 @@ download_file id1 0.txt /home/rishabh/F/
 download_file id1 client.cpp /home/rishabh/F/
 download_file id1 test.txt /home/rishabh/F/
 
-download_file id1 video.asf /home/rishabh/F/
+download_file id1 video2.mp4 /home/rishabh/F/
+download_file id1 video3.mp4 /home/rishabh/F/
+download_file id1 Script.js /home/rishabh/F/
+
 
 upload_file bb.pdf id1 6 
 
@@ -76,5 +89,6 @@ SOME CHECK WHILE IMPLEMENTING FUNCTIONS IN AOS -
 7) check if file is available in that group in which user is also a member
 8) check if a username is unique or not
  
+127.0.0.1,5024|3-1463090
 
 
