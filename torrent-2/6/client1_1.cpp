@@ -22,6 +22,7 @@ string client_ip;
 //map <int, int> sock2idx;
 int myPort;
 
+ofstream output;
 
 int m=0;
 
@@ -39,7 +40,7 @@ void tokenize(string command, vector <string> &cmds){
         }
     }
 }
-
+/*
 void create_mtorrent_file(vector <string> cmd){
     string tracker_info = server_ip + " " + to_string(server_port);
     char filepath[100], saveName[100];
@@ -102,7 +103,7 @@ void create_mtorrent_file(vector <string> cmd){
     //stream << curr_path << endl;
     shareHASH=hash;
 }
-
+*/
 
 void create_user(string command, vector <string> cmd, int sock){
     if(cmd.size() != 3){
@@ -125,13 +126,10 @@ void create_user(string command, vector <string> cmd, int sock){
             cin>>usrname;
             cmd[1]=usrname;
             command="create_user "+usrname+" "+cmd[2];
-            //cout<<"updated cmd --  "<<command<<endl;
-            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
             break; 
     }
-    //printf("%s\n",buffer );
 }
 
 void login(string command, vector <string> cmd, int sock){
@@ -161,14 +159,12 @@ void login(string command, vector <string> cmd, int sock){
             cout<<"ENTER USERNAME PASSWORD AGAIN : ";
             getline(cin,usr_psw);
             command="login "+usr_psw;
-            //cout<<"updated cmd --  "<<command<<endl;
             //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
             break; 
         attempts--;
     }
-    //printf("%s\n",buffer );
 }
 
 void create_group(string command, vector <string> cmd, int sock){
@@ -197,8 +193,6 @@ void create_group(string command, vector <string> cmd, int sock){
             cout<<"ENTER GROUP ID AGAIN : ";
             getline(cin,grpId);
             command="create_group "+grpId;
-            //cout<<"updated cmd --  "<<command<<endl;
-            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
             break; 
@@ -234,8 +228,6 @@ void join_group(string command, vector <string> cmd, int sock){
             cout<<"ENTER GROUP ID AGAIN : ";
             getline(cin,grpId);
             command="join_group "+grpId;
-            //cout<<"updated cmd --  "<<command<<endl;
-            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
             break; 
@@ -248,7 +240,6 @@ void list_requests(string command, vector <string> cmd, int sock){
         cout<<"INVALID NO. OF ARGS\n";
         return;
     }
-    //cout<<"in list_requests client...\n";
     int len,attempts=4;
     while(1){
         if(attempts==0){
@@ -270,8 +261,6 @@ void list_requests(string command, vector <string> cmd, int sock){
             cout<<"ENTER GROUP ID AGAIN : ";
             getline(cin,grpId);
             command="list_requests "+grpId;
-            //cout<<"updated cmd --  "<<command<<endl;
-            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
             break; 
@@ -305,8 +294,6 @@ void leave_group(string command, vector <string> cmd, int sock){
             cout<<"ENTER GROUP ID AGAIN : ";
             getline(cin,grpId);
             command="leave_group "+grpId;
-            //cout<<"updated cmd --  "<<command<<endl;
-            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
             break; 
@@ -319,7 +306,6 @@ void accept_request(string command, vector <string> cmd, int sock){
         cout<<"INVALID NO. OF ARGS\n";
         return;
     }
-    //cout<<"in accept_request() client...\n";
     int len,attempts=4;
     while(1){
         if(attempts==0){
@@ -341,8 +327,6 @@ void accept_request(string command, vector <string> cmd, int sock){
             cout<<"ENTER GROUP ID AND USER ID AGAIN : ";
             getline(cin,grp_usr_Id);
             command="accept_request "+grp_usr_Id;
-            //cout<<"updated cmd --  "<<command<<endl;
-            //reply=create_user(cmd[0]+" "+usrname+" ",cmd[2], cmd, sock);
         }
         else
             break; 
@@ -453,7 +437,7 @@ void upload_file(string command, vector <string> cmd, int sock){
 void list_files(string command, vector <string> cmd, int sock){
     if(cmd.size() != 2){
         cout<<"INVALID NO. OF ARGS\n";
-        return;
+        
     }
     int len=command.length();
     char send_cmd[len];
@@ -471,7 +455,7 @@ void * client1(void *temp){
     string data=*(string*)temp;
 	
 	cout<<"--->>> "<<data<<endl;
-	
+	//return NULL;
 	vector <string> tokens;
 	tokenize(data, tokens);
 	int port=stoi(tokens[0]);
@@ -529,9 +513,29 @@ void * client1(void *temp){
 
 
 
-    int i, start=stoi(tokens[1]), end=stoi(tokens[2]), idx=file_2_idx[tokens[3]];
+    int i=stoi(tokens[1]), start=stoi(tokens[1]), end=stoi(tokens[2]), idx=file_2_idx[tokens[3]];
     start*=512*1024;
     end=start+end*512*1024;
+    //  ******************************* MULTI SEED DOWNLOAD **************************************
+    
+    int read_last_chunk=total_size % (64*1024);
+    cout<<read_last_chunk<<endl;
+    int read_size=64*1024;
+    //end=start+end*512*1024;
+    while(start < end && start < total_size){
+        int slab=end-start;
+        if(slab % read_size != 0){
+            read_size=read_last_chunk;
+        }
+        downloaded_files[idx][i].chunk=(char*)malloc(sizeof(char)*read_size);
+        int valread=read(client_socket, downloaded_files[idx][i].chunk, read_size);
+        cout<<valread<<"-"<<tokens[0]<<endl;
+        output.seekp(start,ios::beg);
+        output.write (downloaded_files[idx][i].chunk, read_size);
+        i++;
+        start += read_size;
+    }
+    //  *******************************************************************************************
 /*
     for (int chunk = 0; chunk < total_chunks; ++chunk)
     {
@@ -549,14 +553,20 @@ void * client1(void *temp){
     }
   */
 
+    
+
+
+    //  ******************************* SINGLE SEED DOWNLOAD **************************************
+    /*
+    int i, start=stoi(tokens[1]), end=stoi(tokens[2]), idx=file_2_idx[tokens[3]];
+    start*=512*1024;
+    end=start+end*512*1024;
+
     ofstream outfile;
-    //string destpath1="zzzz_"+tokens[3];
     string destpath1=tokens[5]+tokens[3];
     char *d_path1 = new char[destpath1.length() + 1];
     strcpy(d_path1, destpath1.c_str());
-	outfile.open(d_path1);
-
-
+    outfile.open(d_path1);
 
     int read_last_chunk=total_size % (64*1024);
     cout<<read_last_chunk<<endl;
@@ -576,7 +586,9 @@ void * client1(void *temp){
 
     	start += read_size;
     }
-    outfile.close();
+    outfile.close();*/
+    //  *******************************************************************************************
+    
     /*string destpath1="zzzz_"+tokens[3];
     char *d_path1 = new char[destpath.length() + 1];
     strcpy(d_path1, destpath1.c_str());
@@ -693,6 +705,9 @@ void download_file(string command, vector <string> cmd, int sock){
     int start_chk=0;
 
     vector<string> passDetails(len);
+    /*
+    // ******** FOR DOWNLOADING FROM ONLY 1 SEED ON FCFS BASIS **********
+
     string str=to_string(seeds_port[0])+" "+to_string(start_chk)+" "+to_string(chunks)+" "+cmd[2]+" "+to_string(size_of_file)+" "+cmd[3];
 	passDetails[0]=str;
 	if (pthread_create(&thread_id[0], NULL, client1 , (void *)&passDetails[0]) < 0)
@@ -700,22 +715,32 @@ void download_file(string command, vector <string> cmd, int sock){
         perror("\ncould not create thread in download_file\n");
     }
     pthread_join(thread_id[0],NULL);
+    // *****************************************************************
+    */
 
 
 
-
+    cout<<"chunks - "<<chunks<<endl;
     //cout<<"joined"<<endl;
-    /*for(i=0;i<len;i++){
+    for(i=0;i<len;i++){
     	string str="";
     	if(i==len-1){
-    		str=to_string(seeds_port[i])+" "+to_string(start_chk)+" "+to_string(chunks-i)+" "+cmd[2]+" "+to_string(size_of_file);	
+            cout<<start_chk<<" "<<chunks<<" "<<chunks-start_chk<<endl;
+    		str=to_string(seeds_port[i])+" "+to_string(start_chk)+" "+to_string(chunks-start_chk)+" "+cmd[2]+" "+to_string(size_of_file)+" "+cmd[3];	
     	}
-    	else
-	    	str=to_string(seeds_port[i])+" "+to_string(start_chk)+" "+to_string(x)+" "+cmd[2]+" "+to_string(size_of_file);
+    	else{
+            cout<<start_chk<<" "<<chunks<<" "<<x<<endl;
+	    	str=to_string(seeds_port[i])+" "+to_string(start_chk)+" "+to_string(x)+" "+cmd[2]+" "+to_string(size_of_file)+" "+cmd[3];
+        }
     	passDetails[i]=str;
     	start_chk+=x;
     	//cout<<passDetails[i].c_str()<<endl;
     }
+
+    string destpath1=cmd[3]+cmd[2];
+    char *d_path1 = new char[destpath1.length() + 1];
+    strcpy(d_path1, destpath1.c_str());
+    output.open(d_path1);
 
     //CHUNK_INFO chk;
     for(i=0;i<len;i++){   
@@ -731,8 +756,8 @@ void download_file(string command, vector <string> cmd, int sock){
     for(i=0;i<len;i++){
         pthread_join(thread_id[i],NULL);
         cout<<"join - "<<i<<endl;
-    }*/
-    
+    }
+    output.close();
     cout<<"AFTER JOIN\n";
     /*int idx=file_2_idx[cmd[2]];
     long int count=size_of_file/(64*1024);
@@ -796,7 +821,6 @@ void execute_cmd(string command, vector <string> cmd, int sock){
         download_file(command, cmd, sock);
     }
     else{
-        //cout<<cmd[0]<<","<<cmd[1]<<","<<cmd[2]<<endl;
         cout<<"INVALID COMMAND\n";
     }   
 }
@@ -868,6 +892,24 @@ void * acceptCon(void * client_socket1){
         myfile.write(chunk_data, cur_cnk_size);
         send(client_socket , chunk_data , cur_cnk_size , 0 );
     }*/
+    //  *********************  SINGLE SEED SENDING  *********************************
+    /*int i, start=stoi(tokens[1]), end=stoi(tokens[2]), m=stoi(tokens[2]);
+    start*=512*1024;
+    end=start+end*512*1024;
+    int read_last_chunk=total_size % (64*1024);
+    cout<<read_last_chunk<<endl;
+    int read_size=64*1024;
+    for(i=0;i<m;i++){
+        int slab=end-start;
+        if(slab % read_size != 0 ){
+            read_size=read_last_chunk;
+        }
+
+    }*/
+
+    //  *******************************************************************************************
+
+    //  *********************  SINGLE SEED SENDING  *********************************
     int i, start=stoi(tokens[1]), end=stoi(tokens[2]);
     start*=512*1024;
     end=start+end*512*1024;
@@ -888,6 +930,7 @@ void * acceptCon(void * client_socket1){
     	start += read_size;
     }
     file1.close();
+    //  *******************************************************************************************
     //myfile.close();
 
     
@@ -919,7 +962,6 @@ void * acceptCon(void * client_socket1){
 void * server(void *temp){
     int server_socket;
     int port=*(int*)temp;
-    //free(temp);
     struct sockaddr_in address;
     //int addrlen=sizeof(address);
     char buffer[1024]={0};
@@ -928,7 +970,6 @@ void * server(void *temp){
     server_socket=socket(AF_INET,SOCK_STREAM,0);
     if(server_socket==-1){
         cout<<"Socket creation error "<<errno<<endl;
-        //printf("Socket creation error %d\n",errno);
         return 0;
     }
 
@@ -937,7 +978,6 @@ void * server(void *temp){
         perror("setsockopt"); 
         exit(EXIT_FAILURE); 
     } 
-    //setsockopt(server_socket,)
     address.sin_addr.s_addr=INADDR_ANY;
     address.sin_family=AF_INET;
     address.sin_port=htons(port);
@@ -967,7 +1007,6 @@ void * server(void *temp){
         int *client_soc=(int*)malloc(sizeof(int));
         *client_soc=client_socket;
         pthread_create(&t,NULL,acceptCon,client_soc);
-        //acceptCon(client_socket,client);
     }
     close(server_socket);
     return 0;
@@ -991,10 +1030,7 @@ int main(int argc, char const *argv[])
         char passIP_port[ip1.length()];
         strcpy(passIP_port, ip1.c_str());
         pthread_create(&t1,NULL,server,&myPort);
-        /*if (pthread_create(&thread_id, NULL, PeerASServer , (void *)passIP_port) < 0)
-        {
-            perror("\ncould not create thread\n");
-        }*/
+        
         //socket programming on client side
         int sock = 0;
         struct sockaddr_in serv_addr, my_addr;
@@ -1023,7 +1059,6 @@ int main(int argc, char const *argv[])
             printf("\nClient File  : Invalid address/ Address not supported \n");
             return -1;
         }
-        //cout<<"b4 connected\n";
         if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
         {
             printf("\nConnection Failed in client side\n");
