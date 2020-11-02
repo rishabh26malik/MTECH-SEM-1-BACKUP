@@ -550,7 +550,8 @@ void * client1(void *temp){
   */
 
     ofstream outfile;
-    string destpath1="zzzz_"+tokens[3];
+    //string destpath1="zzzz_"+tokens[3];
+    string destpath1=tokens[5]+tokens[3];
     char *d_path1 = new char[destpath1.length() + 1];
     strcpy(d_path1, destpath1.c_str());
 	outfile.open(d_path1);
@@ -692,13 +693,13 @@ void download_file(string command, vector <string> cmd, int sock){
     int start_chk=0;
 
     vector<string> passDetails(len);
-    string str=to_string(seeds_port[0])+" "+to_string(start_chk)+" "+to_string(chunks)+" "+cmd[2]+" "+to_string(size_of_file);
+    string str=to_string(seeds_port[0])+" "+to_string(start_chk)+" "+to_string(chunks)+" "+cmd[2]+" "+to_string(size_of_file)+" "+cmd[3];
 	passDetails[0]=str;
 	if (pthread_create(&thread_id[0], NULL, client1 , (void *)&passDetails[0]) < 0)
     {
         perror("\ncould not create thread in download_file\n");
     }
-    //pthread_join(thread_id[0],NULL);
+    pthread_join(thread_id[0],NULL);
 
 
 
