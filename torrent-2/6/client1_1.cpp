@@ -660,6 +660,10 @@ void download_file(string command, vector <string> cmd, int sock){
     		   || replyStr=="U R NOT A PART OF THIS GROUP"   || replyStr=="FILE_NOT_AVAILABLE" ){
         return;
     }
+    /*memset(buffer, '\0', sizeof(buffer));
+    valread = read( sock , buffer, 1024);
+    string sha(buffer);
+    cout<<"sha - "<<sha<<endl;*/
     // TILL HERE, GOT INFO OF SEEDS
     ////////////////
     int i, chunks;

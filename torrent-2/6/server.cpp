@@ -516,10 +516,29 @@ void *serverservice(void *socket_desc)	//socket_desc
         }
         
 
+        /*if(cmd[0]=="download_file"){
             char *serverreply = new char[clientreplymsg.length() + 1];
             strcpy(serverreply, clientreplymsg.c_str());
             //cout<<"serverreply : "<<serverreply<<endl;
-            send(new_socket, serverreply, strlen(serverreply), 0);  
+            send(new_socket, serverreply, strlen(serverreply), 0);
+
+            if(status!="NO USER CREATED" || status!="U R NOT LOG IN"   || status!="NO SUCH GROUP"
+                    || status!="U R NOT A PART OF THIS GROUP"   || status!="FILE_NOT_AVAILABLE" ){
+                cout<<"xxxxxxxxxxx\n";
+                string sha=file2hash[cmd[1]][0].combinedHash;
+                cout<<sha<<endl;
+                char *serverreply2 = new char[sha.length() + 1];
+                strcpy(serverreply2, sha.c_str());
+                //cout<<"serverreply : "<<serverreply<<endl;
+                send(new_socket, serverreply2, strlen(serverreply2), 0);
+            }
+        }
+        else{*/
+            char *serverreply = new char[clientreplymsg.length() + 1];
+            strcpy(serverreply, clientreplymsg.c_str());
+            //cout<<"serverreply : "<<serverreply<<endl;
+            send(new_socket, serverreply, strlen(serverreply), 0);
+        //}  
     }
 /*    while(1){
     	char buffer[1024]={0};

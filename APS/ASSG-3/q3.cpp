@@ -1,257 +1,277 @@
-#include<chrono>
-#include <bits/stdc++.h> 
-using namespace std; 
+#include<bits/stdc++.h>
+using namespace std;
 
-struct MinHeapNode { 
-	int element; 
-	int i; 
-}; 
+struct Heap
+{
+	long long int *arr;
+	long long int count;
+	long long int capacity, heap_type;
+	long long int *fileIdx;
+};
+typedef Heap heap;
 
+heap* createHeap(long long int size, long long int type)
+{
+	heap *h=(heap*)malloc(sizeof(heap));
+	if(h==NULL)
+	{
+		cout<<"memory error"<<endl;
+		return NULL;
+	}	
+	h->heap_type=type;
+	h->count=0;
+	h->capacity=size;
+	h->arr=(long long int*)malloc(sizeof(long long int) * h->capacity);
+	if(h->arr == NULL)
+	{
+		cout<<"memory error"<<endl;
+		return NULL;
+	}
+	h->fileIdx=(long long int*)malloc(sizeof(long long int) * h->capacity);
+	if(h->fileIdx == NULL)
+	{
+		cout<<"memory error"<<endl;
+		return NULL;
+	}
+	return h;
+}
 
-void swap(MinHeapNode* x, MinHeapNode* y); 
+int parent(heap *h, long long int i)
+{
+	if(i<=0 || i>=h->count)
+		return -1;
+	return (i-1)/2;
+}
 
-class MinHeap { 
-	MinHeapNode* harr; 
-	int heap_size; 
+int leftChild(heap *h, long long int i)
+{
+	long long int left=2*i+1;
+	if(left>=h->count)
+		return -1;
+	return left;
+}
 
-public: 
-	MinHeap(MinHeapNode a[], int size); 
-	void MinHeapify(int); 
-	int left(int i) { return (2 * i + 1); } 
+int rightChild(heap *h, long long int i)
+{
+	long long int right=2*i+2;
+	if(right>=h->count)
+		return -1;
+	return right;
+}
 
-	int right(int i) { return (2 * i + 2); } 
+void percolateDown(heap *h, long long int i)
+{
+	long long int left,right,tmp,max1;
+	left=leftChild( h, i);
+	right=rightChild( h, i);
+	if(left != -1 && h->arr[left] < h->arr[i])
+		max1=left;
+	else
+		max1=i;
+	if(right!=-1 && h->arr[right] < h->arr[max1])  	// replace > with <  sign
+		max1=right;
+	if(max1 != i)
+	{
+		tmp=h->arr[i];
+		h->arr[i]=h->arr[max1];
+		h->arr[max1]=tmp;
 
-	MinHeapNode getMin() { return harr[0]; } 
+		tmp=h->fileIdx[i];
+		h->fileIdx[i]=h->fileIdx[max1];
+		h->fileIdx[max1]=tmp;	
+		
+		percolateDown(h,max1);
+	}
+}
 
-	void replaceMin(MinHeapNode x) 
-	{ 
-		harr[0] = x; 
-		MinHeapify(0); 
-	} 
-}; 
+void buildHeap(heap *h, long long int a[], long long int n, long long int idx[])
+{
+	long long int i;
+	if(h==NULL)
+		return;
+	for(i=0;i<n;i++){
+		h->arr[i] = a[i];
+		h->fileIdx[i] = idx[i];
+	}
+	h->count = n;
+	for(i = (n-1)/2; i >= 0; i--)
+		percolateDown(h, i);
+}
 
+int deleteMIn(heap *h)
+{
+	long long int data;
+	if(h->count == 0)
+		return -1;
+	data=h->arr[0];
+	h->arr[0]=h->arr[(h->count)-1];
+	h->fileIdx[0]=h->fileIdx[(h->count)-1];
+	h->count--;
+	percolateDown(h,0);
+	return data;
+}
 
-MinHeap::MinHeap(MinHeapNode a[], int size) 
-{ 
-	heap_size = size; 
-	harr = a; // store address of array 
-	int i = (heap_size - 1) / 2; 
-	while (i >= 0) { 
-		MinHeapify(i); 
-		i--; 
-	} 
-} 
-
-
-void MinHeap::MinHeapify(int i) 
-{ 
-	int l = left(i); 
-	int r = right(i); 
-	int smallest = i; 
-	if (l < heap_size && harr[l].element < harr[i].element) 
-		smallest = l; 
-	if (r < heap_size && harr[r].element < harr[smallest].element) 
-		smallest = r; 
-	if (smallest != i) { 
-		swap(&harr[i], &harr[smallest]); 
-		MinHeapify(smallest); 
-	} 
-} 
-
-void swap(MinHeapNode* x, MinHeapNode* y) 
-{ 
-	MinHeapNode temp = *x; 
-	*x = *y; 
-	*y = temp; 
-} 
-
-void merge(int arr[], int l, int m, int r) 
-{ 
-	int i, j, k; 
-	int n1 = m - l + 1; 
-	int n2 = r - m; 
-
-	int L[n1], R[n2]; 
-
-	for (i = 0; i < n1; i++) 
-		L[i] = arr[l + i]; 
-	for (j = 0; j < n2; j++) 
-		R[j] = arr[m + 1 + j]; 
-
-
-	i = 0; 
-
-	j = 0; 
-
-	k = l; 
-	while (i < n1 && j < n2) { 
-		if (L[i] <= R[j]) 
-			arr[k++] = L[i++]; 
-		else
-			arr[k++] = R[j++]; 
-	} 
-
-	while (i < n1) 
-		arr[k++] = L[i++]; 
-
-	while (j < n2) 
-		arr[k++] = R[j++]; 
-} 
-
-void mergeSort(int arr[], int l, int r) 
-{ 
-	if (l < r) { 
-		int m = l + (r - l) / 2; 
-		mergeSort(arr, l, m); 
-		mergeSort(arr, m + 1, r); 
-		merge(arr, l, m, r); 
-	} 
-} 
-
-FILE* openFile(char* fileName, char* mode) 
-{ 
-	FILE* fp = fopen(fileName, mode); 
-	if (fp == NULL) { 
-		perror("Error while opening the file.\n"); 
-		exit(EXIT_FAILURE); 
-	} 
-	return fp; 
-} 
-
-void mergeFiles(char* output_file, int n, int k) 
-{ 
-	FILE* in[k]; 
-	for (int i = 0; i < k; i++) { 
-		char fileName[2]; 
-
-		snprintf(fileName, sizeof(fileName), 
-				"%d", i); 
-
-		in[i] = openFile(fileName, "r"); 
-	} 
-
-	FILE* out = openFile(output_file, "w"); 
-
-	MinHeapNode* harr = new MinHeapNode[k]; 
-	int i; 
-	for (i = 0; i < k; i++) { 
-		if (fscanf(in[i], "%d ", &harr[i].element) != 1) 
-			break; 
-
-		harr[i].i = i; 
-	} 
-	MinHeap hp(harr, i); 
-
-	int count = 0; 
-
-	while (count != i) { 
-
-		MinHeapNode root = hp.getMin(); 
-		fprintf(out, "%d ", root.element); 
-
-		if (fscanf(in[root.i], "%d ", 
-				&root.element) 
-			!= 1) { 
-			root.element = INT_MAX; 
-			count++; 
-		} 
-
-		// Replace root with next 
-		// element of input file 
-		hp.replaceMin(root); 
-	} 
-
-	// close input and output files 
-	for (int i = 0; i < k; i++) 
-		fclose(in[i]); 
-
-	fclose(out); 
-} 
-
-void createInitialRuns( 
-	char* input_file, int run_size, 
-	int num_ways) 
-{ 
-	FILE* in = openFile(input_file, "r"); 
-
-	FILE* out[num_ways]; 
-	char fileName[2]; 
-	for (int i = 0; i < num_ways; i++) { 
-		snprintf(fileName, sizeof(fileName), 
-				"%d", i); 
-
-		out[i] = openFile(fileName, "w"); 
-	} 
-
-	int* arr = (int*)malloc( 
-		run_size * sizeof(int)); 
-
-	bool more_input = true; 
-	int next_output_file = 0; 
-
-	int i; 
-	while (more_input) { 
-		for (i = 0; i < run_size; i++) { 
-			if (fscanf(in, "%d,", &arr[i]) != 1) { 
-				more_input = false; 
-				break; 
-			} 
-		} 
-
-		mergeSort(arr, 0, i - 1); 
-
-		for (int j = 0; j < i; j++) 
-			fprintf(out[next_output_file], 
-					"%d ", arr[j]); 
-
-		next_output_file++; 
-	} 
-
-	for (int i = 0; i < num_ways; i++) 
-		fclose(out[i]); 
-
-	fclose(in); 
-} 
-
-void externalSort( 
-	char* input_file, char* output_file, 
-	int num_ways, int run_size) 
-{ 
-
-	createInitialRuns(input_file, 
-					run_size, num_ways); 
-
-	mergeFiles(output_file, run_size, num_ways); 
-} 
-
-int main() 
-{ 
-	time_t start, end; 
+void merge(long long int arr[], long long int low, long long int high, long long int mid){
+    //cout<<"in merge\n";
+    long long int len1, len2, i ,j, k;
+    len1= mid-low+1;
+    len2=high-mid;
+    long long int left[len1], right[len2];
+    for(i=0; i<len1; i++){
+        left[i]=arr[low+i];
+    }
+    for(i=0; i<len2; i++){
+        right[i]=arr[mid+1+i];
+    }
+    i=j=0;
+    k=low;
+    while(i<len1 && j<len2){
+        if(left[i] <= right[j]){
+            arr[k]=left[i];
+            i++;
+        }
+        else{
+            arr[k]=right[j];
+            j++;
+        }
+        k++;
+    }
+    while(i < len1){
+        arr[k]=left[i];
+        i++;
+        k++;
+    }
+    while(j < len2){
+        arr[k]=right[j];
+        j++;
+        k++;
+    }
+}
 
 
-	int num_ways = 10; 
+void mergeSort(long long int arr[], long long int low, long long int high){
+    if(low<high){
+        long long int mid=low+(high-low)/2;
+        mergeSort(arr,low, mid);
+        mergeSort(arr, mid+1, high);
+        merge(arr,low, high, mid);
+    }
+}
 
-	int run_size = 100000; 
+void solve(int partitions, int size){
+    FILE* in = fopen("input.txt", "r"); 
+    string filename;
+    long long int arr[size];
+    long long int i, j, k=0;
+    char outFile[100];
+    while(k< partitions){
+        for (i = 0; i < size; i++){
+                if (fscanf(in, "%lld,", &arr[i]) != 1)
+                    break;
+        } 
+        //for(i=0;i<size;i++)
+        //    cout<<arr[i]<<" ";
+        //cout<<"\n---------------------------------\n";
+        mergeSort(arr,0,size-1);
+        filename=to_string(k)+".txt";
+        strcpy(outFile, filename.c_str());
+        FILE* out=fopen(outFile, "w");
+        for(j=0;j<size;j++){
+            //cout<<arr[j]<<" ";
+            fprintf(out, "%lld,", arr[j]);    
+        }
+        fclose(out);
+        k++;
+    }
+}
 
-	char input_file[] = "input.txt"; 
-	char output_file[] = "output.txt"; 
+void mergeFiles(long long int partitions, long long int size){
+	FILE *out[partitions], *output;
+	string filename;
+	char file[200];
+	long long int i;
+	for(i=0;i<partitions;i++){
+		filename=to_string(i)+".txt";
+		strcpy(file, filename.c_str());
+		out[i]=fopen(file, "r");
+	}
+	output=fopen("output.txt","w");
+	heap *heap;
+	heap = createHeap(size,0);
+	long long int arr[size], index[size];
+	for(i=0;i<partitions;i++){
+		if (fscanf(out[i], "%lld,", &arr[i]) != 1) 
+            break;
+        index[i]=i;
+	}
+	buildHeap(heap, arr, partitions, index);
+	/*for(i=0;i<partitions;i++)
+		cout<<heap->arr[i]<<","<<heap->fileIdx[i]<<"  ";
+	cout<<endl;*/
+	long long int tmp=partitions;
+	long long int j=0;
+	while(j<size*partitions/*partitions--*/){
+	//cout<<j<<endl;
+		//cout<<"aa\n";
+		fprintf(output, "%lld,", heap->arr[0]);
+		//cout<<"bb\n";
+		long long int idx=heap->fileIdx[0];
+		if (fscanf(out[heap->fileIdx[0]], "%lld,", 
+                   &heap->arr[0]) != 1) { 
+            //cout<<"cc\n";
+            heap->arr[0] = INT_MAX;
+            heap->fileIdx[0] = INT_MAX; 
+            //partitions--; 
+        } 
+        else{
+        	//cout<<"dd\n";
+        	heap->fileIdx[0]=idx;
+        }
+        percolateDown(heap,0);
+        /*for(i=0;i<tmp;i++)
+			cout<<heap->arr[i]<<","<<heap->fileIdx[i]<<"  ";
+		cout<<endl;*/
+		//cout<<partitions<<endl;
+		j++;
+	}
+	for(i=0;i<tmp;i++)
+		fclose(out[i]);
+	fclose(output);
+}
 
-	/*FILE* in = openFile(input_file, "w"); 
-
-	srand(time(NULL)); 
-
-	for (int i = 0; i < num_ways * run_size; i++) 
-		fprintf(in, "%d ", rand()); 
-
-	fclose(in);*/ 
-	time(&start);
-	ios_base::sync_with_stdio(false);
-	externalSort(input_file, output_file, num_ways, 
-				run_size); 
-	time(&end); 
-	double time_taken = double(end - start); 
+int main()
+{
+    long long int partitions, size;
+    cin>>partitions>>size;
+    time_t start, end;
+    time(&start);
+    solve(partitions, size);
+    mergeFiles(partitions, size);
+    time(&end); 
+    double time_taken = double(end - start); 
     cout << "Time taken by program is : " << fixed 
          << time_taken << setprecision(5); 
-    cout << " sec " << endl;
-	return 0; 
-} 
+    cout << " sec " << endl;/*vector <int> out;
+    int arr[1000];
+    FILE* in = fopen("input.txt", "r"); 
+    for (int i = 0; i < 1000; i++){
+                if (fscanf(in, "%d,", &arr[i]) != 1)
+                    break;
+        } 
+    fclose(in);
+    sort(arr,arr+1000);
+    for(int i=0;i<1000;i++)
+    	cout<<arr[i]<<" ";
+    cout<<"\n\n----------------\n\n";
+    int brr[1000];
+    in = fopen("output.txt", "r"); 
+    for (int i = 0; i < 1000; i++){
+                if (fscanf(in, "%d,", &brr[i]) != 1)
+                    break;
+        } 
+    fclose(in);
+    //sort(arr,arr+n);
+    for(int i=0;i<1000;i++)
+    	cout<<brr[i]<<" ";*/
+ 	return 1;
+}
