@@ -158,8 +158,9 @@ void mergeSort(long long int arr[], long long int low, long long int high){
     }
 }
 
-void solve(int partitions, int size){
-    FILE* in = fopen("input.txt", "r"); 
+void solve(int partitions, int size, char input_file[]){
+    //FILE* in = fopen("input.txt", "r"); 
+    FILE* in = fopen(input_file, "r");
     string filename;
     long long int arr[size];
     long long int i, j, k=0;
@@ -185,7 +186,7 @@ void solve(int partitions, int size){
     }
 }
 
-void mergeFiles(long long int partitions, long long int size){
+void mergeFiles(long long int partitions, long long int size, char output_file[]){
 	FILE *out[partitions], *output;
 	string filename;
 	char file[200];
@@ -195,7 +196,8 @@ void mergeFiles(long long int partitions, long long int size){
 		strcpy(file, filename.c_str());
 		out[i]=fopen(file, "r");
 	}
-	output=fopen("output.txt","w");
+	//output=fopen("output.txt","w");
+	output=fopen(output_file,"w");
 	heap *heap;
 	heap = createHeap(size,0);
 	long long int arr[size], index[size];
@@ -239,14 +241,14 @@ void mergeFiles(long long int partitions, long long int size){
 	fclose(output);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     long long int partitions, size;
     cin>>partitions>>size;
     time_t start, end;
     time(&start);
-    solve(partitions, size);
-    mergeFiles(partitions, size);
+    solve(partitions, size, argv[1]);
+    mergeFiles(partitions, size, argv[2]);
     time(&end); 
     double time_taken = double(end - start); 
     cout << "Time taken by program is : " << fixed 
