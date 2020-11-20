@@ -1,0 +1,168 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath} 
+\usepackage{geometry}
+\title{LA report}
+\author{rishabhmalik26 }
+\date{November 2020}
+
+\begin{document}
+
+
+\maketitle
+
+\section{Linear Codes}
+In this chapter, we study linear error-control codes, which are special codes with rich mathematical
+structure. Linear codes are widely used in practice for a number of reasons. One reason is that they
+are easy to construct. Another reason is that encoding linear codes is very quick and easy. Decoding
+is also often facilitated by the linearity of a code. The theory of general linear codes requires the
+use of abstract algebra and linear algebra, but we will begin with some simpler binary linear codes
+
+\subsection{Binary Codes}
+A binary linear code C of length n is a set of binary n-tuples such that the
+component wise modulo 2 sum of any two codewords is contained in C.
+
+\textbf{Example 1.1.1.} The set {0000, 0101, 1010, 1111} is a binary linear code, since the sum of any two
+codewords lies in this set. Notice that this is a (4, 4, 2) code because the codewords have length 4,
+there are 4 codewords, and the minimum distance between codewords is 2.
+
+\textbf{Example 1.1.2.} The set {0000000, 0001111, 0010110, 0011001, 0100101, 0101010, 0110011, 0111100,
+1000011, 1001100, 1010101, 1011010, 1100110, 1101001, 1110000, 1111111} is a binary linear code
+known as a Hamming code. Notice that this is a (7, 16, 3) code because the codewords have length
+7, there are 16 codewords, and the minimum distance is 3.
+
+\section{Fields, Vector Spaces, Subspaces and General Linear Codes}
+In order to develop the theory for general linear codes, we need some abstract and linear algebra.
+Learning the definitions and getting comfortable with the examples will be very important.
+We begin with a discussion of the mathematical constructs known as fields. The binary alphabet, along 
+with modulo 2 addition and multiplication, is the smallest example of a field. 
+\subsection{Field}
+Let F be a nonempty set that is closed under two binary operations denoted +
+and *. That is, the binary operations input any elements a and b in F and output other elements
+c = a + b and d = a * b in F . Then (F, +, *) is a field if:
+
+\begin{enumerate}
+  \item There exists an additive identity labeled 0 in F such that a + 0 = 0 + a = a for any element a $\in$ F.
+  \item The addition is commutative: a + b = b + a, for all a, b $\in$ F.
+  \item The addition is associative: (a + b) + c = a + (b + c), for all a, b, c $\in$ F.
+  \item There exists an additive inverse for each element: For each a $\in$ F , there exists an element denoted -a in F such that a + (-a) = 0.
+  \item There exists a multiplicative identity denoted 1 in F such that a * 1 = 1 * a = a for any element a $\in$ F.
+  \item The multiplication is commutative: a * b = b * a, for all a, b $\in$ F.
+  \item The multiplication is associative: a * (b * c) = (a * b) * c, for all a, b, c $\in$ F.
+  \item There exists a multiplicative inverse for each nonzero element: For each a 6 = 0 in F , there exists an element denoted a -1 in F such that a * a -1 = a -1 * a = 1.
+  \item The operations distribute: $a * (b + c) = a * b + a * c$ and $(b + c) * a = b * a + c * a$, for all a, b, c $\in$ F.
+\end{enumerate}
+
+\subsection{Vector Spaces}
+Let F be a field. A set V of elements called vectors is a vector space if for any u, v, w $\in$ V and for any c, d $\in$ F :
+\begin{enumerate}
+  \item u + v $\in$ V
+  \item cv $\in$ V
+  \item u + v = v + u
+  \item u + (v + w) = (u + v) + w
+  \item There exists an element denoted 0 $\in$ V such that u + 0 = u
+  \item There exists an element denoted 0 $\in$ V such that u + 0 = u
+  \item c(u + v) = cu = cv
+  \item (c + d)u = cu + du
+  \item c(du) = (cd)u
+  \item 1u = u
+\end{enumerate}
+
+\subsection{Subspaces}
+Let V be a vector space over a field F and let W be a subset of V . If W is a
+vector space over F , then W is a vector subspace of V .
+
+\textbf{Theorem 2.3.1.}If W is a subset of a vector space V over a field F , then W is a vector subspace
+of V iff $\alpha u + \beta v \in W$ for all $\alpha$ , $\beta$, $\gamma$ $\in$ F and all u, v $\in$ W .
+
+We can now begin to connect vector spaces to error-control codes. Earlier, we discussed
+the linear code C = {000, 100, 001, 101}. We will now show that this code is a vector subspace of
+the vector space V (3, 2) of binary 3-tuples. Using the above mentioned theorem in subspaces, we must check if every linear
+combination of vectors in C remains in C. In fact, this is the defining
+condition for a linear code. We have just discovered one of the major links between coding theory
+and linear algebra: Linear codes are vector subspaces of vector spaces.
+
+\subsection{Linear Codes}
+A linear code of length n over GF (q) is a subspace of the vector space GF (q) n = V (n, q).
+
+\textbf{Theorem 2.4.1.} Let C be a linear code. The linear combination of any set of codewords in C is a code word in C.
+
+\textbf{Example 2.4.1} Let’s continue working with our linear code C = \{000, 100, 001, 101\}. We can see
+that this code is spanned by the linearly independent vectors [100] and [001], since all other vectors
+in C can be obtained as binary linear combinations of these two vectors. In other words, these two
+vectors form a basis for C, so the dimension of C is 2.
+
+\textbf{Theorem 2.4.2.}The dimension of a linear code C of length n is its dimension as a vector
+subspace of $GF (2)^n = V (n, 2)$.
+
+If C is a k-dimensional subspace of V (n, q), we say that C has dimension k and is an [n, k, d] or
+[n, k] linear code. In particular, if the dimension of a binary code is k, then the number of codewords is $2^k$ . In general, if the
+dimension of a q-ary code is k, then the number of codewords is $q^k$ . This means that C can be used
+to communicate any of $q^k$ distinct messages. We identify these messages with the $q^k$ elements of
+V (k, q), the vector space of k-tuples over GF (q). This is consistent with the aforementioned notion
+of encoding messages of length k to obtain codewords of length n, where $n > k$.
+
+\subsection{Encoding Linear Codes: Generator Matrices}
+Linear codes are used in practice largely due to the simple encoding procedures facilitated by their
+linearity. A k × n generator matrix G for an [n, k] linear code C provides a compact way to describe
+all of the codewords in C and provides a way to encode messages. By performing the multiplication
+mG, a generator matrix maps a length k message string m to a length n codeword string. The
+encoding function m → mG maps the vector space V (k, q) onto a k-dimensional subspace (namely
+the code C) of the vector space of V (n, q).
+
+Before giving a formal definition of generator matrices, let’s start with some examples.
+
+\textbf{Example 2.5.1.} We will now extend the work done in Example 2.4.1 on C = \{000, 100, 001, 101\}.
+We have already shown that C is a 2-dimensional vector subspace of the vector space V (3, 2).
+Therefore, C is a [3, 2] linear code and should have a 2 × 3 generator matrix. However, let’s use
+our intuition to derive the size and content of the generator matrix. We want to find a generator
+matrix G for C that will map messages (i.e. binary bit strings) onto the four codewords of C. But
+how long are are the messages that we can encode? We can answer this question using three facts:
+(1) we always encode messages of a fixed length k to codewords of a fixed length n; (2) a code must
+be able to encode arbitrary messages of length k; and (3) the encoding procedure must be “one-to-
+one,” or in other words, no two messages can be encoded as the same codeword. Using these three
+facts, it is clear that the messages corresponding to the four codewords in C must be of length 2
+since there are exactly 4 distinct binary messages of length 2: [00], [10], [01], and [11]. Hence, in
+order for the matrix multiplication to make sense, G must have 2 rows. Since the codewords are of length 3, 
+properties of matrix multiplication tell us that G should have 3 columns. In particular, if 
+$ G =
+\begin{bmatrix}
+1 & 0 & 0\\
+0 & 0 & 1
+\end{bmatrix}
+$, then
+$[00]G=[000]$, $[10]G=[100]$, $[01]G=[001]$ and $[11]G=[101]$. 
+Hence, this code C can encode any length 2 binary message. The generator matrix determines which length 2 message is encoded as which length 3 codeword.
+
+We have now seen how a generator matrix can be used to map messages onto codewords. We have
+also seen that an [n, k] linear code C is a k-dimensional vector subspace of V (n, q) and can hence be
+specified by a basis of k codewords, or q-ary vectors. This leads us to the following formal definition
+of a generator matrix: \emph{A k × n matrix G whose rows form a basis for an [n, k] linear code C is called a
+generator matrix of the code C.}
+
+\subsection{Parity Check Matrices}
+Let C be an [n, k] linear code. A parity check matrix for C is an (n - k) × n
+matrix H such that $c \in C$ if and only if $cH^T = 0$.
+
+\textbf{Example 2.6.1.}If C is the code \{111, 000\}, then a valid parity check matrix is 
+\[ H =
+\begin{bmatrix}
+1 & 0 & 1\\
+0 & 1 & 1
+\end{bmatrix}
+\]
+One way to verify this is to compute the product cH T for an arbitrary codeword c = [x, y, z]:
+\[
+[xyz]
+\begin{bmatrix}
+1 & 0 \\
+0 & 1 \\
+1 & 1
+\end{bmatrix}
+=
+[x + z, y + z]
+\]
+So, c = [xyz] is a valid codeword iff cH T = 0, ie. iff [x + z, y + z] = [0, 0]. Algebraic manipulations
+over binary show that x = y = z. Thus the only valid codewords are indeed {000, 111}. Notice that
+this is the binary repetition code of length 3.
+\end{document}
