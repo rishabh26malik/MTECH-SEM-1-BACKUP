@@ -1,0 +1,477 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+\title{Linear Independence and Codes: Hamming Codes}
+\author{Dhruv Sachdev}
+\date{November 18 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Aim}
+\paragraph{}
+The aim of this project is to apply the concepts and tools learned in the Linear Algebra course to design and implement error-detecting and error-correcting codes. These concepts include matrix multiplication, column space, null space, basis, pivots, row operations and some more. Since we are using Linear Algebra concepts to design the codes, we will be looking into linear codes only. Also, at some points, I will deviate slightly from the conventions of coding theory so as to relate to the linear algebra operations more. For example. the generator matrix that we will be looking here will be a transpose of the actual generator matrix that we usually get to see in coding theory.
+
+\section{Introduction}
+\paragraph{}
+Consider a situation in which we want to transmit a binary data signal across some channel. This happens all the time in Cell Phones, WiFi, DVDs and many more. In an ideal scenario, we would want that there is no discrepancy between the message sent by the sender and the message received by the receiver. Unfortunately, that is not the case in real life. Often, some errors creep into the message due to some noise/disturbance in the channel i.e. a 0 bit might flip to 1 and vice versa. So, we want to design a mechanism by which errors can be detected and possibly corrected automatically. Without such error detecting or correcting mechanism, the voice in our cell phones would not sound clear, DVDs would sound scratchy and so on.
+
+\section{Linear Algebra with bits}
+\paragraph{}
+We have already used vectors and matrices with its entries as real numbers in the course. We will be applying the concepts learned for matrices with bits as its entries. 
+\subsection{Bits}
+Bits are just like real numbers, but unlike real numbers, there are only 2 bits. Bits can be added(addition modulo 2 below) and multiplied just like real numbers.\\
+$$
+\begin{aligned}
+    0 + 0 = 0\\
+    0 + 1 = 1\\
+    1 + 0 = 1\\
+    1 + 1 = 0
+\end{aligned}
+\label{eq: logical 1}
+$$
+
+$$
+\begin{aligned}
+    0.0 = 0\\
+    0.1 = 0\\
+    1.0 = 0\\
+    1.1 = 1
+\end{aligned}
+\label{eq: logical 1}
+$$
+
+\section{Error Correcting Codes}
+
+\subsection{Repetition codes}
+\paragraph{}
+The simplest solution that comes to mind for detecting errors in the message is to send each bit of the message multiple times. For each 0 in the sender's message, two 0's would be sent and the same with 1's. So, for example, if the original message is of 3 bits as [1 1 0], it would be encoded to [1 1 : 1 1 : 0 0] and sent across the channel. Here, : has been used to divide the message into segments. Naturally, the receiver should be aware of the encoding policy beforehand so that it can decode the message accordingly.
+\paragraph{}
+The advantage of this policy is that the receiver can detect errors in the message(if any). If the message received was [1 1 : 0 1 : 0 0], the receiver would understand there is an error in the 2\textsuperscript{nd} segment. The recipient can deduce that the original message would have been [1 1 0] or [1 0 0]. But, the recipient does not have enough information to correct the error. Another problem with this policy is that twice the amount of actual data needs to be sent across the channel can cause problems if there is a limitation on the bandwidth of the channel that is available.
+\paragraph{}
+A slight change to this policy would be to send each bit in segments of three. The message [1 1 0] would be encoded to [1 1 1 : 1 1 1 : 0 0 0] and sent to the receiver. This would help us in not only detecting an error but correcting it also (assuming that there is at most a single bit error only and we will assume so from here on unless specified otherwise). If the recipient receives [1 1 1 : 1 0 1 : 0 0 0], the error is detected in the 2\textsuperscript{nd} segment. But the original segment could either be [0 0 0] or [1 1 1] and it is far more likely that second bit in the 2\textsuperscript{nd} segment got flipped from 1 to 0 as compared to the first and third bits getting flipped from 0 to 1. So, the recipient will correct the error and consider [1 1 0] as the message that was intended to be sent by the sender. 
+\paragraph{}
+Let's consider that the probability of a bit getting flipped during the transmission is p and the chances of getting some bit flipped is independent from the other bits getting flipped. So, if [1 0 1] is received, the probability that [1 1 1] was sent is $(1-p)^{2}p$ whereas the probability that [0 0 0] was sent is $p^{2}(1-p)$. If $p < \frac{1}{2}$, it is likelier that [1 1 1] was sent and therefore the recipient decodes the message [1 0 1] as [1 1 1]. This is the type of decoding where we took our received message and had each bit vote on what the message sent was. This is called Maximum Likelihood Decoding. Given the received message, we determine which of the message is most likely to have been sent. 
+\paragraph{}
+Now, let's figure out the probability that we decode the message incorrectly. When there are two or more errors in a single segment, that bit will be decoded incorrectly. For simplicity, let's say that the message to send was a single bit(1) and sent in three segments. The probability that the message is decoded incorrectly is:
+\begin{equation}
+    {3\choose 2}(1-p)p^{2} + {3\choose 3}p^{3} = 3p^{2} - 2p^{3} \approx 3p^{2} \ll p
+\end{equation}
+since when p is small, $p^{3}$ is much more smaller as compared to the $p^{2}$ term. If we had done no encoding and just sent a single bit, the probability of receiving the bit incorrectly is p. Hence, when p is small, this repetition encoding gives us quite some improvement. But, obviously there is a disadvantage that three times as much data has to be sent across the channel in this encoding. 
+
+\subsubsection*{Matrix formalism}
+We define the code generator matrix G as follows:
+$$
+    G = \begin{bmatrix}
+        1\\1\\1
+    \end{bmatrix}
+$$
+Suppose that $\Vec{x}$ is one bit of the message that is to be sent (think of it as a 1x1 matrix). Then, $G\Vec{x}$ is a 3 x 1 column vector which represents the encoded version of the sender's message. 
+
+$$
+G\Vec{x} = 
+\begin{bmatrix}
+    1\\1\\1
+\end{bmatrix}
+\text{ if } \Vec{x} =
+\begin{bmatrix}
+    1
+\end{bmatrix}
+\text{ and }
+G\Vec{x} = 
+\begin{bmatrix}
+    0\\0\\0
+\end{bmatrix}
+\text{ if } \Vec{x} =
+\begin{bmatrix}
+    0
+\end{bmatrix}
+$$
+
+Let's say the recipient receives a message $\Vec{c}$:
+$$
+\Vec{c} = 
+\begin{bmatrix}
+    c_1\\c_2\\c_3
+\end{bmatrix}
+$$
+
+Ideally c\textsubscript{1}, c\textsubscript{2}, c\textsubscript{3} all are 0 or 1 and $\Vec{c} = G\Vec{x}$ but there might be an error. The recipient looks for an error by performing parity check. For the message to be error free, $c_1 + c_2$ to be even and $c_2 + c_3$ to be even too. We don't need to check parity of $c_1 + c_3$ as it will be even when the former two are even. We will use + as addition modulo 2 from now on. So, the equations that we need to solve are:
+
+\begin{equation}
+\begin{aligned}
+c_1 + c_2 = 0\\
+c_2 + c_3 = 0
+\end{aligned}
+\label{eq: logical 1}
+\end{equation}
+
+If we think of c\textsubscript{1}, c\textsubscript{2}, c\textsubscript{3} as unknown variables of the above set of linear equations, the coefficient matrix is:
+$$
+H = 
+\begin{bmatrix}
+    1 & 1 & 0\\
+    0 & 1 & 1
+\end{bmatrix}
+$$
+which is known as parity check matrix. 
+
+\paragraph{}
+The recipient calculates $H\Vec{c}$ and there are 4 possibilities as follows:
+\begin{enumerate}
+    \item $H\Vec{c} = \begin{bmatrix} 0\\0 \end{bmatrix}$. This means that $c\textsubscript{1} + c\textsubscript{2} = 0$ as well as $c\textsubscript{2} + c\textsubscript{3} = 0$ and that there no error occurred in the transmission of the message.
+    
+    \item $H\Vec{c} = \begin{bmatrix} 0\\1 \end{bmatrix}$. This means that $c\textsubscript{1} + c\textsubscript{2} = 0$ but $c\textsubscript{2} + c\textsubscript{3} = 1$. Therefore, $c\textsubscript{1} = c\textsubscript{2}$(both must be 0 or 1) and c3 is different. So, the recipient assumes that the error likely occurred in c\textsubscript{3} and decodes the message by flipping the c\textsubscript{3} in the received message.
+    
+    \item $H\Vec{c} = \begin{bmatrix} 1\\0 \end{bmatrix}$. This means that $c\textsubscript{2} + c\textsubscript{3} = 0$ but $c\textsubscript{1} + c\textsubscript{3} = 1$. Therefore, $c\textsubscript{1} = c\textsubscript{2}$(both must be 0 or 1) and c3 is different. So, the recipient assumes that the error likely occurred in c\textsubscript{1} and decodes the message by flipping the c\textsubscript{1} in the received message.
+    
+    \item $H\Vec{c} = \begin{bmatrix} 1\\1 \end{bmatrix}$. This means that $c\textsubscript{1} + c\textsubscript{2} = 1$ and $c\textsubscript{2} + c\textsubscript{3} = 1$. Therefore, $c\textsubscript{1} = c\textsubscript{3}$(both must be 0 or 1) and c3 is different. So, the recipient assumes that the error likely occurred in c\textsubscript{2} and decodes the message by flipping the c\textsubscript{2} in the received message.
+\end{enumerate}
+
+Notice one interesting thing: The three outcomes of $H\Vec{c}$ when there is no error are columns of H. In all of the 3 cases, the number of bit in which there is an error is same as the column number of $H\Vec{c}$ in H. We will look more into this in Hamming code.
+
+\subsection{Parity codes}
+This is a slightly more sophisticated code. It takes two bits of the sender's message at a time, and gives five bit blocks.
+$$
+    \begin{bmatrix}
+        x\\y
+    \end{bmatrix}
+     = 
+    \begin{bmatrix}
+        x\\x\\y\\y\\x + y
+        
+    \end{bmatrix}
+$$
+
+x + y at the end of the error-protected block is called the parity bit because it tells us whether the number of 1s in the unprotected block was even or odd. 
+
+\section{Linear Codes}
+An error correcting code is called linear if it turns each k-bit block of a message into an n-bit error protected block by doing a linear transformation
+$$ \vec{x} \to G\vec{x} $$
+where G is a n x k matrix. This matrix is called the \textbf{generator} of the code. Vectors in the range of $ \vec{x} \to G\vec{x} $ are called \textbf{codewords}. The transformation $ \vec{x} \to G\vec{x} $ has domain $B^k$ and co-domain $B^n$. So, every codeword is a vector in $B^n$. But, every vector in $B^n$ is not a codeword. We will see more about this in a while. 
+
+\subsection{Conditions for the code to be error-correcting}
+Let's say we have a linear code with a generator G. How do we know if it can be used to correct errors? Let's try to find that out. We take a vector $\mathbf{x} \in B^k$, turn it into a codeword $\mathbf{y} = G\mathbf{x}$, and send it across the channel. Suppose, there is some noise in the channel and one of the bits(say i\textsuperscript{th}) get flipped. So, the recipient receives the vector $\mathbf{y} + \mathbf{e_{i}}$, where $\mathbf{e_i}$ is the i\textsuperscript{th} column of the identity matrix. Adding one to an entry in a vector flips the entry because we perform addition modulo 2. This vector $\mathbf{y} + \mathbf{e_{i}}$ should not be a codeword because if it is one, we would not even be able to detect that an error occurred.
+
+\begin{enumerate}
+    \item So, if \textbf{y} is a codeword, then $\forall i$, $\mathbf{y} + \mathbf{e_{i}}$ should not be a codeword.
+\end{enumerate}
+
+
+\paragraph{}
+Now, let's say that our code satisfies this requirement and if $\mathbf{y} + \mathbf{e_{i}}$ is not a codeword, the recipient would realize that an error occurred when $\mathbf{y} + \mathbf{e_{i}}$ is received.
+
+\paragraph{}
+For now, let's assume that at most only 1 bit gets flipped during the transmission. If the recipient knew that i\textsuperscript{th} entry got flipped, he/she could have corrected the error by computing $(\mathbf{y} + \mathbf{e_i}) + \mathbf{e_i} = \mathbf{y}$. But, the recipient does not know which entry got flipped. So, the only way is to check $(\mathbf{y} + \mathbf{e_i}) + \mathbf{e_j}$ for each j. If the recipient is fortunate, it will be a codeword only for one value of j. In that case, that codeword would be the correct message. In case, there are more than one values of j for which $(\mathbf{y} + \mathbf{e_i}) + \mathbf{e_i}$ is a codeword, the recipient would not be able to figure out which codeword did the sender intend to send. This leads us to second requirement of error-correcting codes. 
+
+\begin{enumerate}[resume]
+    \item If y is a codeword, and $(\mathbf{y} + \mathbf{e_i}) + \mathbf{e_j}$ is also a codeword, then $(\mathbf{y} + \mathbf{e_i}) + \mathbf{e_j} = \mathbf{y}$.
+\end{enumerate}
+
+Now, let's say that the code satisfies this property also. Now, the only thing left to do is to figure out vector \textbf{x} from \textbf{y}, i.e. we need to find $\mathbf{y} = G\mathbf{x}$ where x is the unknown vector. We need a unique solution for this equation and that can exist only if the transformation $\mathbf{x} \to G\mathbf{x}$ is one-one. So, the third condition for error correcting codes is: 
+
+\begin{enumerate}[resume]
+    \item For each codeword y, the equation $\mathbf{y} = G\mathbf{x}$ has a unique solution.
+\end{enumerate}
+
+These 3 conditions can also be written in other words as follows:
+\paragraph{Theorem 1}
+\begin{enumerate}
+    \item The vector $\mathbf{e_i}$ is not a codeword. If it is a codeword, $\mathbf{y} + \mathbf{e_i}$ would also be a codeword and we don't want that.
+    
+    \item If $\mathbf{e_i} + \mathbf{e_j}$ is a codeword, then $\mathbf{e_i} + \mathbf{e_j} = 0$. If it is not 0, $(\mathbf{y} + \mathbf{e_i}) + \mathbf{e_j}$ would not be y and we don't want that.
+    
+    \item The transformation $\mathbf{x} \to G\mathbf{x}$ is one-one. Because if it is not, there could be multiple solutions to the equation $\mathbf{y} = G\mathbf{x}$ with x as unknown and we would not be able to decide the original message x. 
+\end{enumerate}
+
+\subsection{Check Matrix}
+A check matrix for a linear code is a matrix H with the property that $H\mathbf{z} = 0$ iff z is a codeword. With check matrix, error detection and correction becomes much clearer. Let's say the sender sends the vector \textbf{y} and the recipient receives a vector \textbf{z} and he/she computes $H\mathbf{z}$. If no error occurred, $\mathbf{z} = \mathbf{y}$ and $H\mathbf{z} = H\mathbf{y} = 0$. If the i\textsuperscript{th} entry got flipped, $\mathbf{z} = \mathbf{y} + \mathbf{e_i}$ and hence
+$$
+\begin{aligned}
+    H\mathbf{z} &= H(\mathbf{y} + \mathbf{e_i})\\
+    &= H\mathbf{y} + H\mathbf{e_i}\\
+    &= H\mathbf{e_i} = \text{ i}^{th} \text{ column of H}
+\end{aligned}
+$$
+
+To find out which bit got flipped, we will have to skim through all the columns of H until we find the column which is equal to $H\mathbf{e_i}$. The column number where we stop is the number of the bit which got flipped. One question that comes to mind is that, what if H has two columns that are same. Then, we might not be able to figure out which bit got flipped. Fortunately, this would not happen as H is a check matrix of error correcting code. If two columns of H are same, it would mean that $\mathbf{e_i} + \mathbf{e_j}$ is a codeword because
+$$
+\begin{aligned}
+    H(\mathbf{e_i} + \mathbf{e_j}) &= H\mathbf{e_i} + H\mathbf{e_j}\\
+    &= \text{Column i + Column j}\\
+    &= \text{Column i + Column i} \text{, since the columns are same} \\ 
+    &= 0 \text{ parity of the sum will be even}
+\end{aligned}
+$$
+and we already know that for a error correcting code, $\mathbf{e_i}+ \mathbf{e_j}$ is not a codeword unless $\mathbf{e_i} + \mathbf{e_j} = 0$(i.e. $i = j$). Hence, no two columns will be same in check matrix H. 
+
+\paragraph{Theorem 2}
+
+\begin{enumerate}
+    \item The code satisfies first requirement of Theorem 1 iff all the columns of H are non-zero.\\ Because if any column i is zero, it would mean that $H\mathbf{e_i} = 0$ and that e\textsubscript{i} is a codeword and that would violate requirement 1 of theorem 1.
+    
+    \item The code satisfies second requirement of Theorem 1 iff all columns of H are different.\\ Because if they are same, as we just saw above, it would mean that $\mathbf{e_i}+ \mathbf{e_j}$ is a codeword and $\mathbf{e_i}+ \mathbf{e_j} \ne 0$ and that would violate 2\textsuperscript{nd} requirement of theorem 1.
+\end{enumerate}
+
+\subsection{Finding a check matrix}
+We start from the generator matrix G which is a n x k matrix. We find an invertible n x n matrix C whose first k columns are columns of G. As first k columns of C are same as columns of G, let's call them $\mathbf{g_1}, \mathbf{g_2}, \dots, \mathbf{g_k}$ and last n - k columns as $\mathbf{g_{k+1}}, \mathbf{s_{k+2}}, \dots, \mathbf{s_{n}}$. As C is an invertible matrix, the columns of C are also a basis for B\textsuperscript{n}. Therefore, any vector in z in B\textsuperscript{n} can be written as follows:
+$$z = a_1g_1 + \dots + a_kg_k + b_{k+1}s_{k+1} + \dots + b_ns_n $$
+
+Multiplication by C\textsuperscript{-1} turns would give the coefficient vector as follows:
+$$
+C^{-1}\mathbf{z} = 
+\begin{bmatrix}
+    a_1\\
+    \vdots\\
+    a_k\\
+    b_{k+1}\\
+    \vdots\\
+    b_n
+\end{bmatrix}
+$$
+
+If \textbf{z} is a codeword, all the weights b\textsubscript{i} are 0. If \textbf{z} is not a codeword, atleast one of the weights b\textsubscript{i} is non-zero. So, the last n - k entries of C\textsuperscript{-1}\textbf{z} are 0 iff \textbf{z} is a codeword. Therefore, we can use last n - k columns of C\textsuperscript{-1} as the check matrix.
+
+We can get matrix C by removing the non-pivot columns from the matrix [G $\mid$ I\textsubscript{n}]. Since the transformation caused by G is injective, the null space of matrix G is null vector only (we proved this in assignment 4). Once we get C, we need to find its inverse and extract last n - k rows for getting the check matrix H.
+
+\subsection{Going backwards}
+Check matrices are so helpful that code designers sometimes start with a matrix H and then find the linear code for which the matrix H is the check matrix. A check matrix H is a matrix with k rows and its columns consist of \textbf{all} the non-zero vectors in $\mathbf{Z_2^k}$. When K = 3, 
+$$
+H = 
+\begin{bmatrix}
+    1 & 0 & 0 & 1 & 0 & 1 & 1\\
+    0 & 1 & 0 & 1 & 1 & 0 & 1\\
+    0 & 0 & 1 & 1 & 1 & 1 & 0
+\end{bmatrix}
+ = [I_3 \mid Q]
+$$
+
+In general, we can write matrix H as [I\textsubscript{k} $\mid$ Q] where Q will be of size k x l where l = (2\textsuperscript{k} - 1 - k). Notice that the two conditions for check matrix that were stated in Theorem 2 are satisfied by this matrix above. All columns of H are non-zero and all columns are different.
+
+
+\paragraph{}
+We want a generator matrix G such that Column Space(G) = Null Space(H). Let $G = \begin{bmatrix}
+    Q \\ I_{l}
+\end{bmatrix}$
+
+Let's prove some facts about the matrices H and G stated above.
+\begin{enumerate}
+    \item The transformation represented by the matrix H is onto.\\~\\
+    Notice that the matrix H is already in reduced row echelon form and has 3 pivots. So, the rank of this matrix is 3. Therefore, the column space(H) contains the entire vector space $Z_2^3$. In other words, the first 3 columns of H are standard basis of $Z_2^3$. So, the image(H) contains all the vectors in $Z_2^3$ and hence H is onto.
+    
+    \item The transformation represented by the matrix G is one-one.\\~\\
+    We know that linear transformation represented by a matrix is one-one iff null space of the matrix contains only zero vector(This was already proved in assignment 4). The null space of the matrix contains only zero vector iff all the columns of the matrix are linearly independent. The last l rows of the matrix G are rows of identity matrix and all the columns of the identity matrix are independent. Since columns of a lower half of matrix G are independent, columns of matrix G are independent too.
+    
+    \item Column Space(G) = Null Space(H).
+    
+    \begin{enumerate}
+        \item Column Space(G) $\subseteq$ Null Space(H)\\~\\
+        Let's compute the matrix
+        $$
+        HG = 
+        \begin{bmatrix}
+            I_k & Q
+        \end{bmatrix}
+        \begin{bmatrix}
+            Q \\
+            I_l
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            I_k*Q + Q*I_l    
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            2Q
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            0
+        \end{bmatrix}
+        $$
+        since Q + Q is 0 due to addition modulo 2 operation
+        So, for any vector \textbf{x}, if we apply G and then H it is equivalent to applying H on a vector on column space of G. But, the matrix H will always transform that vector in the column space of G to 0. So, every vector in column space of G is in null space of H. 
+        $$
+        H(G\mathbf{x}) = H\mathbf{y} = (HG)\mathbf{x} = 0\mathbf{x} = \mathbf{0} \text{ where y is in column space of G}
+        $$
+        
+        \item
+        G is one-one and hence dim(Null Space(G)) = 0 and dim(Column Space(G)) = l (by rank nullity theorem). H is onto and hence rank of H is k and dim(Column Space(H)) = k and dim(Null Space(H)) = l (by rank nullity theorem). We already know that Column Space(G) $\subseteq$ Null Space(H) and the dimension of both the subspaces are the same (= l). The only way this is possible is that both the subspaces are the same. 
+    \end{enumerate}
+    
+    Notice that we have satisfied requirement 3 of theorem 3 as well since we proved that G is one-one. 
+    
+\end{enumerate}
+
+\subsection{Streamlining the process}
+Let's see how the error correcting code will work as a whole. For now, let's assume that the sender will send messages in chunks of 4 bits (l = 4). Let there be a message \textbf{u} $\in Z_2^4$. Applying G on the vector \textbf{u} will give us
+$
+G\mathbf{u} = \mathbf{x} = 
+\begin{bmatrix}
+    Q\mathbf{u}\\
+    \mathbf{u}
+\end{bmatrix}
+$.
+For now, we will assume that there can be at most 1 error in a message during the transmission. If there occurs an error in i\textsuperscript{th} bit, the recipient will get the message $\mathbf{y} = \mathbf{x} + \mathbf{e_i}$, where $\mathbf{e_i}$ is a standard basis vector of $Z_2^7$ with 1 in i\textsuperscript{th} entry. The recipient gets the message $\mathbf{y} = \mathbf{x}$ if there is no error. 
+
+\paragraph{}
+The recipient will apply H on the received message $\mathbf{y}$. 
+\begin{enumerate}
+    \item If there is no error in the message, $H\mathbf{y} = 0$ as y is in the column space of G and we know that Column Space(G) = Null Space(H). 
+    
+    \item If there is an error in the message, $H\mathbf{y} = H(\mathbf{x} + \mathbf{e_i}) = H\mathbf{x} + H\mathbf{e_i} = H\mathbf{e_i} = $ i\textsuperscript{th} column of H. The recipient goes through all the columns of H until he/she finds a match. Once a match is found, the error is corrected by computing 
+    $$
+    \mathbf{y} + \mathbf{e_i} = \mathbf{x} + \mathbf{e_i} + \mathbf{e_i} = \mathbf{x}
+    $$
+    since $\mathbf{e_i} + \mathbf{e_i} = 0$ due to addition modulo 2 operation. Here i is the index of the columns where the match was found. 
+\end{enumerate}
+Once, we have corrected an error (if any), we have the encoded message \textbf{x}, and we know that the original message is the bottom l (= 4 here) entries.
+
+
+\subsection{Example}
+For l = 4, the matrix G will be as follows:
+$$
+\begin{bmatrix}
+    1 & 0 & 1 & 1\\
+    1 & 1 & 0 & 1\\
+    1 & 1 & 1 & 0\\
+    1 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0\\
+    0 & 0 & 1 & 0\\
+    0 & 0 & 0 & 1\\
+\end{bmatrix}
+$$
+Let's see an example for a message for l = 4. Suppose the message to be sent is $\mathbf{u} = \begin{bmatrix}
+    0 & 1 & 0 & 1
+\end{bmatrix}^T$, then we encode the message to $\mathbf{x} = G\mathbf{u} = \begin{bmatrix}
+    1 & 0 & 1 & 0 & 1 & 0 & 1
+\end{bmatrix}^T$
+If this message is transmitted without any error, then $\mathbf{y} = \mathbf{x}$. The recipient computes $H\mathbf{y}$.
+$$
+H\mathbf{y} = 
+\begin{bmatrix}
+    1 & 0 & 0 & 1 & 0 & 1 & 1\\
+    0 & 1 & 0 & 1 & 1 & 0 & 1\\
+    0 & 0 & 1 & 1 & 1 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+    1\\
+    0\\
+    1\\
+    0\\
+    1\\
+    0\\
+    1
+\end{bmatrix}
+=
+\begin{bmatrix}
+    0\\
+    0\\
+    0
+\end{bmatrix}
+$$
+So, the recipient understands that there was no error and extracts last 4 entries from y as $\mathbf{u} = \begin{bmatrix}
+    0 & 1 & 0 & 1
+\end{bmatrix}^T$
+
+\paragraph{}
+In case, one of the bit was flipped during transmission, (say 3rd), the message received 
+$$
+\mathbf{y} = \mathbf{x} + \mathbf{e_{3}} = 
+\begin{bmatrix}
+    1\\
+    0\\
+    1\\
+    0\\
+    1\\
+    0\\
+    1
+\end{bmatrix}
++
+\begin{bmatrix}
+    0\\
+    0\\
+    1\\
+    0\\
+    0\\
+    0\\
+    0
+\end{bmatrix}
+=
+\begin{bmatrix}
+    1\\
+    0\\
+    0\\
+    0\\
+    1\\
+    0\\
+    1
+\end{bmatrix}
+$$
+The recipient computes $H\mathbf{y}$.
+$$
+H\mathbf{y} = 
+\begin{bmatrix}
+    1 & 0 & 0 & 1 & 0 & 1 & 1\\
+    0 & 1 & 0 & 1 & 1 & 0 & 1\\
+    0 & 0 & 1 & 1 & 1 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+    1\\
+    0\\
+    0\\
+    0\\
+    1\\
+    0\\
+    1
+\end{bmatrix}
+=
+\begin{bmatrix}
+    0\\
+    0\\
+    1
+\end{bmatrix}
+$$
+Since this does not come out to be \mathbf{0}, the recipient realizes that there was an error and traverses through the columns of H to match the output of $H\mathbf{y}$. It finds that it matches with the 3\textsuperscript{rd} column and therefore computes $y + e_3$.
+$$
+\begin{bmatrix}
+    1\\
+    0\\
+    0\\
+    0\\
+    1\\
+    0\\
+    1
+\end{bmatrix}
++
+\begin{bmatrix}
+    0\\
+    0\\
+    1\\
+    0\\
+    0\\
+    0\\
+    0
+\end{bmatrix}
+= 
+\begin{bmatrix}
+    1\\
+    0\\
+    1\\
+    0\\
+    1\\
+    0\\
+    1
+\end{bmatrix}
+= \mathbf{x}
+$$
+Now, the recipient simply extracts the last 4 entries of \textbf{x} and that is \textbf{u} = $\begin{bmatrix}
+    0 & 1 & 0 & 1
+\end{bmatrix}^T$, the original message intended to be sent.
+
+\end{document}

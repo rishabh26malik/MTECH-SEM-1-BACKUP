@@ -1,0 +1,98 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{setspace}
+\onehalfspacing
+\DeclareUnicodeCharacter{2212}{-} 
+\title{LA project}
+\author{Shiv Sharma }
+\date{November 2020}
+
+\begin{document}
+
+\maketitle
+\section{Construction of PRIO codes using coset coding with hamming code}
+\subsection{Introduction}
+Flash memory is  a form of non volatile memory that is  prevalent in today's day and age for storing information. The flash devices ranges from Solid state drive to memory cards.
+
+A flash memory consists of an array of cells, in which information bits are stored in the form of the amount of charge. In multilevel flash memory, each cell can represent one of more than two levels, and these levels are distinguished by multiple read thresholds. The triple-level cell (TLC) can represent one of eight levels, that is, it stores three bits. Each level corresponds to a three-bit sequence as shown in Table, and each bit represents one logical page. Then, a group of such cells stores three logical pages, referred to as pages 1–3. 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+Level & Page 1 & Page 2 & Page 3 \\ \hline
+0     & 0      & 0      & 0      \\ \hline
+1     & 0      & 0      & 1      \\ \hline
+2     & 0      & 1      & 0      \\ \hline
+3     & 0      & 1      & 1      \\ \hline
+4     & 1      & 0      & 0      \\ \hline
+5     & 1      & 0      & 1      \\ \hline
+6     & 1      & 1      & 0      \\ \hline
+7     & 1      & 1      & 1      \\ \hline
+\end{tabular}
+\end{table}
+
+To read pages 1–3, the required numbers of read thresholds are 1, 2, and 4, respectively. Therefore, the average number of read thresholds is 2.33.  Multiple read thresholds are required in order to read a single logical page in multilevel flash memory. However, use of a large number of read thresholds degrades the read performance of the flash memory device. In order to solve this problem, the random input/output (RIO) code is used in which one logical page can be read using a single read threshold. 
+
+
+In the RIO code, the data of all logical pages are stored simultaneously; thus, all the data are known in advance. Parallel RIO (P-RIO) code are used to increase the efficiency by performing the  encoding of each page in parallel.
+
+P-RIO codes are constructed using coset coding. Coset coding is a technique that constructs RIO codes using linear binary codes. Hamming codes are used as the linear codes, to leverage the information on the data of all logical pages to construct the P-RIO codes. The constructed codes store more pages than RIO codes constructed via coset coding with Hamming codes. 
+
+\subsection{Coset coding}
+In this paper, a linear binary code of length $n$ and dimension $k$ is referred to as an $(n, k)$ code. coset coding is used to construct an $[n, n-k, t]$ WOM code using $(n, k)$ code $C$, where $t$ depends on $C[4] .$ Let $H$ be the parity check matrix of $C .$ For all $(\boldsymbol{d}, \boldsymbol{c}) \in\{0,1\}^{n-k} \times \operatorname{Im}\left(\mathcal{E}^{i-1}\right)$ with $i \in \mathcal{I}_{t},$ the
+encoding map $\mathcal{E}$ is as follows.
+$$
+\mathcal{E}(\boldsymbol{d}, \boldsymbol{c})=\boldsymbol{c}+\boldsymbol{x}
+$$
+where
+$$
+\boldsymbol{x} \in\left\{\boldsymbol{v} \mid \boldsymbol{v} \in\{0,1\}^{n}, \boldsymbol{v} H^{T}=\boldsymbol{d}-\boldsymbol{c} H^{T}, I(\boldsymbol{c}) \cap I(\boldsymbol{v})=\emptyset\right\}
+$$
+Further, for all $c \in \operatorname{Im}\left(\mathcal{E}^{i}\right)$ with $i \in \mathcal{I}_{t},$ the decoding map $\mathcal{D}$ is
+$$
+\mathcal{D}(\boldsymbol{c})=\boldsymbol{c} H^{T}
+$$
+The following theorem has been proven in [4]. Theorem 1: When the linear code is the (7,4) Hamming code, coset coding can be used to construct the [7,3,3] WOM code. Let $r$ be an integer greater than $3 .$ Then a $\left[2^{r}-1, r, 2^{r-2}+2\right]$ WOM code can be constructed via coset coding with a $\left(2^{r}-1,2^{r}-r-1\right)$ Hamming code.
+
+\subsection{RIO Code}
+In this paper, it is assumed that each cell of a flash memory represents one of $q$ levels $(0,1, \ldots, q-1) .$ These levels are distinguished by $(q-1)$ different read thresholds. For each $i \in \mathcal{I}_{q-1},$ we denote the threshold between levels $(i-1)$ and $i$ by $i .$ For the state of $n$ cells $c=\left(c_{1}, \ldots, c_{n}\right) \in$ $\{0, \ldots, q-1\}^{n},$ the operation for read threshold $i$ is denoted by $R T_{i}(\boldsymbol{c}) .$ We define $R T_{i}(\boldsymbol{c})=\left(r_{1}, \ldots, r_{n}\right) \in\{0,1\}^{n}$ where
+for each $j \in \mathcal{I}_{n}, r_{j}=1$ if $c_{j} \geq i ;$ otherwise $, r_{j}=0 .$ For any $c_{1}, \ldots, c_{q-1} \in\{0,1\}^{n}$ such that $c_{1} \leq c_{2} \leq \ldots \leq c_{q-1},$ the
+following property holds: For each $i \in \mathcal{I}_{q-1}$,
+$$
+R T_{q-i}\left(\sum_{j=1}^{q-1} \boldsymbol{c}_{j}\right)=\boldsymbol{c}_{i}
+$$
+RIO code is a coding scheme that stores $t$ pages in a $(t+1)-$ level flash memory, such that page $i$ can be read using read threshold $(t+1-i)$ for each $i \in \mathcal{I}_{t}[1] .$ From $(6),$ pages $1, \ldots, t$ are encoded into $c_{1}, \ldots, c_{t},$ respectively, such that $\boldsymbol{c}_{1} \leq \boldsymbol{c}_{2} \leq \cdots \leq \boldsymbol{c}_{t},$ and the cell state is set to $\sum_{i=1}^{t} \boldsymbol{c}_{i}$
+where $c_{i}$ is a binary vector for each $i \in \mathcal{I}_{t}$. 
+
+Definition 2: An $[n, l, t]$ RIO code is a coding scheme that enables storage of $t$ pages of $l$ data bits in $n(t+1)$ -level cells, such that each page can be read using a single read threshold. For each $i \in \mathcal{I}_{t},$ the encoding map of page $i \mathcal{E}_{i}$ is defined by
+$$
+\mathcal{E}_{i}:\{0,1\}^{l} \times \operatorname{Im}\left(\mathcal{E}_{i-1}\right) \rightarrow\{0,1\}^{n}
+$$
+where $\operatorname{Im}\left(\mathcal{E}_{0}\right)=\{(0, \ldots, 0)\} .$ For all $(\boldsymbol{d}, \boldsymbol{c}) \in\{0,1\}^{l} \times$
+$\operatorname{Im}\left(\mathcal{E}_{i-1}\right), \boldsymbol{c} \leq \mathcal{E}_{i}(\boldsymbol{d}, \boldsymbol{c})$ is satisfied. The cell state is the sum
+of the $\mathcal{E}_{i}$ results for all $i \in \mathcal{I}_{t} .$ Further, for each $i \in \mathcal{I}_{t},$ the decoding map of page $i \mathcal{D}_{i}$ is defined by
+$$
+\mathcal{D}_{i}: \operatorname{Im}\left(\mathcal{E}_{i}\right) \rightarrow\{0,1\}^{l}
+$$
+such that $\mathcal{D}_{i}\left(\mathcal{E}_{i}(\boldsymbol{d}, \boldsymbol{c})\right)=\boldsymbol{d}$ for all $(\boldsymbol{d}, \boldsymbol{c}) \in\{0,1\}^{l} \times \operatorname{Im}\left(\mathcal{E}_{i-1}\right)$
+If the cell state is $c \in\{0, \ldots, t\}^{n},$ the argument of $\mathcal{D}_{i}$ is $R T_{t+1-i}(\boldsymbol{c})$ for each $i \in \mathcal{I}_{t}$
+From Definitions 1 and $2,$ it is apparent that the construction of an $[n, l, t]$ RIO code is equivalent to that of an $[n, l, t]$ WOM $\operatorname{code}[1]$
+Example 2: The [3,2,2] RIO code based on the [3,2,2] WOM code is shown in Table III. As an example, let the data of pages 1 and 2 be 10 and $01,$ respectively. Then, from Table II, $\mathcal{E}_{1}(10,000)=010$ and $\mathcal{E}_{2}(01,010)=011 .$ Therefore, the cell state is 021 .
+\subsection{PRIO code}
+In the RIO code, each page encoding depends on the page data only. In contrast, for P-RIO code, information on the data of all pages is leveraged during encoding of each page 
+\textit{Definition}: An $[n, l, t]$ P-RIO code is an $[n, l, t]$ RIO code for which all pages are encoded in parallel. The encoding map $\mathcal{E}$ is defined by
+$$\mathcal{E}: \prod_{i=1}^{t}\{0,1\}^{l} \rightarrow \prod_{i=1}^{t}\{0,1\}^{n}$$
+For all $\left(d_{1}, \ldots, d_{1}\right) \in \Pi_{i-1}^{t}\{0,1\}^{\prime}, c_{1} \leq c_{2} \leq \cdots \leq c_{t}$ is
+satisfied, where $\left(c_{1}, \ldots, c_{t}\right)=\varepsilon\left(d_{1}, \ldots, d_{t}\right) .$ The cell state is the sum of the components of the $\mathcal{E}$ result. For each $i \in I_{t}$ the decoding map $D_{i}$ of page $i$ is defined by
+$$
+\mathcal{D}_{i}:\{0,1\}^{n} \rightarrow\{0,1\}^{l}
+$$
+such that $\mathcal{D}_{i}\left(c_{i}\right)=d_{i}$ for all $\left(d_{1}, \ldots, d_{c}\right) \in \prod_{i-1}^{t}\{0,1\}^{t}$
+where $\left(c_{1}, \ldots, c_{t}\right)=\varepsilon\left(d_{1}, \ldots, d_{t}\right) .$ If the cell state is $c \in$
+$\{0, \ldots, t\}^{n},$ the argument of $\mathcal{D}_{i}$ is $R T_{i+1-i}(c)$ for each $i \in \mathcal{I}_{1-}$
+An algorithm to construct P-RIO code has been proposed in a previous study [3] , and run to yicld P-RIO codes that store two pages for moderate code lengths. These codes have parameters for which RIO codes do not exist [3].
+
+ Coset coding is used  to construct P-RIO codes. When Hamming codes are used as the linear codes $[7,3,3]$ RIO code and [15,4,6] RIO code can be constructed. Then, we leverage the information on the data of all pages to construct P-RIO codes that store more pages than these $\mathrm{RIO}$ codes.
+\end{document}

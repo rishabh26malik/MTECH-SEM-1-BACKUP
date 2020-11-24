@@ -10,7 +10,7 @@
 
     EXAMPLE:
     $ python generate_input.py 1337 input.txt 100000000 10
-    
+    python generate_input.py 1234 input.txt 10000 10
     This will generate file named "input.txt" which has 100000000 numbers with each having maximum of 10 digits. This file will be around 1GB in size. 
     You can play around with the values to generate different files.
 '''
